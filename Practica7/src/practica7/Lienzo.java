@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package practica7;
 
 import java.awt.BasicStroke;
@@ -25,12 +24,12 @@ import java.util.ArrayList;
  * @author Óscar
  */
 public class Lienzo extends javax.swing.JPanel {
-   
-    final static int PUNTO=0;
-    final static int LINEA=1;
-    final static int RECTANGULO=2;
-    final static int ELIPSE=3;
-    final static int NUEVO=4;
+
+    final static int PUNTO = 0;
+    final static int LINEA = 1;
+    final static int RECTANGULO = 2;
+    final static int ELIPSE = 3;
+    final static int NUEVO = 4;
     //Variables privadas
     private Color color;
     private int forma;
@@ -39,8 +38,7 @@ public class Lienzo extends javax.swing.JPanel {
     private Shape s;
     private ArrayList<Shape> vShape;
     boolean relleno;
-    
-    
+
     /**
      * Creates new form NewJPanel
      */
@@ -48,9 +46,9 @@ public class Lienzo extends javax.swing.JPanel {
         initComponents();
         stroke = new BasicStroke(10.0f);
         vShape = new ArrayList();
-        color = new Color(0,0,0);
+        color = new Color(0, 0, 0);
     }
-    
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -64,34 +62,37 @@ public class Lienzo extends javax.swing.JPanel {
             g2d.draw(s);
         }
     }
-    
-    private Shape createShape(Point2D p1, Point2D p2){
-        if(p1==null || (p2==null && forma!= PUNTO)) return null;
-        
-        switch(forma){
+
+    private Shape createShape(Point2D p1, Point2D p2) {
+        if (p1 == null || (p2 == null && forma != PUNTO)) {
+            return null;
+        }
+
+        switch (forma) {
             case PUNTO:
-                return s=new Line2D.Double(p1,p1);
+                return s = new Line2D.Double(p1, p1);
             case LINEA:
-                return s=new Line2D.Double(p1,p2);
+                return s = new Line2D.Double(p1, p2);
             case RECTANGULO:
                 s = new Rectangle2D.Double();
-                ((RectangularShape)s).setFrameFromDiagonal(p1,p2);
+                ((RectangularShape) s).setFrameFromDiagonal(p1, p2);
                 return s;
             case ELIPSE:
                 s = new Ellipse2D.Double();
-                ((RectangularShape)s).setFrameFromDiagonal(p1,p2);
+                ((RectangularShape) s).setFrameFromDiagonal(p1, p2);
             default:
-                return s=null;
+                return s = null;
         }
     }
 
-    private void updateShape(Point2D p1, Point2D p2){
-        if (s instanceof Line2D){
-            ((Line2D)s).setLine(p1,p2);
-        }else if (s instanceof RectangularShape){
-            ((RectangularShape)s).setFrameFromDiagonal(p1, p2);
+    private void updateShape(Point2D p1, Point2D p2) {
+        if (s instanceof Line2D) {
+            ((Line2D) s).setLine(p1, p2);
+        } else if (s instanceof RectangularShape) {
+            ((RectangularShape) s).setFrameFromDiagonal(p1, p2);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -105,9 +106,11 @@ public class Lienzo extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
             }
+
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);
             }
+
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 formMouseReleased(evt);
             }
@@ -121,12 +124,12 @@ public class Lienzo extends javax.swing.JPanel {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -142,24 +145,28 @@ public class Lienzo extends javax.swing.JPanel {
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        updateShape(pIni, evt.getPoint());
-        this.repaint();
+        if (forma != Lienzo.PUNTO) {
+            updateShape(pIni, evt.getPoint());
+            this.repaint();
+        }
+
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
-        if (forma!= Lienzo.PUNTO)
+        if (forma != Lienzo.PUNTO) {
             updateShape(pIni, evt.getPoint());
-        this.repaint();
+            this.repaint();
+        }
     }//GEN-LAST:event_formMouseDragged
 
-    public void setColor(Color color){
+    public void setColor(Color color) {
         this.color = color;
     }
-        
-     public Color getColor(){
+
+    public Color getColor() {
         return color;
     }
-     
+
     public int getForma() {
         return forma;
     }
@@ -167,7 +174,6 @@ public class Lienzo extends javax.swing.JPanel {
     public void setForma(int forma) {
         this.forma = forma;
     }
-
 
     public Point2D getpIni() {
         return pIni;
@@ -188,11 +194,10 @@ public class Lienzo extends javax.swing.JPanel {
     public boolean isRelleno() {
         return relleno;
     }
-    
+
     public void setRelleno(boolean relleno) {
         this.relleno = relleno;
     }
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
