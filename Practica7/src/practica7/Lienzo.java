@@ -147,7 +147,8 @@ public class Lienzo extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
-        updateShape(pIni, evt.getPoint());
+        if (forma!= Lienzo.PUNTO)
+            updateShape(pIni, evt.getPoint());
         this.repaint();
     }//GEN-LAST:event_formMouseDragged
 
