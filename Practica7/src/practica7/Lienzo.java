@@ -136,7 +136,8 @@ public class Lienzo extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseClicked
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-        createShape(evt.getPoint(), evt.getPoint());
+        pIni = evt.getPoint();
+        vShape.add(createShape(evt.getPoint(), evt.getPoint()));
         this.repaint();
     }//GEN-LAST:event_formMousePressed
 
