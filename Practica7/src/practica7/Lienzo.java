@@ -6,75 +6,90 @@
 
 package practica7;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
+import java.util.ArrayList;
 
 /**
  *
  * @author Óscar
  */
 public class Lienzo extends javax.swing.JPanel {
-    private Color color;
-    private int forma;
+   
     final static int PUNTO=0;
     final static int LINEA=1;
     final static int RECTANGULO=2;
     final static int ELIPSE=3;
     final static int NUEVO=4;
-    private Point pClic,pIni, pFin;
+    //Variables privadas
+    private Color color;
+    private int forma;
+    private Point2D pIni, pFin;
+    private Stroke stroke;
+    private Shape s;
+    private ArrayList<Shape> vShape;
     boolean relleno;
+    
     
     /**
      * Creates new form NewJPanel
      */
     public Lienzo() {
         initComponents();
-        relleno=false;
+        stroke = new BasicStroke(10.0f);
+        vShape = new ArrayList();
+        color = new Color(0,0,0);
     }
     
     @Override
-    public void paint(Graphics g){
+    public void paint(Graphics g) {
         super.paint(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setPaint(color);
+        g2d.setStroke(stroke);
+        for (Shape s : vShape) {
+            if (relleno) {
+                g2d.fill(s);
+            }
+            g2d.draw(s);
+        }
+    }
+    
+    private Shape createShape(Point2D p1, Point2D p2){
+        if(p1==null || (p2==null && forma!= PUNTO)) return null;
         
-        g.setColor(color);
         switch(forma){
             case PUNTO:
-                if(pClic!=null) g.fillOval(pClic.x,pClic.y,10,10);
-                break;
+                return s=new Line2D.Double(p1,p1);
             case LINEA:
-                if(pIni!=null && pFin!=null){
-                    g.drawLine(pIni.x,pIni.y,pFin.x,pFin.y);
-                }
-                break;
+                return s=new Line2D.Double(p1,p2);
             case RECTANGULO:
-                if(pIni!=null && pFin!=null) {
-                    int ancho= Math.abs(pIni.x - pFin.x);
-                    int alto= Math.abs(pIni.y - pFin.y);
-                    int minX = Math.min(pIni.x, pFin.x);
-                    int minY = Math.min(pIni.y, pFin.y);
-                    if(!isRelleno()){    
-                        g.drawRect(minX,minY,ancho,alto);
-                    }else{
-                        g.fillRect(minX,minY,ancho,alto);
-                    } 
-                }
-                break;
+                s = new Rectangle2D.Double();
+                ((RectangularShape)s).setFrameFromDiagonal(p1,p2);
+                return s;
             case ELIPSE:
-                if(pIni!=null && pFin!=null) {
-                    int ancho= Math.abs(pIni.x - pFin.x);
-                    int alto= Math.abs(pIni.y - pFin.y);
-                    int minX = Math.min(pIni.x, pFin.x);
-                    int minY = Math.min(pIni.y, pFin.y);
-                    if(!isRelleno()){
-                        g.drawOval(minX,minY,ancho,alto);
-                    }else{
-                        g.fillOval(minX,minY,ancho,alto);
-                    } 
-                }
-                break;
-            case NUEVO:
-                break;
+                s = new Ellipse2D.Double();
+                ((RectangularShape)s).setFrameFromDiagonal(p1,p2);
+            default:
+                return s=null;
+        }
+    }
+
+    private void updateShape(Point2D p1, Point2D p2){
+        if (s instanceof Line2D){
+            ((Line2D)s).setLine(p1,p2);
+        }else if (s instanceof RectangularShape){
+            ((RectangularShape)s).setFrameFromDiagonal(p1, p2);
         }
     }
     /**
@@ -116,23 +131,22 @@ public class Lienzo extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        pClic =evt.getPoint();
+        pIni = evt.getPoint();
         this.repaint();
     }//GEN-LAST:event_formMouseClicked
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-        pIni =pFin= evt.getPoint();
-        pClic = null;
+        createShape(evt.getPoint(), evt.getPoint());
         this.repaint();
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        //pFin = evt.getPoint();
+        updateShape(pIni, evt.getPoint());
+        this.repaint();
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
-        pFin = evt.getPoint();
-        pClic = null;
+        updateShape(pIni, evt.getPoint());
         this.repaint();
     }//GEN-LAST:event_formMouseDragged
 
@@ -152,15 +166,8 @@ public class Lienzo extends javax.swing.JPanel {
         this.forma = forma;
     }
 
-    public Point getpClic() {
-        return pClic;
-    }
 
-    public void setpClic(Point pClic) {
-        this.pClic = pClic;
-    }
-
-    public Point getpIni() {
+    public Point2D getpIni() {
         return pIni;
     }
 
@@ -168,7 +175,7 @@ public class Lienzo extends javax.swing.JPanel {
         this.pIni = pIni;
     }
 
-    public Point getpFin() {
+    public Point2D getpFin() {
         return pFin;
     }
 
