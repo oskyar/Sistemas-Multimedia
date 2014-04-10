@@ -21,14 +21,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
     public VentanaPrincipal() {
         initComponents();
-        labelFigura.setText("Lápiz");
-        botonLapiz.setSelected(true);
-   //     lienzo.setForma(Lienzo.PUNTO);
-        checkboxRelleno.setSelected(false);
-   //     lienzo.setRelleno(false);
-        botonColorNegro.setSelected(true);
-   //     lienzo.setColor(Color.black);
-        panelLabelFigura.setVisible(true);
+        VentanaInterna vi = new VentanaInterna(); 
+        escritorio.add(vi); 
+        vi.setVisible(true); 
     }
 
     /**
@@ -97,7 +92,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonesFiguras.add(botonLapiz);
 
         BotonesMenu.add(botonLinea);
-        botonLinea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/practica7/iconos/Linea.gif"))); // NOI18N
+        botonLinea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Linea.gif"))); // NOI18N
         botonLinea.setFocusable(false);
         botonLinea.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         botonLinea.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -109,7 +104,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonesFiguras.add(botonLinea);
 
         BotonesMenu.add(botonRectangulo);
-        botonRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/practica7/iconos/Rectangulo.gif"))); // NOI18N
+        botonRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Rectangulo.gif"))); // NOI18N
         botonRectangulo.setFocusable(false);
         botonRectangulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         botonRectangulo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -121,7 +116,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonesFiguras.add(botonRectangulo);
 
         BotonesMenu.add(botonOvalo);
-        botonOvalo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/practica7/iconos/Ovalo.gif"))); // NOI18N
+        botonOvalo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Ovalo.gif"))); // NOI18N
         botonOvalo.setFocusable(false);
         botonOvalo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         botonOvalo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -154,7 +149,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         flowLayout1.setAlignOnBaseline(true);
         contenedorColores.setLayout(flowLayout1);
 
-        panelColores.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Color"));
+        panelColores.setBorder(javax.swing.BorderFactory.createTitledBorder("Color"));
         panelColores.setMaximumSize(new java.awt.Dimension(89, 90));
         panelColores.setMinimumSize(new java.awt.Dimension(89, 90));
         panelColores.setPreferredSize(new java.awt.Dimension(125, 90));
@@ -467,12 +462,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonOvaloMouseClicked
 
     private void NuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevoActionPerformed
-        //lienzo.setForma(Lienzo.NUEVO);
-   /*     lienzo.setpIni(null);
-        lienzo.setpFin(null);
-        lienzo.setpClic(null);
-        lienzo.repaint();
-        */
+        VentanaInterna vi = new VentanaInterna(); 
+        escritorio.add(vi); 
+        vi.setVisible(true); 
     }//GEN-LAST:event_NuevoActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
