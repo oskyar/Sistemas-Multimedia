@@ -32,21 +32,23 @@ public class Lienzo extends javax.swing.JPanel {
     final static int NUEVO = 4;
     //Variables privadas
     private Color color;
-    private int forma;
+    private static int forma;
     private Point2D pIni, pFin;
     private Stroke stroke;
     private Shape s;
     private ArrayList<Shape> vShape;
-    boolean relleno;
+    boolean relleno, editar;
 
     /**
      * Creates new form NewJPanel
      */
     public Lienzo() {
         initComponents();
-        stroke = new BasicStroke(10.0f);
+        stroke = new BasicStroke(1.0f);
         vShape = new ArrayList();
         color = new Color(0, 0, 0);
+        editar=false;
+        relleno=false;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class Lienzo extends javax.swing.JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setPaint(color);
         g2d.setStroke(stroke);
-        for (Shape s : vShape) {
+        for (Shape s: vShape) {
             if (relleno) {
                 g2d.fill(s);
             }
@@ -72,14 +74,15 @@ public class Lienzo extends javax.swing.JPanel {
             case PUNTO:
                 return s = new Line2D.Double(p1, p1);
             case LINEA:
-                return s = new Line2D.Double(p1, p2);
+                return s = new Line2D.Double(p1, p1);
             case RECTANGULO:
                 s = new Rectangle2D.Double();
-                ((RectangularShape) s).setFrameFromDiagonal(p1, p2);
+                ((RectangularShape) s).setFrameFromDiagonal(p1, p1);
                 return s;
             case ELIPSE:
                 s = new Ellipse2D.Double();
-                ((RectangularShape) s).setFrameFromDiagonal(p1, p2);
+                ((Ellipse2D) s).setFrameFromDiagonal(p1, p1);
+                return s;
             default:
                 return s = null;
         }
@@ -134,13 +137,12 @@ public class Lienzo extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        pIni = evt.getPoint();
-        this.repaint();
+
     }//GEN-LAST:event_formMouseClicked
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         pIni = evt.getPoint();
-        vShape.add(createShape(evt.getPoint(), evt.getPoint()));
+        vShape.add(createShape(pIni, pIni));
         this.repaint();
     }//GEN-LAST:event_formMousePressed
 
@@ -161,18 +163,19 @@ public class Lienzo extends javax.swing.JPanel {
 
     public void setColor(Color color) {
         this.color = color;
+        repaint();
     }
 
     public Color getColor() {
         return color;
     }
 
-    public int getForma() {
-        return forma;
+    public static int getForma() {
+        return Lienzo.forma;
     }
 
-    public void setForma(int forma) {
-        this.forma = forma;
+    public static void setForma(int forma) {
+        Lienzo.forma = forma;
     }
 
     public Point2D getpIni() {
@@ -197,6 +200,24 @@ public class Lienzo extends javax.swing.JPanel {
 
     public void setRelleno(boolean relleno) {
         this.relleno = relleno;
+        repaint();
+    }
+
+    public boolean isEditar() {
+        return editar;
+    }
+
+    public void setEditar(boolean editar) {
+        this.editar = editar;
+    }
+    
+    public Stroke getStroke() {
+        return stroke;
+    }
+
+    public void setStroke(Stroke sk) {
+        this.stroke = sk;
+        repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

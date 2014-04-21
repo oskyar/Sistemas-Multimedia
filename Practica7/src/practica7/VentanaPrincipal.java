@@ -6,7 +6,10 @@
 
 package practica7;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Stroke;
 import java.io.File;
 import javax.swing.JFileChooser;
 
@@ -19,11 +22,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form VentanaPrincipal
      */
+    //Guardo la última ventana interna creada
+    private VentanaInterna vi;
+    private int numVentanas;
+    
     public VentanaPrincipal() {
         initComponents();
-        VentanaInterna vi = new VentanaInterna(); 
+        numVentanas=0;
+        vi = new VentanaInterna(); 
         escritorio.add(vi); 
-        vi.setVisible(true); 
+        vi.setVisible(true);
+        vi.setTitle("Lienzo "+ ++numVentanas);
     }
 
     /**
@@ -111,6 +120,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonRectangulo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonRectanguloMouseClicked(evt);
+            }
+        });
+        botonRectangulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRectanguloActionPerformed(evt);
             }
         });
         BotonesFiguras.add(botonRectangulo);
@@ -352,6 +366,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 checkboxRellenoMouseClicked(evt);
             }
         });
+        checkboxRelleno.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                checkboxRellenoStateChanged(evt);
+            }
+        });
         panelRelleno.add(checkboxRelleno);
 
         checkboxEditar.setText("Editar");
@@ -446,25 +465,33 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void botonLineaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonLineaMouseClicked
         labelFigura.setText("Línea");
         botonLinea.setSelected(true);
-  //      lienzo.setForma(Lienzo.LINEA);
+        Lienzo.setForma(Lienzo.LINEA);
     }//GEN-LAST:event_botonLineaMouseClicked
 
     private void botonRectanguloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonRectanguloMouseClicked
         labelFigura.setText("Rectángulo");
         botonRectangulo.setSelected(true);
-  //      lienzo.setForma(Lienzo.RECTANGULO);
+        Lienzo.setForma(Lienzo.RECTANGULO);
     }//GEN-LAST:event_botonRectanguloMouseClicked
 
     private void botonOvaloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonOvaloMouseClicked
         labelFigura.setText("Ovalo");
         botonOvalo.setSelected(true);
-   //     lienzo.setForma(Lienzo.ELIPSE);
+        Lienzo.setForma(Lienzo.ELIPSE);
     }//GEN-LAST:event_botonOvaloMouseClicked
 
     private void NuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevoActionPerformed
+        
         VentanaInterna vi = new VentanaInterna(); 
         escritorio.add(vi); 
-        vi.setVisible(true); 
+        vi.getLienzo().setColor(getVentanaInterna().getLienzo().getColor());
+        vi.getLienzo().setStroke(getVentanaInterna().getLienzo().getStroke());
+        vi.getLienzo().setEditar(getVentanaInterna().getLienzo().isEditar());
+        vi.getLienzo().setRelleno(getVentanaInterna().getLienzo().isRelleno());
+        vi.setTitle("Lienzo "+ ++numVentanas);
+        vi.setVisible(true);
+        setVentanaInterna(vi);
+        
     }//GEN-LAST:event_NuevoActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -477,27 +504,45 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void botonColorNegroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorNegroMouseClicked
-    //    lienzo.setColor(Color.black);
+        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setColor(Color.black);
+        }
     }//GEN-LAST:event_botonColorNegroMouseClicked
 
     private void botonColorRojoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorRojoMouseClicked
-    //     lienzo.setColor(Color.red);
+            VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setColor(Color.red);
+        }
     }//GEN-LAST:event_botonColorRojoMouseClicked
 
     private void botonColorAzulMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorAzulMouseClicked
-    //    lienzo.setColor(Color.blue);
+        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setColor(Color.blue);
+        }
     }//GEN-LAST:event_botonColorAzulMouseClicked
 
     private void botonColorBlancoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorBlancoMouseClicked
-    //    lienzo.setColor(Color.white);
+        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setColor(Color.white);
+        }
     }//GEN-LAST:event_botonColorBlancoMouseClicked
 
     private void botonColorAmarilloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorAmarilloMouseClicked
-    //    lienzo.setColor(Color.yellow);
+        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setColor(Color.yellow);
+        }
     }//GEN-LAST:event_botonColorAmarilloMouseClicked
 
     private void botonColorVerdeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorVerdeMouseClicked
-    //    lienzo.setColor(Color.green);
+        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setColor(Color.green);
+        }
     }//GEN-LAST:event_botonColorVerdeMouseClicked
 
     private void verBarraEstadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verBarraEstadoMouseClicked
@@ -505,19 +550,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_verBarraEstadoMouseClicked
 
     private void verBarraEstadoMenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_verBarraEstadoMenuKeyPressed
-      /*  if(verBarraEstado.isSelected()){
-            pie.setVisible(false);
-            pie.setEnabled(false);
-            verBarraEstado.setSelected(false);
-            System.out.println("SELECT");
-        }else{
-            pie.setVisible(true);
-            pie.setEnabled(true);
-            verBarraEstado.setSelected(true);
-            System.out.println("NO SELECT");
-        }
-        lienzo.repaint();
-        */
+
     }//GEN-LAST:event_verBarraEstadoMenuKeyPressed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -538,10 +571,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_verBarraEstadoActionPerformed
 
-    private void botonColorAzulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonColorAzulActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botonColorAzulActionPerformed
-
     private void botonLapizMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonLapizMouseClicked
         labelFigura.setText("Lápiz");
         botonLapiz.setSelected(true);
@@ -549,14 +578,35 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonLapizMouseClicked
 
     private void checkboxRellenoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_checkboxRellenoMouseClicked
-        /*    if(lienzo.isRelleno()){
-            lienzo.setRelleno(false);
-        }else{
-            lienzo.setRelleno(true);
+        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setEnabled(checkboxRelleno.isSelected());
         }
-        */
     }//GEN-LAST:event_checkboxRellenoMouseClicked
 
+    private void botonColorAzulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonColorAzulActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botonColorAzulActionPerformed
+
+    private void checkboxRellenoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxRellenoStateChanged
+        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setEnabled(checkboxRelleno.isSelected());
+        }
+    }//GEN-LAST:event_checkboxRellenoStateChanged
+
+    private void botonRectanguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRectanguloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botonRectanguloActionPerformed
+
+    public VentanaInterna getVentanaInterna(){
+        return vi;
+    }
+    
+    public void setVentanaInterna(VentanaInterna vi){
+        this.vi = vi;
+    }
+    
     /**
      * @param args the command line arguments
      */
