@@ -33,6 +33,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         escritorio.add(vi); 
         vi.setVisible(true);
         vi.setTitle("Lienzo "+ ++numVentanas);
+        botonLapiz.setSelected(true);
     }
 
     /**
@@ -120,11 +121,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonRectangulo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonRectanguloMouseClicked(evt);
-            }
-        });
-        botonRectangulo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonRectanguloActionPerformed(evt);
             }
         });
         BotonesFiguras.add(botonRectangulo);
@@ -223,11 +219,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonColorAzul.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonColorAzulMouseClicked(evt);
-            }
-        });
-        botonColorAzul.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonColorAzulActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -361,11 +352,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         checkboxRelleno.setText("Relleno");
         checkboxRelleno.setActionCommand("");
         checkboxRelleno.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        checkboxRelleno.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                checkboxRellenoMouseClicked(evt);
-            }
-        });
         checkboxRelleno.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 checkboxRellenoStateChanged(evt);
@@ -400,7 +386,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         archivo.setText("Archivo");
 
-        Nuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.ALT_MASK));
+        Nuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        Nuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/NuevoBoceto.GIF"))); // NOI18N
         Nuevo.setText("Nuevo");
         Nuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -409,7 +396,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         archivo.add(Nuevo);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Abrir");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -418,7 +405,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         archivo.add(jMenuItem1);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.ALT_MASK));
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Guardar.gif"))); // NOI18N
         jMenuItem2.setText("Guardar");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -431,14 +419,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         edicion.setText("Edición");
 
-        verBarraEstado.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
+        verBarraEstado.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         verBarraEstado.setSelected(true);
         verBarraEstado.setText("Ver barra estado");
-        verBarraEstado.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                verBarraEstadoMouseClicked(evt);
-            }
-        });
         verBarraEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 verBarraEstadoActionPerformed(evt);
@@ -545,10 +528,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonColorVerdeMouseClicked
 
-    private void verBarraEstadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verBarraEstadoMouseClicked
-
-    }//GEN-LAST:event_verBarraEstadoMouseClicked
-
     private void verBarraEstadoMenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_verBarraEstadoMenuKeyPressed
 
     }//GEN-LAST:event_verBarraEstadoMenuKeyPressed
@@ -563,7 +542,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void verBarraEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verBarraEstadoActionPerformed
-    
         if(!verBarraEstado.isSelected()){
             panelLabelFigura.setVisible(false);        
         }else{
@@ -577,27 +555,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     //    lienzo.setForma(Lienzo.PUNTO);
     }//GEN-LAST:event_botonLapizMouseClicked
 
-    private void checkboxRellenoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_checkboxRellenoMouseClicked
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if( vInt != null){
-            vInt.getLienzo().setEnabled(checkboxRelleno.isSelected());
-        }
-    }//GEN-LAST:event_checkboxRellenoMouseClicked
-
-    private void botonColorAzulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonColorAzulActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botonColorAzulActionPerformed
-
     private void checkboxRellenoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxRellenoStateChanged
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if( vInt != null){
-            vInt.getLienzo().setEnabled(checkboxRelleno.isSelected());
-        }
-    }//GEN-LAST:event_checkboxRellenoStateChanged
 
-    private void botonRectanguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRectanguloActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botonRectanguloActionPerformed
+    }//GEN-LAST:event_checkboxRellenoStateChanged
 
     public VentanaInterna getVentanaInterna(){
         return vi;
