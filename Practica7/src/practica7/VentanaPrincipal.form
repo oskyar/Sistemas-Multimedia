@@ -682,6 +682,9 @@
                           <Dimension value="[69, 10]"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="checkboxEditarStateChanged"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>

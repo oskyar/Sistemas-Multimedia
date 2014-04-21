@@ -365,6 +365,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         checkboxEditar.setMaximumSize(new java.awt.Dimension(69, 10));
         checkboxEditar.setMinimumSize(new java.awt.Dimension(69, 10));
         checkboxEditar.setPreferredSize(new java.awt.Dimension(69, 10));
+        checkboxEditar.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                checkboxEditarStateChanged(evt);
+            }
+        });
         panelRelleno.add(checkboxEditar);
 
         contenedorEditarRelleno.add(panelRelleno);
@@ -556,8 +561,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonLapizMouseClicked
 
     private void checkboxRellenoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxRellenoStateChanged
-
+        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setRelleno(checkboxRelleno.isSelected());
+        }
     }//GEN-LAST:event_checkboxRellenoStateChanged
+
+    private void checkboxEditarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxEditarStateChanged
+        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setEditar(checkboxEditar.isSelected());
+        }
+    }//GEN-LAST:event_checkboxEditarStateChanged
 
     public VentanaInterna getVentanaInterna(){
         return vi;
