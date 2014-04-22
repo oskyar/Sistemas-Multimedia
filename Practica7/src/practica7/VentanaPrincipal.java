@@ -8,8 +8,7 @@ package practica7;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Stroke;
+import java.awt.Shape;
 import java.io.File;
 import javax.swing.JFileChooser;
 
@@ -25,6 +24,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     //Guardo la última ventana interna creada
     private VentanaInterna vi;
     private int numVentanas;
+    private Shape s;
     
     public VentanaPrincipal() {
         initComponents();
@@ -68,7 +68,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonColorAmarillo = new javax.swing.JButton();
         contenedorGrosor = new javax.swing.JPanel();
         panelGrosor = new javax.swing.JPanel();
-        jSpinner1 = new javax.swing.JSpinner();
+        grosor = new javax.swing.JSpinner();
         contenedorEditarRelleno = new javax.swing.JPanel();
         panelRelleno = new javax.swing.JPanel();
         checkboxRelleno = new javax.swing.JCheckBox();
@@ -307,9 +307,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelGrosor.setMinimumSize(new java.awt.Dimension(60, 50));
         panelGrosor.setPreferredSize(new java.awt.Dimension(60, 50));
 
-        jSpinner1.setMaximumSize(new java.awt.Dimension(50, 28));
-        jSpinner1.setMinimumSize(new java.awt.Dimension(50, 28));
-        jSpinner1.setPreferredSize(new java.awt.Dimension(50, 28));
+        grosor.setMaximumSize(new java.awt.Dimension(50, 28));
+        grosor.setMinimumSize(new java.awt.Dimension(50, 28));
+        grosor.setPreferredSize(new java.awt.Dimension(50, 28));
+        grosor.setValue(1);
+        grosor.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                grosorStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelGrosorLayout = new javax.swing.GroupLayout(panelGrosor);
         panelGrosor.setLayout(panelGrosorLayout);
@@ -319,7 +325,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelGrosorLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(grosor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
         panelGrosorLayout.setVerticalGroup(
@@ -328,7 +334,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelGrosorLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(grosor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -432,15 +438,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 verBarraEstadoActionPerformed(evt);
             }
         });
-        verBarraEstado.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
-            public void menuKeyPressed(javax.swing.event.MenuKeyEvent evt) {
-                verBarraEstadoMenuKeyPressed(evt);
-            }
-            public void menuKeyReleased(javax.swing.event.MenuKeyEvent evt) {
-            }
-            public void menuKeyTyped(javax.swing.event.MenuKeyEvent evt) {
-            }
-        });
         edicion.add(verBarraEstado);
 
         menu.add(edicion);
@@ -533,10 +530,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonColorVerdeMouseClicked
 
-    private void verBarraEstadoMenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_verBarraEstadoMenuKeyPressed
-
-    }//GEN-LAST:event_verBarraEstadoMenuKeyPressed
-
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
     JFileChooser dlg = new JFileChooser(); 
         int resp = dlg.showOpenDialog(this); 
@@ -574,6 +567,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_checkboxEditarStateChanged
 
+    private void grosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosorStateChanged
+        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
+        if( vInt != null){
+            vInt.getLienzo().setStroke(new BasicStroke(((Integer)grosor.getValue()).floatValue())); 
+        }
+    }//GEN-LAST:event_grosorStateChanged
+
     public VentanaInterna getVentanaInterna(){
         return vi;
     }
@@ -610,10 +610,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel cuerpo;
     private javax.swing.JMenu edicion;
     private javax.swing.JDesktopPane escritorio;
+    private javax.swing.JSpinner grosor;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JLabel labelFigura;
     private javax.swing.JMenuBar menu;
     private javax.swing.JPanel panelAtributos;
