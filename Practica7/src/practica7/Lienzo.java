@@ -37,9 +37,9 @@ public class Lienzo extends javax.swing.JPanel {
     private Point2D p;
     private Stroke stroke;
     private Shape s;
-    private ArrayList<Shape> vShape;
+    private final ArrayList<Shape> vShape;
     boolean relleno, editar;
-    private Point2D dXY;
+    private final Point2D dXY;
 
     /**
      * Creates new form NewJPanel
@@ -107,7 +107,6 @@ public class Lienzo extends javax.swing.JPanel {
                 return s;
             }
         }
-
         return null;
     }
 
@@ -149,14 +148,9 @@ public class Lienzo extends javax.swing.JPanel {
     private void initComponents() {
 
         addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                formMouseClicked(evt);
-            }
-
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);
             }
-
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 formMouseReleased(evt);
             }
@@ -170,28 +164,16 @@ public class Lienzo extends javax.swing.JPanel {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 400, Short.MAX_VALUE)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 300, Short.MAX_VALUE)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-
-    }//GEN-LAST:event_formMouseClicked
-
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-//        if (!editar){
-//            pIni = evt.getPoint();
-//            vShape.add(createShape(pIni, pIni));
-//            this.repaint();
-//        }else{
-//            s = getSelectedShape(evt.getPoint());
-//            if(s instanceof Line2D) setLocation((Line2D)s,evt.getPoint());
-//        }
         p = evt.getPoint();
         if (!editar) {
             vShape.add(0, createShape(p, p));
@@ -200,7 +182,7 @@ public class Lienzo extends javax.swing.JPanel {
             if (s != null) {
                 double x = (s instanceof Line2D) ? ((Line2D) s).getX1() : s.getBounds2D().getX();
                 double y = (s instanceof Line2D) ? ((Line2D) s).getY1() : s.getBounds2D().getY();
-                dXY.setLocation(x-p.getX(), y-p.getY());
+                dXY.setLocation(x - p.getX(), y - p.getY());
             }
         }
     }//GEN-LAST:event_formMousePressed
@@ -210,18 +192,8 @@ public class Lienzo extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
-//        if(!editar){
-//            if (forma != Lienzo.PUNTO) {
-//                updateShape(pIni, evt.getPoint());
-//                this.repaint();
-//            }
-//        }else{
-//            s = getSelectedShape(evt.getPoint());
-//            if(s instanceof Line2D) setLocation((Line2D)s,evt.getPoint());
-//        }
-//        
         Point pEvt = evt.getPoint();
-        
+
         if (!editar) {
             if (forma != Lienzo.PUNTO) {
                 updateShape(p, evt.getPoint());
@@ -285,7 +257,4 @@ public class Lienzo extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-    private void setLineLocation(Line2D line, Point2D p) {
-
-    }
 }

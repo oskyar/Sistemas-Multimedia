@@ -69,11 +69,3 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
     private practica7.Lienzo lienzo1;
     // End of variables declaration//GEN-END:variables
 }
- 
-/* Para comprobar la figura que es, se hace dentro del UPDATE
-if (s instanceOf Line2D){
-    ((Lide2D)s).setLine(....)
-}else if (s instanceOf (RectangleShape){
-
-    ((RectangularShape)s) .setFrame(----)
-}*/
