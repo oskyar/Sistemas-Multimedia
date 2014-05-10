@@ -77,6 +77,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelRelleno = new javax.swing.JPanel();
         checkboxRelleno = new javax.swing.JCheckBox();
         checkboxEditar = new javax.swing.JCheckBox();
+        contenedorBrillo = new javax.swing.JPanel();
+        panelBrillo = new javax.swing.JPanel();
+        jSlider1 = new javax.swing.JSlider();
+        contenedorBrillo1 = new javax.swing.JPanel();
+        panelBrillo1 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox();
         panelLabelFigura = new javax.swing.JPanel();
         labelFigura = new javax.swing.JLabel();
         menu = new javax.swing.JMenuBar();
@@ -86,6 +92,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         guardar = new javax.swing.JMenuItem();
         edicion = new javax.swing.JMenu();
         verBarraEstado = new javax.swing.JCheckBoxMenuItem();
+        imagen = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -367,6 +376,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 checkboxRellenoStateChanged(evt);
             }
         });
+        checkboxRelleno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkboxRellenoActionPerformed(evt);
+            }
+        });
         panelRelleno.add(checkboxRelleno);
 
         checkboxEditar.setText("Editar");
@@ -385,6 +399,53 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorEditarRelleno.add(panelRelleno);
 
         panelAtributos.add(contenedorEditarRelleno);
+
+        contenedorBrillo.setBorder(javax.swing.BorderFactory.createTitledBorder("Brillo"));
+        contenedorBrillo.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorBrillo.setMinimumSize(new java.awt.Dimension(95, 90));
+        contenedorBrillo.setPreferredSize(new java.awt.Dimension(95, 90));
+        contenedorBrillo.setLayout(new java.awt.GridLayout(0, 1));
+
+        panelBrillo.setBorder(null);
+        panelBrillo.setToolTipText("");
+        panelBrillo.setMaximumSize(new java.awt.Dimension(90, 80));
+        panelBrillo.setMinimumSize(new java.awt.Dimension(90, 80));
+        panelBrillo.setPreferredSize(new java.awt.Dimension(90, 80));
+        panelBrillo.setLayout(new java.awt.BorderLayout());
+
+        jSlider1.setMinimum(-100);
+        jSlider1.setPaintLabels(true);
+        jSlider1.setPaintTicks(true);
+        jSlider1.setValue(0);
+        panelBrillo.add(jSlider1, java.awt.BorderLayout.CENTER);
+
+        contenedorBrillo.add(panelBrillo);
+
+        panelAtributos.add(contenedorBrillo);
+
+        contenedorBrillo1.setBorder(javax.swing.BorderFactory.createTitledBorder("Efecto"));
+        contenedorBrillo1.setToolTipText("");
+        contenedorBrillo1.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorBrillo1.setMinimumSize(new java.awt.Dimension(95, 90));
+        contenedorBrillo1.setPreferredSize(new java.awt.Dimension(95, 90));
+        contenedorBrillo1.setLayout(new java.awt.GridLayout(0, 1));
+
+        panelBrillo1.setBorder(null);
+        panelBrillo1.setToolTipText("");
+        panelBrillo1.setMaximumSize(new java.awt.Dimension(90, 80));
+        panelBrillo1.setMinimumSize(new java.awt.Dimension(90, 80));
+        panelBrillo1.setPreferredSize(new java.awt.Dimension(90, 80));
+        panelBrillo1.setLayout(new java.awt.BorderLayout());
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setMaximumSize(new java.awt.Dimension(100, 50));
+        jComboBox1.setMinimumSize(new java.awt.Dimension(100, 50));
+        jComboBox1.setPreferredSize(new java.awt.Dimension(50, 20));
+        panelBrillo1.add(jComboBox1, java.awt.BorderLayout.CENTER);
+
+        contenedorBrillo1.add(panelBrillo1);
+
+        panelAtributos.add(contenedorBrillo1);
 
         pie.add(panelAtributos, java.awt.BorderLayout.CENTER);
 
@@ -445,6 +506,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         edicion.add(verBarraEstado);
 
         menu.add(edicion);
+
+        imagen.setText("Imagen");
+
+        jMenuItem1.setText("ResacaleOp");
+        imagen.add(jMenuItem1);
+
+        jMenuItem2.setText("ConvolveOp");
+        imagen.add(jMenuItem2);
+
+        menu.add(imagen);
 
         setJMenuBar(menu);
 
@@ -571,7 +642,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void botonLapizMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonLapizMouseClicked
         labelFigura.setText("Lápiz");
         botonLapiz.setSelected(true);
-    //    lienzo.setForma(Lienzo.PUNTO);
+        Lienzo.setForma(Lienzo.PUNTO);
     }//GEN-LAST:event_botonLapizMouseClicked
 
     private void checkboxRellenoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxRellenoStateChanged
@@ -594,6 +665,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             vInt.getLienzo().setStroke(new BasicStroke(((Integer)grosor.getValue()).floatValue())); 
         }
     }//GEN-LAST:event_grosorStateChanged
+
+    private void checkboxRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkboxRellenoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_checkboxRellenoActionPerformed
 
     public VentanaInterna getVentanaInterna(){
         return vi;
@@ -625,6 +700,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JToggleButton botonRectangulo;
     private javax.swing.JCheckBox checkboxEditar;
     private javax.swing.JCheckBox checkboxRelleno;
+    private javax.swing.JPanel contenedorBrillo;
+    private javax.swing.JPanel contenedorBrillo1;
     private javax.swing.JPanel contenedorColores;
     private javax.swing.JPanel contenedorEditarRelleno;
     private javax.swing.JPanel contenedorGrosor;
@@ -633,11 +710,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane escritorio;
     private javax.swing.JSpinner grosor;
     private javax.swing.JMenuItem guardar;
+    private javax.swing.JMenu imagen;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JSlider jSlider1;
     private javax.swing.JLabel labelFigura;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenuItem nuevo;
     private javax.swing.JPanel panelAtributos;
+    private javax.swing.JPanel panelBrillo;
+    private javax.swing.JPanel panelBrillo1;
     private javax.swing.JPanel panelColores;
     private javax.swing.JPanel panelGrosor;
     private javax.swing.JPanel panelLabelFigura;

@@ -578,7 +578,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void botonLapizMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonLapizMouseClicked
         labelFigura.setText("Lápiz");
         botonLapiz.setSelected(true);
-    //    lienzo.setForma(Lienzo.PUNTO);
+        Lienzo.setForma(Lienzo.LINEA);
     }//GEN-LAST:event_botonLapizMouseClicked
 
     private void checkboxRellenoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxRellenoStateChanged
