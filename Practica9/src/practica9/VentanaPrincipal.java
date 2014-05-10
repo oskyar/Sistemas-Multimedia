@@ -7,8 +7,12 @@ package practica9;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
+import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -29,6 +33,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private VentanaInterna vi;
     private int numVentanas;
     private Shape s;
+    private BufferedImage imgSource2;
 
     public VentanaPrincipal() {
         initComponents();
@@ -79,10 +84,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         checkboxEditar = new javax.swing.JCheckBox();
         contenedorBrillo = new javax.swing.JPanel();
         panelBrillo = new javax.swing.JPanel();
-        jSlider1 = new javax.swing.JSlider();
-        contenedorBrillo1 = new javax.swing.JPanel();
-        panelBrillo1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
+        sliderBrillo = new javax.swing.JSlider();
+        contenedorEfecto = new javax.swing.JPanel();
+        panelEfecto = new javax.swing.JPanel();
+        listaEfectos = new javax.swing.JComboBox();
         panelLabelFigura = new javax.swing.JPanel();
         labelFigura = new javax.swing.JLabel();
         menu = new javax.swing.JMenuBar();
@@ -93,8 +98,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         edicion = new javax.swing.JMenu();
         verBarraEstado = new javax.swing.JCheckBoxMenuItem();
         imagen = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        menuRescaleOp = new javax.swing.JMenuItem();
+        menuConvolveOp = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -413,39 +418,52 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelBrillo.setPreferredSize(new java.awt.Dimension(90, 80));
         panelBrillo.setLayout(new java.awt.BorderLayout());
 
-        jSlider1.setMinimum(-100);
-        jSlider1.setPaintLabels(true);
-        jSlider1.setPaintTicks(true);
-        jSlider1.setValue(0);
-        panelBrillo.add(jSlider1, java.awt.BorderLayout.CENTER);
+        sliderBrillo.setMinimum(-100);
+        sliderBrillo.setValue(0);
+        sliderBrillo.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderBrilloStateChanged(evt);
+            }
+        });
+        sliderBrillo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                sliderBrilloFocusGained(evt);
+            }
+        });
+        panelBrillo.add(sliderBrillo, java.awt.BorderLayout.CENTER);
 
         contenedorBrillo.add(panelBrillo);
 
         panelAtributos.add(contenedorBrillo);
 
-        contenedorBrillo1.setBorder(javax.swing.BorderFactory.createTitledBorder("Efecto"));
-        contenedorBrillo1.setToolTipText("");
-        contenedorBrillo1.setMaximumSize(new java.awt.Dimension(200, 90));
-        contenedorBrillo1.setMinimumSize(new java.awt.Dimension(95, 90));
-        contenedorBrillo1.setPreferredSize(new java.awt.Dimension(95, 90));
-        contenedorBrillo1.setLayout(new java.awt.GridLayout(0, 1));
+        contenedorEfecto.setBorder(javax.swing.BorderFactory.createTitledBorder("Efecto"));
+        contenedorEfecto.setToolTipText("");
+        contenedorEfecto.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorEfecto.setMinimumSize(new java.awt.Dimension(95, 90));
+        contenedorEfecto.setPreferredSize(new java.awt.Dimension(150, 90));
+        contenedorEfecto.setLayout(new java.awt.GridLayout(0, 1));
 
-        panelBrillo1.setBorder(null);
-        panelBrillo1.setToolTipText("");
-        panelBrillo1.setMaximumSize(new java.awt.Dimension(90, 80));
-        panelBrillo1.setMinimumSize(new java.awt.Dimension(90, 80));
-        panelBrillo1.setPreferredSize(new java.awt.Dimension(90, 80));
-        panelBrillo1.setLayout(new java.awt.BorderLayout());
+        panelEfecto.setBorder(null);
+        panelEfecto.setToolTipText("");
+        panelEfecto.setMaximumSize(new java.awt.Dimension(200, 200));
+        panelEfecto.setMinimumSize(new java.awt.Dimension(90, 80));
+        panelEfecto.setPreferredSize(new java.awt.Dimension(150, 80));
+        panelEfecto.setLayout(new java.awt.BorderLayout());
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.setMaximumSize(new java.awt.Dimension(100, 50));
-        jComboBox1.setMinimumSize(new java.awt.Dimension(100, 50));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(50, 20));
-        panelBrillo1.add(jComboBox1, java.awt.BorderLayout.CENTER);
+        listaEfectos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano" }));
+        listaEfectos.setMaximumSize(new java.awt.Dimension(200, 50));
+        listaEfectos.setMinimumSize(new java.awt.Dimension(150, 40));
+        listaEfectos.setPreferredSize(new java.awt.Dimension(150, 40));
+        listaEfectos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listaEfectosActionPerformed(evt);
+            }
+        });
+        panelEfecto.add(listaEfectos, java.awt.BorderLayout.CENTER);
 
-        contenedorBrillo1.add(panelBrillo1);
+        contenedorEfecto.add(panelEfecto);
 
-        panelAtributos.add(contenedorBrillo1);
+        panelAtributos.add(contenedorEfecto);
 
         pie.add(panelAtributos, java.awt.BorderLayout.CENTER);
 
@@ -509,11 +527,21 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         imagen.setText("Imagen");
 
-        jMenuItem1.setText("ResacaleOp");
-        imagen.add(jMenuItem1);
+        menuRescaleOp.setText("RescaleOp");
+        menuRescaleOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRescaleOpActionPerformed(evt);
+            }
+        });
+        imagen.add(menuRescaleOp);
 
-        jMenuItem2.setText("ConvolveOp");
-        imagen.add(jMenuItem2);
+        menuConvolveOp.setText("ConvolveOp");
+        menuConvolveOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuConvolveOpActionPerformed(evt);
+            }
+        });
+        imagen.add(menuConvolveOp);
 
         menu.add(imagen);
 
@@ -560,11 +588,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         if (resp == JFileChooser.APPROVE_OPTION) {
             try {
                 File f = dlg.getSelectedFile();
-                VentanaInterna vi = (VentanaInterna)escritorio.getSelectedFrame();
+                VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
                 BufferedImage img = vi.getLienzo().getImage();
                 img = vi.getLienzo().volcado(img);
-                
-                ImageIO.write(img,"jpg", f);
+
+                ImageIO.write(img, "jpg", f);
                 //Código 
             } catch (IOException ex) {
                 Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -632,9 +660,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_abrirActionPerformed
 
     private void verBarraEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verBarraEstadoActionPerformed
-        if(!verBarraEstado.isSelected()){
-            panelLabelFigura.setVisible(false);        
-        }else{
+        if (!verBarraEstado.isSelected()) {
+            panelLabelFigura.setVisible(false);
+        } else {
             panelLabelFigura.setVisible(true);
         }
     }//GEN-LAST:event_verBarraEstadoActionPerformed
@@ -647,22 +675,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void checkboxRellenoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxRellenoStateChanged
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if( vInt != null){
+        if (vInt != null) {
             vInt.getLienzo().setRelleno(checkboxRelleno.isSelected());
         }
     }//GEN-LAST:event_checkboxRellenoStateChanged
 
     private void checkboxEditarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxEditarStateChanged
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if( vInt != null){
+        if (vInt != null) {
             vInt.getLienzo().setEditar(checkboxEditar.isSelected());
         }
     }//GEN-LAST:event_checkboxEditarStateChanged
 
     private void grosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosorStateChanged
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if( vInt != null){
-            vInt.getLienzo().setStroke(new BasicStroke(((Integer)grosor.getValue()).floatValue())); 
+        if (vInt != null) {
+            vInt.getLienzo().setStroke(new BasicStroke(((Integer) grosor.getValue()).floatValue()));
         }
     }//GEN-LAST:event_grosorStateChanged
 
@@ -670,14 +698,172 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_checkboxRellenoActionPerformed
 
-    public VentanaInterna getVentanaInterna(){
+    private void menuRescaleOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRescaleOpActionPerformed
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImage();
+            if (imgSource != null) {
+                try {
+                    RescaleOp rop = new RescaleOp(1.0F, 100.0F, null);
+                    BufferedImage imgdest = rop.filter(imgSource, null);
+                    vi.getLienzo().setImage(imgdest);
+                    vi.getLienzo().repaint();
+                } catch (IllegalArgumentException e) {
+                    System.err.println(e.getLocalizedMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_menuRescaleOpActionPerformed
+
+    BufferedImage convertImageType(BufferedImage img, int type) {
+        if (img == null) {
+            return null;
+        }
+        BufferedImage imgOut = new BufferedImage(img.getWidth(),
+                img.getHeight(), type);
+        Graphics2D g2d = imgOut.createGraphics();
+        g2d.drawImage(img, 0, 0, null);
+        return imgOut;
+    }
+
+
+    private void menuConvolveOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConvolveOpActionPerformed
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImage();
+            if (imgSource != null) {
+                try {
+                    ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_MEDIA_3x3));
+                    BufferedImage imgdest = cop.filter(imgSource, null);
+                    vi.getLienzo().setImage(imgdest);
+                    vi.getLienzo().repaint();
+                } catch (IllegalArgumentException e) {
+                    System.err.println(e.getLocalizedMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_menuConvolveOpActionPerformed
+
+    private void sliderBrilloStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderBrilloStateChanged
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+        if (vi != null) {
+            if (imgSource2 != null) {
+                try {
+                    RescaleOp rop = new RescaleOp(1.0F, (float) sliderBrillo.getValue(), null);
+                    BufferedImage imgdest = rop.filter(imgSource2, null);
+                    vi.getLienzo().setImage(imgdest);
+                    vi.getLienzo().repaint();
+                } catch (IllegalArgumentException e) {
+                    System.err.println(e.getLocalizedMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_sliderBrilloStateChanged
+
+    private void sliderBrilloFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderBrilloFocusGained
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+        if (vi != null) {
+            imgSource2 = vi.getLienzo().getImage();
+        }
+    }//GEN-LAST:event_sliderBrilloFocusGained
+
+    private void listaEfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaEfectosActionPerformed
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+
+        switch (listaEfectos.getSelectedIndex()) {
+
+            case KernelProducer.TYPE_MEDIA_3x3:
+                if (vi != null) {
+                    BufferedImage imgSource = vi.getLienzo().getImage();
+                    if (imgSource != null) {
+                        try {
+                            ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_MEDIA_3x3));
+                            BufferedImage imgdest = cop.filter(imgSource, null);
+                            vi.getLienzo().setImage(imgdest);
+                            vi.getLienzo().repaint();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getLocalizedMessage());
+                        }
+                    }
+                }
+                break;
+
+            case KernelProducer.TYPE_BINOMIAL_3x3:
+                if (vi != null) {
+                    BufferedImage imgSource = vi.getLienzo().getImage();
+                    if (imgSource != null) {
+                        try {
+                            ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_BINOMIAL_3x3));
+                            BufferedImage imgdest = cop.filter(imgSource, null);
+                            vi.getLienzo().setImage(imgdest);
+                            vi.getLienzo().repaint();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getLocalizedMessage());
+                        }
+                    }
+                }
+                break;
+
+            case KernelProducer.TYPE_ENFOQUE_3x3:
+                if (vi != null) {
+                    BufferedImage imgSource = vi.getLienzo().getImage();
+                    if (imgSource != null) {
+                        try {
+                            ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_ENFOQUE_3x3));
+                            BufferedImage imgdest = cop.filter(imgSource, null);
+                            vi.getLienzo().setImage(imgdest);
+                            vi.getLienzo().repaint();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getLocalizedMessage());
+                        }
+                    }
+                }
+
+                break;
+
+            case KernelProducer.TYPE_RELIEVE_3x3:
+                if (vi != null) {
+                    BufferedImage imgSource = vi.getLienzo().getImage();
+                    if (imgSource != null) {
+                        try {
+                            ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_RELIEVE_3x3));
+                            BufferedImage imgdest = cop.filter(imgSource, null);
+                            vi.getLienzo().setImage(imgdest);
+                            vi.getLienzo().repaint();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getLocalizedMessage());
+                        }
+                    }
+                }
+                break;
+
+            case KernelProducer.TYPE_LAPLACIANA_3x3:
+                if (vi != null) {
+                    BufferedImage imgSource = vi.getLienzo().getImage();
+                    if (imgSource != null) {
+                        try {
+                            ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_LAPLACIANA_3x3));
+                            BufferedImage imgdest = cop.filter(imgSource, null);
+                            vi.getLienzo().setImage(imgdest);
+                            vi.getLienzo().repaint();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getLocalizedMessage());
+                        }
+                    }
+                }
+                break;
+
+        }
+    }//GEN-LAST:event_listaEfectosActionPerformed
+
+    public VentanaInterna getVentanaInterna() {
         return vi;
     }
-    
-    public void setVentanaInterna(VentanaInterna vi){
+
+    public void setVentanaInterna(VentanaInterna vi) {
         this.vi = vi;
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -701,9 +887,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkboxEditar;
     private javax.swing.JCheckBox checkboxRelleno;
     private javax.swing.JPanel contenedorBrillo;
-    private javax.swing.JPanel contenedorBrillo1;
     private javax.swing.JPanel contenedorColores;
     private javax.swing.JPanel contenedorEditarRelleno;
+    private javax.swing.JPanel contenedorEfecto;
     private javax.swing.JPanel contenedorGrosor;
     private javax.swing.JPanel cuerpo;
     private javax.swing.JMenu edicion;
@@ -711,22 +897,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JSpinner grosor;
     private javax.swing.JMenuItem guardar;
     private javax.swing.JMenu imagen;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JLabel labelFigura;
+    private javax.swing.JComboBox listaEfectos;
     private javax.swing.JMenuBar menu;
+    private javax.swing.JMenuItem menuConvolveOp;
+    private javax.swing.JMenuItem menuRescaleOp;
     private javax.swing.JMenuItem nuevo;
     private javax.swing.JPanel panelAtributos;
     private javax.swing.JPanel panelBrillo;
-    private javax.swing.JPanel panelBrillo1;
     private javax.swing.JPanel panelColores;
+    private javax.swing.JPanel panelEfecto;
     private javax.swing.JPanel panelGrosor;
     private javax.swing.JPanel panelLabelFigura;
     private javax.swing.JPanel panelRelleno;
     private javax.swing.JPanel pie;
+    private javax.swing.JSlider sliderBrillo;
     private javax.swing.JCheckBoxMenuItem verBarraEstado;
     // End of variables declaration//GEN-END:variables
 }
