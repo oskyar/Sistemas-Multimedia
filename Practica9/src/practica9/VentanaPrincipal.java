@@ -11,7 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
 import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +32,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private VentanaInterna vi;
     private int numVentanas;
     private Shape s;
-    private BufferedImage imgSource2;
+    
 
     public VentanaPrincipal() {
         initComponents();
@@ -418,7 +417,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelBrillo.setPreferredSize(new java.awt.Dimension(90, 80));
         panelBrillo.setLayout(new java.awt.BorderLayout());
 
-        sliderBrillo.setMinimum(-100);
+        sliderBrillo.setMaximum(200);
+        sliderBrillo.setMinimum(-200);
+        sliderBrillo.setPaintLabels(true);
         sliderBrillo.setValue(0);
         sliderBrillo.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -426,8 +427,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         sliderBrillo.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                sliderBrilloFocusGained(evt);
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                sliderBrilloFocusLost(evt);
             }
         });
         panelBrillo.add(sliderBrillo, java.awt.BorderLayout.CENTER);
@@ -589,7 +590,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             try {
                 File f = dlg.getSelectedFile();
                 VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
-                BufferedImage img = vi.getLienzo().getImage();
+                BufferedImage img = vi.getLienzo().getImageOriginal();
                 img = vi.getLienzo().volcado(img);
 
                 ImageIO.write(img, "jpg", f);
@@ -650,7 +651,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 File f = dlg.getSelectedFile();
                 BufferedImage img = ImageIO.read(f);
                 VentanaInterna vi = new VentanaInterna();
-                vi.getLienzo().setImage(img);
+                vi.getLienzo().setImageOriginal(img);
+                //vi.getLienzo().setImageActual(img);
                 this.escritorio.add(vi);
                 vi.setVisible(true);
             } catch (Exception ex) {
@@ -701,12 +703,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void menuRescaleOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRescaleOpActionPerformed
         VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
         if (vi != null) {
-            BufferedImage imgSource = vi.getLienzo().getImage();
+            BufferedImage imgSource = vi.getLienzo().getImageOriginal();
             if (imgSource != null) {
                 try {
                     RescaleOp rop = new RescaleOp(1.0F, 100.0F, null);
                     BufferedImage imgdest = rop.filter(imgSource, null);
-                    vi.getLienzo().setImage(imgdest);
+                    vi.getLienzo().setImageOriginal(imgdest);
                     vi.getLienzo().repaint();
                 } catch (IllegalArgumentException e) {
                     System.err.println(e.getLocalizedMessage());
@@ -730,12 +732,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void menuConvolveOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConvolveOpActionPerformed
         VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
         if (vi != null) {
-            BufferedImage imgSource = vi.getLienzo().getImage();
+            BufferedImage imgSource = vi.getLienzo().getImageOriginal();
             if (imgSource != null) {
                 try {
                     ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_MEDIA_3x3));
                     BufferedImage imgdest = cop.filter(imgSource, null);
-                    vi.getLienzo().setImage(imgdest);
+                    vi.getLienzo().setImageOriginal(imgdest);
                     vi.getLienzo().repaint();
                 } catch (IllegalArgumentException e) {
                     System.err.println(e.getLocalizedMessage());
@@ -747,11 +749,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void sliderBrilloStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderBrilloStateChanged
         VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
         if (vi != null) {
-            if (imgSource2 != null) {
+            if (vi.getLienzo().getImageOriginal() != null) {
                 try {
                     RescaleOp rop = new RescaleOp(1.0F, (float) sliderBrillo.getValue(), null);
-                    BufferedImage imgdest = rop.filter(imgSource2, null);
-                    vi.getLienzo().setImage(imgdest);
+                    BufferedImage imgdest = rop.filter(vi.getLienzo().getImageOriginal(), null);
+                    vi.getLienzo().setImageActual(imgdest);
                     vi.getLienzo().repaint();
                 } catch (IllegalArgumentException e) {
                     System.err.println(e.getLocalizedMessage());
@@ -760,13 +762,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_sliderBrilloStateChanged
 
-    private void sliderBrilloFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderBrilloFocusGained
-        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
-        if (vi != null) {
-            imgSource2 = vi.getLienzo().getImage();
-        }
-    }//GEN-LAST:event_sliderBrilloFocusGained
-
     private void listaEfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaEfectosActionPerformed
         VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
 
@@ -774,12 +769,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
             case KernelProducer.TYPE_MEDIA_3x3:
                 if (vi != null) {
-                    BufferedImage imgSource = vi.getLienzo().getImage();
+                    BufferedImage imgSource = vi.getLienzo().getImageOriginal();
                     if (imgSource != null) {
                         try {
                             ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_MEDIA_3x3));
                             BufferedImage imgdest = cop.filter(imgSource, null);
-                            vi.getLienzo().setImage(imgdest);
+                            vi.getLienzo().setImageActual(imgdest);
                             vi.getLienzo().repaint();
                         } catch (IllegalArgumentException e) {
                             System.err.println(e.getLocalizedMessage());
@@ -790,12 +785,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
             case KernelProducer.TYPE_BINOMIAL_3x3:
                 if (vi != null) {
-                    BufferedImage imgSource = vi.getLienzo().getImage();
+                    BufferedImage imgSource = vi.getLienzo().getImageOriginal();
                     if (imgSource != null) {
                         try {
                             ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_BINOMIAL_3x3));
                             BufferedImage imgdest = cop.filter(imgSource, null);
-                            vi.getLienzo().setImage(imgdest);
+                            vi.getLienzo().setImageActual(imgdest);
                             vi.getLienzo().repaint();
                         } catch (IllegalArgumentException e) {
                             System.err.println(e.getLocalizedMessage());
@@ -806,12 +801,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
             case KernelProducer.TYPE_ENFOQUE_3x3:
                 if (vi != null) {
-                    BufferedImage imgSource = vi.getLienzo().getImage();
+                    BufferedImage imgSource = vi.getLienzo().getImageOriginal();
                     if (imgSource != null) {
                         try {
                             ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_ENFOQUE_3x3));
                             BufferedImage imgdest = cop.filter(imgSource, null);
-                            vi.getLienzo().setImage(imgdest);
+                            vi.getLienzo().setImageActual(imgdest);
                             vi.getLienzo().repaint();
                         } catch (IllegalArgumentException e) {
                             System.err.println(e.getLocalizedMessage());
@@ -823,12 +818,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
             case KernelProducer.TYPE_RELIEVE_3x3:
                 if (vi != null) {
-                    BufferedImage imgSource = vi.getLienzo().getImage();
+                    BufferedImage imgSource = vi.getLienzo().getImageOriginal();
                     if (imgSource != null) {
                         try {
                             ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_RELIEVE_3x3));
                             BufferedImage imgdest = cop.filter(imgSource, null);
-                            vi.getLienzo().setImage(imgdest);
+                            vi.getLienzo().setImageActual(imgdest);
                             vi.getLienzo().repaint();
                         } catch (IllegalArgumentException e) {
                             System.err.println(e.getLocalizedMessage());
@@ -839,12 +834,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
             case KernelProducer.TYPE_LAPLACIANA_3x3:
                 if (vi != null) {
-                    BufferedImage imgSource = vi.getLienzo().getImage();
+                    BufferedImage imgSource = vi.getLienzo().getImageOriginal();
                     if (imgSource != null) {
                         try {
                             ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_LAPLACIANA_3x3));
                             BufferedImage imgdest = cop.filter(imgSource, null);
-                            vi.getLienzo().setImage(imgdest);
+                            vi.getLienzo().setImageActual(imgdest);
                             vi.getLienzo().repaint();
                         } catch (IllegalArgumentException e) {
                             System.err.println(e.getLocalizedMessage());
@@ -855,6 +850,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_listaEfectosActionPerformed
+
+    private void sliderBrilloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderBrilloFocusLost
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+        if(vi!=null)vi.getLienzo().setImageOriginal(vi.getLienzo().getImageActual());
+       /* if(vi!=null)vi.getLienzo().setImageActual(null);
+        */
+        sliderBrillo.setValue(0);
+    }//GEN-LAST:event_sliderBrilloFocusLost
 
     public VentanaInterna getVentanaInterna() {
         return vi;

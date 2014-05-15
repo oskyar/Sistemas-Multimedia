@@ -43,6 +43,7 @@ public class Lienzo extends javax.swing.JPanel {
     boolean relleno, editar;
     private final Point2D dXY;
     private BufferedImage img;
+    private BufferedImage imgDest;
 
     /**
      * Creates new form NewJPanel
@@ -62,7 +63,7 @@ public class Lienzo extends javax.swing.JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
-        if(img!=null) g2d.drawImage(img,0,0, this);
+        if(imgDest!=null) g2d.drawImage(imgDest,0,0, this);
         g2d.setPaint(color);
         g2d.setStroke(stroke);
         for (Shape s : vShape) {
@@ -262,12 +263,15 @@ public class Lienzo extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 
-    void setImage(BufferedImage img) {
-        setPreferredSize(new Dimension(img.getWidth(),img.getHeight()));
-        this.img = img;
+    void setImageOriginal(BufferedImage img) {
+        if(img!=null){
+            setPreferredSize(new Dimension(img.getWidth(),img.getHeight()));
+            this.img = img;
+            setImageActual(img);
+        }
     }
     
-    public BufferedImage getImage(){
+    public BufferedImage getImageOriginal(){
         return this.img;
     }
     
@@ -283,4 +287,14 @@ public class Lienzo extends javax.swing.JPanel {
         }
         return img;
     }
+    
+    void setImageActual(BufferedImage imgDest) {
+        setPreferredSize(new Dimension(img.getWidth(),img.getHeight()));
+        this.imgDest = imgDest;
+    }
+    
+    public BufferedImage getImageActual(){
+        return this.imgDest;
+    }
+    
 }
