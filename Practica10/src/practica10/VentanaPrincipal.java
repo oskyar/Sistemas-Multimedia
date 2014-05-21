@@ -8,10 +8,16 @@ package practica10;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
+import java.awt.image.LookupOp;
+import java.awt.image.LookupTable;
 import java.awt.image.RescaleOp;
+import java.awt.image.ShortLookupTable;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -32,7 +38,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private VentanaInterna vi;
     private int numVentanas;
     private Shape s;
-    
 
     public VentanaPrincipal() {
         initComponents();
@@ -72,6 +77,23 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         escritorio = new javax.swing.JDesktopPane();
         pie = new javax.swing.JPanel();
         paneles = new javax.swing.JPanel();
+        panelImagen = new javax.swing.JPanel();
+        contenedorBrillo = new javax.swing.JPanel();
+        sliderBrillo = new javax.swing.JSlider();
+        contenedorEfecto = new javax.swing.JPanel();
+        listaEfectos = new javax.swing.JComboBox();
+        contenedorContraste = new javax.swing.JPanel();
+        botonContraste = new javax.swing.JButton();
+        botonIluminar = new javax.swing.JButton();
+        botonOscurecer = new javax.swing.JButton();
+        contenedorRotacion = new javax.swing.JPanel();
+        sliderRotacion = new javax.swing.JSlider();
+        botonRotacion90 = new javax.swing.JButton();
+        botonRotacion180 = new javax.swing.JButton();
+        botonRotacion270 = new javax.swing.JButton();
+        contenedorEscala = new javax.swing.JPanel();
+        botonAumentar = new javax.swing.JButton();
+        botonDisminuir = new javax.swing.JButton();
         panelColor = new javax.swing.JPanel();
         contenedorColores = new javax.swing.JPanel();
         panelColores = new javax.swing.JPanel();
@@ -88,13 +110,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelRelleno = new javax.swing.JPanel();
         checkboxRelleno = new javax.swing.JCheckBox();
         checkboxEditar = new javax.swing.JCheckBox();
-        panelImagen = new javax.swing.JPanel();
-        contenedorBrillo = new javax.swing.JPanel();
-        panelBrillo = new javax.swing.JPanel();
-        sliderBrillo2 = new javax.swing.JSlider();
-        contenedorEfecto = new javax.swing.JPanel();
-        panelEfecto = new javax.swing.JPanel();
-        listaEfectos = new javax.swing.JComboBox();
         panelLabelFigura = new javax.swing.JPanel();
         labelFigura = new javax.swing.JLabel();
         menu = new javax.swing.JMenuBar();
@@ -113,6 +128,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         paletaOpciones.setLayout(new javax.swing.BoxLayout(paletaOpciones, javax.swing.BoxLayout.LINE_AXIS));
 
         BotonesFiguras.setRollover(true);
+        BotonesFiguras.setPreferredSize(new java.awt.Dimension(273, 50));
 
         BotonesMenu.add(botonLapiz);
         botonLapiz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Lapiz.gif"))); // NOI18N
@@ -162,15 +178,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         BotonesFiguras.add(botonOvalo);
 
-        botonesPaletas.setMaximumSize(new java.awt.Dimension(150, 50));
-        botonesPaletas.setPreferredSize(new java.awt.Dimension(125, 50));
-        botonesPaletas.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 0));
+        botonesPaletas.setAlignmentX(0.0F);
+        botonesPaletas.setAlignmentY(0.0F);
+        botonesPaletas.setMaximumSize(new java.awt.Dimension(150, 45));
+        botonesPaletas.setPreferredSize(new java.awt.Dimension(125, 45));
+        botonesPaletas.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 0));
 
         grupoPaletas.add(botonPaletaColor);
         botonPaletaColor.setSelected(true);
         botonPaletaColor.setText("Color");
         botonPaletaColor.setFocusable(false);
-        botonPaletaColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonPaletaColor.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        botonPaletaColor.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         botonPaletaColor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         botonPaletaColor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -182,7 +201,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         grupoPaletas.add(botonPaletaImagen);
         botonPaletaImagen.setText("Imagen");
         botonPaletaImagen.setFocusable(false);
-        botonPaletaImagen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonPaletaImagen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        botonPaletaImagen.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         botonPaletaImagen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         botonPaletaImagen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -205,10 +225,230 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         pie.setLayout(new java.awt.BorderLayout());
 
-        java.awt.GridBagLayout panelesLayout = new java.awt.GridBagLayout();
-        panelesLayout.columnWidths = new int[] {0, 5, 0};
-        panelesLayout.rowHeights = new int[] {0, 5, 0};
-        paneles.setLayout(panelesLayout);
+        paneles.setLayout(new javax.swing.BoxLayout(paneles, javax.swing.BoxLayout.Y_AXIS));
+
+        panelImagen.setNextFocusableComponent(botonPaletaImagen);
+        panelImagen.setPreferredSize(new java.awt.Dimension(831, 100));
+        panelImagen.setLayout(new javax.swing.BoxLayout(panelImagen, javax.swing.BoxLayout.LINE_AXIS));
+
+        contenedorBrillo.setBorder(javax.swing.BorderFactory.createTitledBorder("Brillo"));
+        contenedorBrillo.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorBrillo.setMinimumSize(new java.awt.Dimension(95, 90));
+        contenedorBrillo.setLayout(new java.awt.GridBagLayout());
+
+        sliderBrillo.setMaximum(200);
+        sliderBrillo.setMinimum(-200);
+        sliderBrillo.setPaintLabels(true);
+        sliderBrillo.setValue(0);
+        sliderBrillo.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderBrilloStateChanged(evt);
+            }
+        });
+        sliderBrillo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                sliderBrilloFocusLost(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 200;
+        gridBagConstraints.gridy = 50;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        contenedorBrillo.add(sliderBrillo, gridBagConstraints);
+
+        panelImagen.add(contenedorBrillo);
+
+        contenedorEfecto.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro"));
+        contenedorEfecto.setToolTipText("");
+        contenedorEfecto.setMaximumSize(new java.awt.Dimension(400, 90));
+        contenedorEfecto.setMinimumSize(new java.awt.Dimension(95, 90));
+        contenedorEfecto.setLayout(new java.awt.GridBagLayout());
+
+        listaEfectos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano" }));
+        listaEfectos.setMaximumSize(new java.awt.Dimension(170, 50));
+        listaEfectos.setMinimumSize(new java.awt.Dimension(170, 30));
+        listaEfectos.setPreferredSize(null);
+        listaEfectos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listaEfectosActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        contenedorEfecto.add(listaEfectos, gridBagConstraints);
+
+        panelImagen.add(contenedorEfecto);
+
+        contenedorContraste.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraste"));
+        contenedorContraste.setToolTipText("");
+        contenedorContraste.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorContraste.setLayout(new java.awt.GridBagLayout());
+
+        botonContraste.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/contraste.png"))); // NOI18N
+        botonContraste.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonContraste.setDisabledIcon(null);
+        botonContraste.setMaximumSize(new java.awt.Dimension(50, 35));
+        botonContraste.setMinimumSize(new java.awt.Dimension(50, 35));
+        botonContraste.setPreferredSize(new java.awt.Dimension(50, 35));
+        botonContraste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonContrasteActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 25;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.weightx = 1.0;
+        contenedorContraste.add(botonContraste, gridBagConstraints);
+
+        botonIluminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iluminar.png"))); // NOI18N
+        botonIluminar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonIluminar.setDisabledIcon(null);
+        botonIluminar.setMaximumSize(new java.awt.Dimension(50, 35));
+        botonIluminar.setMinimumSize(new java.awt.Dimension(50, 35));
+        botonIluminar.setPreferredSize(new java.awt.Dimension(50, 35));
+        botonIluminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonIluminarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 25;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.weightx = 1.0;
+        contenedorContraste.add(botonIluminar, gridBagConstraints);
+
+        botonOscurecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/oscurecer.png"))); // NOI18N
+        botonOscurecer.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonOscurecer.setDisabledIcon(null);
+        botonOscurecer.setMaximumSize(new java.awt.Dimension(50, 35));
+        botonOscurecer.setMinimumSize(new java.awt.Dimension(50, 35));
+        botonOscurecer.setPreferredSize(new java.awt.Dimension(50, 35));
+        botonOscurecer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonOscurecerActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 25;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.weightx = 1.0;
+        contenedorContraste.add(botonOscurecer, gridBagConstraints);
+
+        panelImagen.add(contenedorContraste);
+
+        contenedorRotacion.setBorder(javax.swing.BorderFactory.createTitledBorder("Rotación"));
+        contenedorRotacion.setToolTipText("");
+        contenedorRotacion.setMaximumSize(new java.awt.Dimension(450, 90));
+        contenedorRotacion.setMinimumSize(new java.awt.Dimension(175, 91));
+        contenedorRotacion.setPreferredSize(new java.awt.Dimension(450, 97));
+        contenedorRotacion.setLayout(new java.awt.GridBagLayout());
+
+        sliderRotacion.setMajorTickSpacing(180);
+        sliderRotacion.setMaximum(360);
+        sliderRotacion.setMinorTickSpacing(90);
+        sliderRotacion.setPaintLabels(true);
+        sliderRotacion.setPaintTicks(true);
+        sliderRotacion.setToolTipText("");
+        sliderRotacion.setValue(0);
+        sliderRotacion.setMaximumSize(new java.awt.Dimension(250, 65));
+        sliderRotacion.setMinimumSize(new java.awt.Dimension(250, 65));
+        sliderRotacion.setPreferredSize(new java.awt.Dimension(250, 65));
+        sliderRotacion.setValueIsAdjusting(true);
+        sliderRotacion.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderRotacionStateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        contenedorRotacion.add(sliderRotacion, gridBagConstraints);
+
+        botonRotacion90.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/rotacion90.png"))); // NOI18N
+        botonRotacion90.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonRotacion90.setMaximumSize(new java.awt.Dimension(50, 35));
+        botonRotacion90.setMinimumSize(new java.awt.Dimension(50, 35));
+        botonRotacion90.setPreferredSize(new java.awt.Dimension(50, 35));
+        botonRotacion90.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRotacion90ActionPerformed(evt);
+            }
+        });
+        contenedorRotacion.add(botonRotacion90, new java.awt.GridBagConstraints());
+
+        botonRotacion180.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/rotacion180.png"))); // NOI18N
+        botonRotacion180.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonRotacion180.setMaximumSize(new java.awt.Dimension(50, 35));
+        botonRotacion180.setMinimumSize(new java.awt.Dimension(50, 35));
+        botonRotacion180.setPreferredSize(new java.awt.Dimension(50, 35));
+        botonRotacion180.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRotacion180ActionPerformed(evt);
+            }
+        });
+        contenedorRotacion.add(botonRotacion180, new java.awt.GridBagConstraints());
+
+        botonRotacion270.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/rotacion270.png"))); // NOI18N
+        botonRotacion270.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonRotacion270.setMaximumSize(new java.awt.Dimension(50, 35));
+        botonRotacion270.setMinimumSize(new java.awt.Dimension(50, 35));
+        botonRotacion270.setPreferredSize(new java.awt.Dimension(50, 35));
+        botonRotacion270.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRotacion270ActionPerformed(evt);
+            }
+        });
+        contenedorRotacion.add(botonRotacion270, new java.awt.GridBagConstraints());
+
+        panelImagen.add(contenedorRotacion);
+
+        contenedorEscala.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraste"));
+        contenedorEscala.setToolTipText("");
+        contenedorEscala.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorEscala.setLayout(new java.awt.GridBagLayout());
+
+        botonAumentar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/aumentar.png"))); // NOI18N
+        botonAumentar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonAumentar.setMaximumSize(new java.awt.Dimension(50, 35));
+        botonAumentar.setMinimumSize(new java.awt.Dimension(50, 35));
+        botonAumentar.setPreferredSize(new java.awt.Dimension(50, 35));
+        botonAumentar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAumentarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 25;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.weightx = 1.0;
+        contenedorEscala.add(botonAumentar, gridBagConstraints);
+
+        botonDisminuir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/disminuir.png"))); // NOI18N
+        botonDisminuir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonDisminuir.setMaximumSize(new java.awt.Dimension(50, 35));
+        botonDisminuir.setMinimumSize(new java.awt.Dimension(50, 35));
+        botonDisminuir.setPreferredSize(new java.awt.Dimension(50, 35));
+        botonDisminuir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonDisminuirActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 25;
+        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.weightx = 1.0;
+        contenedorEscala.add(botonDisminuir, gridBagConstraints);
+
+        panelImagen.add(contenedorEscala);
+
+        paneles.add(panelImagen);
 
         panelColor.setMaximumSize(new java.awt.Dimension(831, 100));
         panelColor.setNextFocusableComponent(botonPaletaColor);
@@ -450,87 +690,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         panelColor.add(contenedorEditarRelleno);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.gridheight = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        paneles.add(panelColor, gridBagConstraints);
-
-        panelImagen.setNextFocusableComponent(botonPaletaImagen);
-        panelImagen.setPreferredSize(new java.awt.Dimension(831, 100));
-        panelImagen.setLayout(new javax.swing.BoxLayout(panelImagen, javax.swing.BoxLayout.LINE_AXIS));
-
-        contenedorBrillo.setBorder(javax.swing.BorderFactory.createTitledBorder("Brillo"));
-        contenedorBrillo.setMaximumSize(new java.awt.Dimension(200, 90));
-        contenedorBrillo.setMinimumSize(new java.awt.Dimension(95, 90));
-        contenedorBrillo.setPreferredSize(new java.awt.Dimension(95, 90));
-        contenedorBrillo.setLayout(new java.awt.GridLayout(0, 1));
-
-        panelBrillo.setBorder(null);
-        panelBrillo.setToolTipText("");
-        panelBrillo.setMaximumSize(new java.awt.Dimension(90, 80));
-        panelBrillo.setMinimumSize(new java.awt.Dimension(90, 80));
-        panelBrillo.setPreferredSize(new java.awt.Dimension(90, 80));
-        panelBrillo.setLayout(new java.awt.BorderLayout());
-
-        sliderBrillo2.setMaximum(200);
-        sliderBrillo2.setMinimum(-200);
-        sliderBrillo2.setPaintLabels(true);
-        sliderBrillo2.setValue(0);
-        sliderBrillo2.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                sliderBrillo2StateChanged(evt);
-            }
-        });
-        sliderBrillo2.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                sliderBrillo2FocusLost(evt);
-            }
-        });
-        panelBrillo.add(sliderBrillo2, java.awt.BorderLayout.CENTER);
-
-        contenedorBrillo.add(panelBrillo);
-
-        panelImagen.add(contenedorBrillo);
-
-        contenedorEfecto.setBorder(javax.swing.BorderFactory.createTitledBorder("Efecto"));
-        contenedorEfecto.setToolTipText("");
-        contenedorEfecto.setMaximumSize(new java.awt.Dimension(200, 90));
-        contenedorEfecto.setMinimumSize(new java.awt.Dimension(95, 90));
-        contenedorEfecto.setPreferredSize(new java.awt.Dimension(150, 90));
-        contenedorEfecto.setLayout(new java.awt.GridLayout(0, 1));
-
-        panelEfecto.setBorder(null);
-        panelEfecto.setToolTipText("");
-        panelEfecto.setMaximumSize(new java.awt.Dimension(200, 200));
-        panelEfecto.setMinimumSize(new java.awt.Dimension(90, 80));
-        panelEfecto.setPreferredSize(new java.awt.Dimension(150, 80));
-        panelEfecto.setLayout(new java.awt.BorderLayout());
-
-        listaEfectos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano" }));
-        listaEfectos.setMaximumSize(new java.awt.Dimension(200, 50));
-        listaEfectos.setMinimumSize(new java.awt.Dimension(150, 40));
-        listaEfectos.setPreferredSize(new java.awt.Dimension(150, 40));
-        listaEfectos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                listaEfectosActionPerformed(evt);
-            }
-        });
-        panelEfecto.add(listaEfectos, java.awt.BorderLayout.CENTER);
-
-        contenedorEfecto.add(panelEfecto);
-
-        panelImagen.add(contenedorEfecto);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        paneles.add(panelImagen, gridBagConstraints);
+        paneles.add(panelColor);
 
         pie.add(paneles, java.awt.BorderLayout.LINE_START);
 
@@ -823,18 +983,275 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelImagen.setVisible(true);
         this.repaint();    }//GEN-LAST:event_botonPaletaImagenActionPerformed
 
-    private void sliderBrillo2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderBrillo2StateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sliderBrillo2StateChanged
+    private void sliderBrilloStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderBrilloStateChanged
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+        if (vi != null) {
+            if (vi.getLienzo().getImageOriginal() != null) {
+                try {
+                    RescaleOp rop = new RescaleOp(1.0F, (float) sliderBrillo.getValue(), null);
+                    BufferedImage imgdest = rop.filter(vi.getLienzo().getImageOriginal(), null);
+                    vi.getLienzo().setImageActual(imgdest);
+                    vi.getLienzo().repaint();
+                } catch (IllegalArgumentException e) {
+                    System.err.println(e.getLocalizedMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_sliderBrilloStateChanged
 
-    private void sliderBrillo2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderBrillo2FocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sliderBrillo2FocusLost
+    private void sliderBrilloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderBrilloFocusLost
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+        if (vi != null) {
+            vi.getLienzo().setImageOriginal(vi.getLienzo().getImageActual());
+        }
+        sliderBrillo.setValue(0);
+    }//GEN-LAST:event_sliderBrilloFocusLost
 
     private void listaEfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaEfectosActionPerformed
-        // TODO add your handling code here:
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+
+        switch (listaEfectos.getSelectedIndex()) {
+
+            case KernelProducer.TYPE_MEDIA_3x3:
+                if (vi != null) {
+                    BufferedImage imgSource = vi.getLienzo().getImageOriginal();
+                    if (imgSource != null) {
+                        try {
+                            ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_MEDIA_3x3));
+                            BufferedImage imgdest = cop.filter(imgSource, null);
+                            vi.getLienzo().setImageActual(imgdest);
+                            vi.getLienzo().repaint();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getLocalizedMessage());
+                        }
+                    }
+                }
+                break;
+
+            case KernelProducer.TYPE_BINOMIAL_3x3:
+                if (vi != null) {
+                    BufferedImage imgSource = vi.getLienzo().getImageOriginal();
+                    if (imgSource != null) {
+                        try {
+                            ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_BINOMIAL_3x3));
+                            BufferedImage imgdest = cop.filter(imgSource, null);
+                            vi.getLienzo().setImageActual(imgdest);
+                            vi.getLienzo().repaint();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getLocalizedMessage());
+                        }
+                    }
+                }
+                break;
+
+            case KernelProducer.TYPE_ENFOQUE_3x3:
+                if (vi != null) {
+                    BufferedImage imgSource = vi.getLienzo().getImageOriginal();
+                    if (imgSource != null) {
+                        try {
+                            ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_ENFOQUE_3x3));
+                            BufferedImage imgdest = cop.filter(imgSource, null);
+                            vi.getLienzo().setImageActual(imgdest);
+                            vi.getLienzo().repaint();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getLocalizedMessage());
+                        }
+                    }
+                }
+
+                break;
+
+            case KernelProducer.TYPE_RELIEVE_3x3:
+                if (vi != null) {
+                    BufferedImage imgSource = vi.getLienzo().getImageOriginal();
+                    if (imgSource != null) {
+                        try {
+                            ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_RELIEVE_3x3));
+                            BufferedImage imgdest = cop.filter(imgSource, null);
+                            vi.getLienzo().setImageActual(imgdest);
+                            vi.getLienzo().repaint();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getLocalizedMessage());
+                        }
+                    }
+                }
+                break;
+
+            case KernelProducer.TYPE_LAPLACIANA_3x3:
+                if (vi != null) {
+                    BufferedImage imgSource = vi.getLienzo().getImageOriginal();
+                    if (imgSource != null) {
+                        try {
+                            ConvolveOp cop = new ConvolveOp(KernelProducer.createKernel(KernelProducer.TYPE_LAPLACIANA_3x3));
+                            BufferedImage imgdest = cop.filter(imgSource, null);
+                            vi.getLienzo().setImageActual(imgdest);
+                            vi.getLienzo().repaint();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getLocalizedMessage());
+                        }
+                    }
+                }
+                break;
+
+        }
     }//GEN-LAST:event_listaEfectosActionPerformed
 
+    private void botonContrasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonContrasteActionPerformed
+  
+        try {
+            VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+            if (vi != null) {
+                BufferedImage imgActual = convertImageType(vi.getLienzo().getImageActual(), BufferedImage.TYPE_INT_RGB);
+                LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_SFUNCION);
+                LookupOp lop = new LookupOp(ltp, null);
+                BufferedImage imgdest = lop.filter(imgActual, null);
+                
+                if (imgdest != null){
+                    vi.getLienzo().setImageOriginal(imgdest);
+                    vi.getLienzo().repaint();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el contraste");
+        }
+    }//GEN-LAST:event_botonContrasteActionPerformed
+
+    private void botonIluminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIluminarActionPerformed
+        try {
+            VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+            if (vi != null) {
+                BufferedImage imgActual = convertImageType(vi.getLienzo().getImageActual(), BufferedImage.TYPE_INT_RGB);
+                LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_LOGARITHM);
+                LookupOp lop = new LookupOp(ltp, null);
+                BufferedImage imgdest = lop.filter(imgActual, null);
+                
+                if (imgdest != null){
+                    vi.getLienzo().setImageOriginal(imgdest);
+                    vi.getLienzo().repaint();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error al iluminar");
+        }
+    }//GEN-LAST:event_botonIluminarActionPerformed
+
+    private void botonOscurecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOscurecerActionPerformed
+        try {
+            VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+            if (vi != null) {
+                BufferedImage imgActual = convertImageType(vi.getLienzo().getImageActual(), BufferedImage.TYPE_INT_RGB);
+                LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_POWER);
+                LookupOp lop = new LookupOp(ltp, null);
+                BufferedImage imgdest = lop.filter(imgActual, null);
+                if (imgdest != null){
+                    vi.getLienzo().setImageOriginal(imgdest);
+                    vi.getLienzo().repaint();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error al oscurecer");
+        }
+    }//GEN-LAST:event_botonOscurecerActionPerformed
+
+    private void sliderRotacionStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderRotacionStateChanged
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImageOriginal();
+            double r = Math.toRadians(sliderRotacion.getValue());
+            Point p = new Point(imgSource.getWidth() / 2, imgSource.getHeight() / 2);
+            AffineTransform at = AffineTransform.getRotateInstance(r, p.x, p.y);
+            AffineTransformOp atop;
+            atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+            BufferedImage imgdest = atop.filter(imgSource, null);
+            if (imgdest != null){
+                vi.getLienzo().setImageActual(imgdest);
+                vi.getLienzo().repaint();
+            }
+        }
+    }//GEN-LAST:event_sliderRotacionStateChanged
+
+    private void botonRotacion90ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRotacion90ActionPerformed
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImageActual();
+            double r = Math.toRadians(90);
+            Point p = new Point(imgSource.getWidth() / 2, imgSource.getHeight() / 2);
+            AffineTransform at = AffineTransform.getRotateInstance(r, p.x, p.y);
+            AffineTransformOp atop;
+            atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+            BufferedImage imgdest = atop.filter(imgSource, null);
+            if (imgdest != null){
+                vi.getLienzo().setImageOriginal(imgdest);
+                vi.getLienzo().repaint();
+            }
+        }
+    }//GEN-LAST:event_botonRotacion90ActionPerformed
+
+    private void botonRotacion180ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRotacion180ActionPerformed
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImageActual();
+            double r = Math.toRadians(180);
+            Point p = new Point(imgSource.getWidth() / 2, imgSource.getHeight() / 2);
+            AffineTransform at = AffineTransform.getRotateInstance(r, p.x, p.y);
+            AffineTransformOp atop;
+            atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+            BufferedImage imgdest = atop.filter(imgSource, null);
+            if (imgdest != null){
+                vi.getLienzo().setImageOriginal(imgdest);
+                vi.getLienzo().repaint();
+            }
+        }
+    }//GEN-LAST:event_botonRotacion180ActionPerformed
+
+    private void botonRotacion270ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRotacion270ActionPerformed
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImageActual();
+            double r = Math.toRadians(270);
+            Point p = new Point(imgSource.getWidth() / 2, imgSource.getHeight() / 2);
+            AffineTransform at = AffineTransform.getRotateInstance(r, p.x, p.y);
+            AffineTransformOp atop;
+            atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+            BufferedImage imgdest = atop.filter(imgSource, null);
+            if (imgdest != null){
+                vi.getLienzo().setImageOriginal(imgdest);
+                vi.getLienzo().repaint();
+            }
+        }
+    }//GEN-LAST:event_botonRotacion270ActionPerformed
+
+    private void botonAumentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAumentarActionPerformed
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImageActual();
+            AffineTransform at = AffineTransform.getScaleInstance(1.25, 1.25);
+            AffineTransformOp atop;
+            atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+            BufferedImage imgdest = atop.filter(imgSource, null);
+            if (imgdest != null){
+                vi.getLienzo().setImageOriginal(imgdest);
+                vi.getLienzo().repaint();
+            }
+        }
+    }//GEN-LAST:event_botonAumentarActionPerformed
+
+    private void botonDisminuirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDisminuirActionPerformed
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImageActual();
+            AffineTransform at = AffineTransform.getScaleInstance(0.75, 0.75);
+            AffineTransformOp atop;
+            atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+            BufferedImage imgdest = atop.filter(imgSource, null);
+            if (imgdest != null){
+                vi.getLienzo().setImageOriginal(imgdest);
+                vi.getLienzo().repaint();
+            }
+        }
+    }//GEN-LAST:event_botonDisminuirActionPerformed
+
+    
     public VentanaInterna getVentanaInterna() {
         return vi;
     }
@@ -853,26 +1270,37 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.ButtonGroup GrupoColores;
     private javax.swing.JMenuItem abrir;
     private javax.swing.JMenu archivo;
+    private javax.swing.JButton botonAumentar;
     private javax.swing.JButton botonColorAmarillo;
     private javax.swing.JButton botonColorAzul;
     private javax.swing.JButton botonColorBlanco;
     private javax.swing.JButton botonColorNegro;
     private javax.swing.JButton botonColorRojo;
     private javax.swing.JButton botonColorVerde;
+    private javax.swing.JButton botonContraste;
+    private javax.swing.JButton botonDisminuir;
+    private javax.swing.JButton botonIluminar;
     private javax.swing.JToggleButton botonLapiz;
     private javax.swing.JToggleButton botonLinea;
+    private javax.swing.JButton botonOscurecer;
     private javax.swing.JToggleButton botonOvalo;
     private javax.swing.JRadioButton botonPaletaColor;
     private javax.swing.JRadioButton botonPaletaImagen;
     private javax.swing.JToggleButton botonRectangulo;
+    private javax.swing.JButton botonRotacion180;
+    private javax.swing.JButton botonRotacion270;
+    private javax.swing.JButton botonRotacion90;
     private javax.swing.JPanel botonesPaletas;
     private javax.swing.JCheckBox checkboxEditar;
     private javax.swing.JCheckBox checkboxRelleno;
     private javax.swing.JPanel contenedorBrillo;
     private javax.swing.JPanel contenedorColores;
+    private javax.swing.JPanel contenedorContraste;
     private javax.swing.JPanel contenedorEditarRelleno;
     private javax.swing.JPanel contenedorEfecto;
+    private javax.swing.JPanel contenedorEscala;
     private javax.swing.JPanel contenedorGrosor;
+    private javax.swing.JPanel contenedorRotacion;
     private javax.swing.JPanel cuerpo;
     private javax.swing.JMenu edicion;
     private javax.swing.JDesktopPane escritorio;
@@ -887,17 +1315,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuRescaleOp;
     private javax.swing.JMenuItem nuevo;
     private javax.swing.JPanel paletaOpciones;
-    private javax.swing.JPanel panelBrillo;
     private javax.swing.JPanel panelColor;
     private javax.swing.JPanel panelColores;
-    private javax.swing.JPanel panelEfecto;
     private javax.swing.JPanel panelGrosor;
     private javax.swing.JPanel panelImagen;
     private javax.swing.JPanel panelLabelFigura;
     private javax.swing.JPanel panelRelleno;
     private javax.swing.JPanel paneles;
     private javax.swing.JPanel pie;
-    private javax.swing.JSlider sliderBrillo2;
+    private javax.swing.JSlider sliderBrillo;
+    private javax.swing.JSlider sliderRotacion;
     private javax.swing.JCheckBoxMenuItem verBarraEstado;
     // End of variables declaration//GEN-END:variables
 }

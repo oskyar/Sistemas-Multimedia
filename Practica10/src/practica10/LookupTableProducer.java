@@ -1,5 +1,5 @@
 
-package sm.practica10.imagen2d_Op2;
+package practica10;
 
 import java.awt.image.LookupTable;
 import java.awt.image.ShortLookupTable;
