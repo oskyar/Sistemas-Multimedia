@@ -365,6 +365,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 sliderRotacionStateChanged(evt);
             }
         });
+        sliderRotacion.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                sliderRotacionFocusLost(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -933,7 +938,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             if (imgSource != null) {
                 try {
                     RescaleOp rop = new RescaleOp(1.0F, 100.0F, null);
-                    BufferedImage imgdest = rop.filter(imgSource, null);
+                    BufferedImage imgdest = rop.filter(convertImageType(imgSource, BufferedImage.TYPE_INT_RGB), null);
                     vi.getLienzo().setImageOriginal(imgdest);
                     vi.getLienzo().repaint();
                 } catch (IllegalArgumentException e) {
@@ -989,7 +994,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             if (vi.getLienzo().getImageOriginal() != null) {
                 try {
                     RescaleOp rop = new RescaleOp(1.0F, (float) sliderBrillo.getValue(), null);
-                    BufferedImage imgdest = rop.filter(vi.getLienzo().getImageOriginal(), null);
+                    BufferedImage imgdest = rop.filter(convertImageType(vi.getLienzo().getImageOriginal(), BufferedImage.TYPE_INT_RGB), null);
                     vi.getLienzo().setImageActual(imgdest);
                     vi.getLienzo().repaint();
                 } catch (IllegalArgumentException e) {
@@ -1250,6 +1255,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_botonDisminuirActionPerformed
+
+    private void sliderRotacionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderRotacionFocusLost
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+        if (vi != null) {
+            vi.getLienzo().setImageOriginal(vi.getLienzo().getImageActual());
+        }
+        sliderRotacion.setValue(0);
+    }//GEN-LAST:event_sliderRotacionFocusLost
 
     
     public VentanaInterna getVentanaInterna() {
