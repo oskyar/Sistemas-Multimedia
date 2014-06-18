@@ -854,8 +854,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void sliderBrilloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderBrilloFocusLost
         VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
         if(vi!=null)vi.getLienzo().setImageOriginal(vi.getLienzo().getImageActual());
-       /* if(vi!=null)vi.getLienzo().setImageActual(null);
-        */
         sliderBrillo.setValue(0);
     }//GEN-LAST:event_sliderBrilloFocusLost
 

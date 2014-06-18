@@ -20,7 +20,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 
 /**
  *

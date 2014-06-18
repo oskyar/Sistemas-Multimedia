@@ -1,0 +1,1 @@
+java -jar practica10.jar

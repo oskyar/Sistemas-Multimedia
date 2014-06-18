@@ -17,13 +17,13 @@ import java.awt.image.ConvolveOp;
 import java.awt.image.LookupOp;
 import java.awt.image.LookupTable;
 import java.awt.image.RescaleOp;
-import java.awt.image.ShortLookupTable;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import sm.image.KernelProducer;
 
 /**
  *
@@ -122,6 +122,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         imagen = new javax.swing.JMenu();
         menuRescaleOp = new javax.swing.JMenuItem();
         menuConvolveOp = new javax.swing.JMenuItem();
+        umbralizacion = new javax.swing.JMenuItem();
+        restar = new javax.swing.JMenuItem();
+        multiplicar = new javax.swing.JMenuItem();
+        sobelMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -775,6 +779,38 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         imagen.add(menuConvolveOp);
 
+        umbralizacion.setText("Umbralización");
+        umbralizacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                umbralizacionActionPerformed(evt);
+            }
+        });
+        imagen.add(umbralizacion);
+
+        restar.setText("Restar");
+        restar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                restarActionPerformed(evt);
+            }
+        });
+        imagen.add(restar);
+
+        multiplicar.setText("Multiplicación");
+        multiplicar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                multiplicarActionPerformed(evt);
+            }
+        });
+        imagen.add(multiplicar);
+
+        sobelMenu.setText("Sobel");
+        sobelMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sobelMenuActionPerformed(evt);
+            }
+        });
+        imagen.add(sobelMenu);
+
         menu.add(imagen);
 
         setJMenuBar(menu);
@@ -1102,7 +1138,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_listaEfectosActionPerformed
 
     private void botonContrasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonContrasteActionPerformed
-  
+
         try {
             VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
             if (vi != null) {
@@ -1110,8 +1146,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_SFUNCION);
                 LookupOp lop = new LookupOp(ltp, null);
                 BufferedImage imgdest = lop.filter(imgActual, null);
-                
-                if (imgdest != null){
+
+                if (imgdest != null) {
                     vi.getLienzo().setImageOriginal(imgdest);
                     vi.getLienzo().repaint();
                 }
@@ -1129,8 +1165,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_LOGARITHM);
                 LookupOp lop = new LookupOp(ltp, null);
                 BufferedImage imgdest = lop.filter(imgActual, null);
-                
-                if (imgdest != null){
+
+                if (imgdest != null) {
                     vi.getLienzo().setImageOriginal(imgdest);
                     vi.getLienzo().repaint();
                 }
@@ -1148,7 +1184,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_POWER);
                 LookupOp lop = new LookupOp(ltp, null);
                 BufferedImage imgdest = lop.filter(imgActual, null);
-                if (imgdest != null){
+                if (imgdest != null) {
                     vi.getLienzo().setImageOriginal(imgdest);
                     vi.getLienzo().repaint();
                 }
@@ -1168,7 +1204,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             AffineTransformOp atop;
             atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
             BufferedImage imgdest = atop.filter(imgSource, null);
-            if (imgdest != null){
+            if (imgdest != null) {
                 vi.getLienzo().setImageActual(imgdest);
                 vi.getLienzo().repaint();
             }
@@ -1185,7 +1221,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             AffineTransformOp atop;
             atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
             BufferedImage imgdest = atop.filter(imgSource, null);
-            if (imgdest != null){
+            if (imgdest != null) {
                 vi.getLienzo().setImageOriginal(imgdest);
                 vi.getLienzo().repaint();
             }
@@ -1202,7 +1238,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             AffineTransformOp atop;
             atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
             BufferedImage imgdest = atop.filter(imgSource, null);
-            if (imgdest != null){
+            if (imgdest != null) {
                 vi.getLienzo().setImageOriginal(imgdest);
                 vi.getLienzo().repaint();
             }
@@ -1219,7 +1255,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             AffineTransformOp atop;
             atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
             BufferedImage imgdest = atop.filter(imgSource, null);
-            if (imgdest != null){
+            if (imgdest != null) {
                 vi.getLienzo().setImageOriginal(imgdest);
                 vi.getLienzo().repaint();
             }
@@ -1234,7 +1270,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             AffineTransformOp atop;
             atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
             BufferedImage imgdest = atop.filter(imgSource, null);
-            if (imgdest != null){
+            if (imgdest != null) {
                 vi.getLienzo().setImageOriginal(imgdest);
                 vi.getLienzo().repaint();
             }
@@ -1249,7 +1285,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             AffineTransformOp atop;
             atop = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
             BufferedImage imgdest = atop.filter(imgSource, null);
-            if (imgdest != null){
+            if (imgdest != null) {
                 vi.getLienzo().setImageOriginal(imgdest);
                 vi.getLienzo().repaint();
             }
@@ -1264,7 +1300,68 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         sliderRotacion.setValue(0);
     }//GEN-LAST:event_sliderRotacionFocusLost
 
-    
+    private void umbralizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_umbralizacionActionPerformed
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImageActual();    
+            UmbralizacionOp umbralizacion = new UmbralizacionOp(120);
+            BufferedImage imgdest = umbralizacion.filter(imgSource, null);
+            
+            if(imgdest !=null){
+                vi.getLienzo().setImageActual(imgdest);
+                vi.getLienzo().repaint();
+            }
+        }
+    }//GEN-LAST:event_umbralizacionActionPerformed
+
+    private void restarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restarActionPerformed
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            BufferedImage imgRight = vi.getLienzo().getImageActual();
+            VentanaInterna viNext = (VentanaInterna) escritorio.selectFrame(true);
+            if (viNext != null) {
+                BufferedImage imgLeft = viNext.getLienzo().getImageActual();
+                RestaOp op = new RestaOp(imgLeft);
+                BufferedImage imgdest = op.filter(imgRight, null);
+                if (imgdest != null) {
+                    vi.getLienzo().setImageActual(imgdest);
+                    vi.getLienzo().repaint();
+                }
+            }
+        }
+    }//GEN-LAST:event_restarActionPerformed
+
+    private void multiplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiplicarActionPerformed
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            BufferedImage imgRight = vi.getLienzo().getImageActual();
+            VentanaInterna viNext = (VentanaInterna) escritorio.selectFrame(true);
+            if (viNext != null) {
+                BufferedImage imgLeft = viNext.getLienzo().getImageActual();
+                MultiplicacionOp op = new MultiplicacionOp(imgLeft);
+                BufferedImage imgdest = op.filter(imgRight, null);
+                if (imgdest != null) {
+                    vi.getLienzo().setImageActual(imgdest);
+                    vi.getLienzo().repaint();
+                }
+            }
+        }
+    }//GEN-LAST:event_multiplicarActionPerformed
+
+    private void sobelMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sobelMenuActionPerformed
+        VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImageActual();    
+            SobelOp sobel = new SobelOp();
+            BufferedImage imgdest = sobel.filter(imgSource, null);
+            
+            if(imgdest !=null){
+                vi.getLienzo().setImageActual(imgdest);
+                vi.getLienzo().repaint();
+            }
+        }
+    }//GEN-LAST:event_sobelMenuActionPerformed
+
     public VentanaInterna getVentanaInterna() {
         return vi;
     }
@@ -1326,6 +1423,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenuItem menuConvolveOp;
     private javax.swing.JMenuItem menuRescaleOp;
+    private javax.swing.JMenuItem multiplicar;
     private javax.swing.JMenuItem nuevo;
     private javax.swing.JPanel paletaOpciones;
     private javax.swing.JPanel panelColor;
@@ -1336,8 +1434,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel panelRelleno;
     private javax.swing.JPanel paneles;
     private javax.swing.JPanel pie;
+    private javax.swing.JMenuItem restar;
     private javax.swing.JSlider sliderBrillo;
     private javax.swing.JSlider sliderRotacion;
+    private javax.swing.JMenuItem sobelMenu;
+    private javax.swing.JMenuItem umbralizacion;
     private javax.swing.JCheckBoxMenuItem verBarraEstado;
     // End of variables declaration//GEN-END:variables
 }
