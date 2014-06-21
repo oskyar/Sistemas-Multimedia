@@ -5,23 +5,23 @@
  */
 package practicaFinal;
 
-import practicaFinal.shapes.ORectangle2D;
-import practicaFinal.shapes.IOShape;
-import practicaFinal.shapes.OPoint2D;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.Stroke;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.function.Consumer;
+import practicaFinal.shapes.IOShape;
+import practicaFinal.shapes.OEllipse2D;
+import practicaFinal.shapes.OLine2D;
+import practicaFinal.shapes.OPoint2D;
+import practicaFinal.shapes.ORectangle2D;
 
 /**
  *
@@ -33,7 +33,7 @@ public class Lienzo extends javax.swing.JPanel {
     final static int LINEA = 1;
     final static int RECTANGULO = 2;
     final static int ELIPSE = 3;
-    final static int NUEVO = 4;
+
     //Variables privadas
     private static Color color;
     private static int forma;
@@ -54,12 +54,8 @@ public class Lienzo extends javax.swing.JPanel {
      */
     public Lienzo() {
         initComponents();
-
-//        stroke = new BasicStroke(1.0f);
         vShape = new ArrayList();
-//      color = new Color(0, 0, 0);
         editar = false;
-//        relleno = false;
         dXY = new Point(0, 0);
     }
 
@@ -70,6 +66,7 @@ public class Lienzo extends javax.swing.JPanel {
         if (imgDest != null) {
             g2d.drawImage(imgDest, 0, 0, this);
         }
+        
         for (IOShape sh : vShape) {
             sh.draw(g2d);
         }
@@ -88,7 +85,11 @@ public class Lienzo extends javax.swing.JPanel {
                 s.setStroke(stroke);
                 return s;
             case LINEA:
-//                return s = new OLine2D(p1, p1);
+                s = new OLine2D(p1, p1);
+                s.setColor(color);
+                s.setFill(relleno);
+                s.setStroke(stroke);
+                return s;
             case RECTANGULO:
                 s = new ORectangle2D(p1, p1);
                 s.setColor(color);
@@ -96,53 +97,25 @@ public class Lienzo extends javax.swing.JPanel {
                 s.setStroke(stroke);
                 return s;
             case ELIPSE:
-//                s = new OEllipse2D(p1,p1);
+                s = new OEllipse2D(p1, p1);
+                s.setColor(color);
+                s.setFill(relleno);
+                s.setStroke(stroke);
                 return s;
             default:
                 return s = null;
         }
     }
 
-    /**
-     * * CLASE AMODIFICAR CUANDO IMPLEMEMTE TODAS
-     */
-    private void updateShape(Point2D p1, Point2D p2) {
-        if (s instanceof Line2D) {
-            ((Line2D) s).setLine(p1, p2);
-        } else if (s instanceof RectangularShape) {
-            ((RectangularShape) s).setFrameFromDiagonal(p1, p2);
-        }
-    }
-
     private IOShape getSelectedShape(Point2D p) {
-        //Puedo recorrer el vector normal, porque inserto los elementos al estilo FIFO en un ArrayList
-        for (IOShape s : vShape) {
-            if (s.contains(p)) {
-                return s;
+        //Recorro el vector al revés, porque la primera figura en dibujarse es la última en seleccionarse.
+        for(int i=vShape.size()-1; i>=0; i--){
+            if(vShape.get(i).contains(p)){
+                return vShape.get(i);
             }
-        }
+       }
+
         return null;
-    }
-
-    public void setLocation(Shape s, Point2D p) {
-
-        if (s instanceof Line2D) {
-            double dx = p.getX() - ((Line2D) s).getX1();
-            double dy = p.getY() - ((Line2D) s).getY1();
-            Point2D newP = new Point2D.Double(((Line2D) s).getX2() + dx, ((Line2D) s).getY2() + dy);
-            ((Line2D) s).setLine(p, newP);
-        } else if (s instanceof RectangularShape) {
-            RectangularShape r = (RectangularShape) s;
-            r.setFrame(p, new Dimension((int) r.getWidth(), (int) r.getHeight()));
-        }
-    }
-
-    private boolean isNear(Line2D line, Point2D p) {
-        if (line.getP1().equals(line.getP2())) {
-            return line.getP1().distance(p) <= 3.0;
-        } else {
-            return line.ptLineDist(p) <= 3.0;
-        }
     }
 
     /**
@@ -183,7 +156,7 @@ public class Lienzo extends javax.swing.JPanel {
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         p = evt.getPoint();
         if (!editar) {
-            vShape.add(0, createShape(p, p));
+            vShape.add(createShape(p, p));
         } else {
             s = getSelectedShape(evt.getPoint());
             if (s != null) {
@@ -270,7 +243,6 @@ public class Lienzo extends javax.swing.JPanel {
 
     public static void setRelleno(boolean relleno) {
         Lienzo.relleno = relleno;
-        //repaint();
     }
 
     public boolean isEditar() {
@@ -287,7 +259,6 @@ public class Lienzo extends javax.swing.JPanel {
 
     public static void setStroke(Stroke sk) {
         stroke = sk;
-        //repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
