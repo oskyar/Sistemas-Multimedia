@@ -9,7 +9,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -37,7 +36,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     //Guardo la última ventana interna creada
     private VentanaInterna vi;
     private int numVentanas;
-    private Shape s;
 
     public VentanaPrincipal() {
         initComponents();
@@ -49,6 +47,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonLapiz.setSelected(true);
         panelColor.setVisible(true);
         panelImagen.setVisible(false);
+        Lienzo.setColor(Color.BLACK);
+        Lienzo.setForma(Lienzo.PUNTO);
+        Lienzo.setStroke(new BasicStroke(((Integer) grosor.getValue()).floatValue()));
     }
 
     /**
@@ -831,7 +832,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRectanguloMouseClicked
 
     private void botonOvaloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonOvaloMouseClicked
-        labelFigura.setText("Ovalo");
+        labelFigura.setText("Óvalo");
         botonOvalo.setSelected(true);
         Lienzo.setForma(Lienzo.ELIPSE);
     }//GEN-LAST:event_botonOvaloMouseClicked
@@ -840,10 +841,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         VentanaInterna vi = new VentanaInterna();
         escritorio.add(vi);
-        vi.getLienzo().setColor(getVentanaInterna().getLienzo().getColor());
-        vi.getLienzo().setStroke(getVentanaInterna().getLienzo().getStroke());
-        vi.getLienzo().setEditar(getVentanaInterna().getLienzo().isEditar());
-        vi.getLienzo().setRelleno(getVentanaInterna().getLienzo().isRelleno());
+        //     vi.getLienzo().setColor(getVentanaInterna().getLienzo().getColor());
+        //    vi.getLienzo().setStroke(getVentanaInterna().getLienzo().getStroke());
+        //    vi.getLienzo().setEditar(getVentanaInterna().getLienzo().isEditar());
+        //     vi.getLienzo().setRelleno(getVentanaInterna().getLienzo().isRelleno());
         vi.setTitle("Lienzo " + ++numVentanas);
         vi.setVisible(true);
         setVentanaInterna(vi);
@@ -870,44 +871,32 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void botonColorNegroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorNegroMouseClicked
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if (vInt != null) {
-            vInt.getLienzo().setColor(Color.black);
-        }
+        Lienzo.setColor(Color.black);
     }//GEN-LAST:event_botonColorNegroMouseClicked
 
     private void botonColorRojoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorRojoMouseClicked
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if (vInt != null) {
-            vInt.getLienzo().setColor(Color.red);
-        }
+        Lienzo.setColor(Color.red);
     }//GEN-LAST:event_botonColorRojoMouseClicked
 
     private void botonColorAzulMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorAzulMouseClicked
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if (vInt != null) {
-            vInt.getLienzo().setColor(Color.blue);
-        }
+        Lienzo.setColor(Color.blue);
     }//GEN-LAST:event_botonColorAzulMouseClicked
 
     private void botonColorBlancoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorBlancoMouseClicked
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if (vInt != null) {
-            vInt.getLienzo().setColor(Color.white);
-        }
+        Lienzo.setColor(Color.white);
     }//GEN-LAST:event_botonColorBlancoMouseClicked
 
     private void botonColorAmarilloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorAmarilloMouseClicked
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if (vInt != null) {
-            vInt.getLienzo().setColor(Color.yellow);
-        }
+        Lienzo.setColor(Color.yellow);
     }//GEN-LAST:event_botonColorAmarilloMouseClicked
 
     private void botonColorVerdeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorVerdeMouseClicked
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if (vInt != null) {
-            vInt.getLienzo().setColor(Color.green);
-        }
+        Lienzo.setColor(Color.green);
     }//GEN-LAST:event_botonColorVerdeMouseClicked
 
     private void abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirActionPerformed
@@ -944,23 +933,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void checkboxRellenoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxRellenoStateChanged
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if (vInt != null) {
-            vInt.getLienzo().setRelleno(checkboxRelleno.isSelected());
-        }
+        Lienzo.setRelleno(checkboxRelleno.isSelected());
     }//GEN-LAST:event_checkboxRellenoStateChanged
 
     private void checkboxEditarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxEditarStateChanged
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if (vInt != null) {
-            vInt.getLienzo().setEditar(checkboxEditar.isSelected());
-        }
+        Lienzo.setEditar(checkboxEditar.isSelected());
     }//GEN-LAST:event_checkboxEditarStateChanged
 
     private void grosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosorStateChanged
         VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        if (vInt != null) {
-            vInt.getLienzo().setStroke(new BasicStroke(((Integer) grosor.getValue()).floatValue()));
-        }
+        Lienzo.setStroke(new BasicStroke(((Integer) grosor.getValue()).floatValue()));
     }//GEN-LAST:event_grosorStateChanged
 
     private void checkboxRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkboxRellenoActionPerformed
@@ -1303,11 +1286,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void umbralizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_umbralizacionActionPerformed
         VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
         if (vi != null) {
-            BufferedImage imgSource = vi.getLienzo().getImageActual();    
+            BufferedImage imgSource = vi.getLienzo().getImageActual();
             UmbralizacionOp umbralizacion = new UmbralizacionOp(120);
             BufferedImage imgdest = umbralizacion.filter(imgSource, null);
-            
-            if(imgdest !=null){
+
+            if (imgdest != null) {
                 vi.getLienzo().setImageActual(imgdest);
                 vi.getLienzo().repaint();
             }
@@ -1351,11 +1334,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void sobelMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sobelMenuActionPerformed
         VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
         if (vi != null) {
-            BufferedImage imgSource = vi.getLienzo().getImageActual();    
+            BufferedImage imgSource = vi.getLienzo().getImageActual();
             SobelOp sobel = new SobelOp();
             BufferedImage imgdest = sobel.filter(imgSource, null);
-            
-            if(imgdest !=null){
+
+            if (imgdest != null) {
                 vi.getLienzo().setImageActual(imgdest);
                 vi.getLienzo().repaint();
             }

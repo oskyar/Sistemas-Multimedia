@@ -3,68 +3,60 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package practicaFinal;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RectangularShape;
 
 /**
  *
  * @author oskyar
  */
-public class ORectangle2D extends Rectangle2D.Double implements IOShape{
+public class OPoint2D extends Line2D.Double implements IOShape {
 
     private Color color;
     private boolean fill;
-    private Point2D p;
     private Stroke stroke;
 
-    public ORectangle2D(Point2D p1, double width, double height){
-        super(p1.getX(),p1.getY(),width,height);
+    public OPoint2D(Point2D p1, double width, double height) {
+        super(p1.getX(), p1.getY(), p1.getX(), p1.getY());
     }
-    
-    public ORectangle2D(Point2D p1, Point2D p2){
-        super(p1.getX(),p1.getY(),Math.abs(p1.getX()-p2.getX()),Math.abs(p1.getY()-p2.getY()));
-    }    
-    
-    public ORectangle2D(ORectangle2D rect){
-        super(rect.getX(),rect.getY(),rect.getWidth(),rect.getHeight());
-    }   
+
+    public OPoint2D(Point2D p1, Point2D p2) {
+        super(p1.getX(), p1.getY(), p1.getX(), p1.getY());
+    }
 
     @Override
     public double getBoundsX() {
-        return getBounds2D().getX();
+        return super.getX1();
     }
 
     @Override
     public void setX(java.lang.Double x) {
-        
+
     }
 
     @Override
     public double getBoundsY() {
-        return getBounds2D().getY();
+        return super.getY1();
     }
 
     @Override
     public void setY(java.lang.Double y) {
-        
+
     }
 
     @Override
     public Point2D getPoint() {
-        return p;
+        return super.getP1();
     }
 
     @Override
     public void setPoint(Point2D p) {
-        this.p=p;
+        super.setLine(p, p);
     }
 
     @Override
@@ -74,8 +66,9 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
 
     @Override
     public void setStroke(Stroke sk) {
-        if(sk != null)
+        if (sk != null) {
             this.stroke = sk;
+        }
     }
 
     @Override
@@ -85,8 +78,9 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
 
     @Override
     public void setColor(Color c) {
-        if( c !=null) 
+        if (c != null) {
             this.color = c;
+        }
     }
 
     @Override
@@ -103,20 +97,28 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     public void draw(Graphics2D g2d) {
         g2d.setPaint(getColor());
         g2d.setStroke(getStroke());
-        if(fill)
+        if (fill) {
             g2d.fill(this);
+        }
         g2d.draw(this);
     }
 
     @Override
+    public boolean contains(Point2D p) {
+        return getP1().distance(p) <= 3.0;
+    }
+
+    @Override
     public void setLocation(Point2D p) {
-        RectangularShape r = (RectangularShape) this;
-        r.setFrame(p, new Dimension((int) r.getWidth(), (int) r.getHeight()));
+        double dx = p.getX() - this.getX1();
+        double dy = p.getY() - this.getY1();
+        Point2D newP = new Point2D.Double(this.getX2() + dx, this.getY2() + dy);
+        this.setLine(p, newP);
     }
 
     @Override
     public void updateShape(Point2D p1, Point2D p2) {
-        setFrameFromDiagonal(p1, p2);
+        //Nada que añadir al punto
     }
-       
+
 }

@@ -16,7 +16,6 @@ import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -33,28 +32,31 @@ public class Lienzo extends javax.swing.JPanel {
     final static int ELIPSE = 3;
     final static int NUEVO = 4;
     //Variables privadas
-    private Color color;
+    private static Color color;
     private static int forma;
+    private static Stroke stroke;
+    private static boolean relleno;
+    private static boolean editar;
     private Point2D p;
-    private Stroke stroke;
-    private Shape s;
-    private final ArrayList<Shape> vShape;
-    boolean relleno, editar;
+    private IOShape s;
+    private final ArrayList<IOShape> vShape;
     private final Point2D dXY;
     private BufferedImage img;
     private BufferedImage imgDest;
 
     /**
-     * Creates new form NewJPanel
+     * Constructor sin parámetros de la clase Lienzo
+     *
+     * Se inician los componentes necesarios a un valor por defecto.
      */
     public Lienzo() {
         initComponents();
 
-        stroke = new BasicStroke(1.0f);
+//        stroke = new BasicStroke(1.0f);
         vShape = new ArrayList();
-        color = new Color(0, 0, 0);
+//      color = new Color(0, 0, 0);
         editar = false;
-        relleno = false;
+//        relleno = false;
         dXY = new Point(0, 0);
     }
 
@@ -62,40 +64,45 @@ public class Lienzo extends javax.swing.JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
-        if(imgDest!=null) g2d.drawImage(imgDest,0,0, this);
-        g2d.setPaint(color);
-        g2d.setStroke(stroke);
-        for (Shape s : vShape) {
-            if (relleno) {
-                g2d.fill(s);
-            }
-            g2d.draw(s);
+        if (imgDest != null) {
+            g2d.drawImage(imgDest, 0, 0, this);
+        }
+        for (IOShape sh : vShape) {
+            sh.draw(g2d);
         }
     }
 
-    private Shape createShape(Point2D p1, Point2D p2) {
+    private IOShape createShape(Point2D p1, Point2D p2) {
         if (p1 == null || (p2 == null && forma != PUNTO)) {
             return null;
         }
 
         switch (forma) {
             case PUNTO:
-                return s = new Line2D.Double(p1, p1);
+                s = new OPoint2D(p1, p1);
+                s.setColor(color);
+                s.setFill(relleno);
+                s.setStroke(stroke);
+                return s;
             case LINEA:
-                return s = new Line2D.Double(p1, p1);
+//                return s = new OLine2D(p1, p1);
             case RECTANGULO:
-                s = new Rectangle2D.Double();
-                ((RectangularShape) s).setFrameFromDiagonal(p1, p1);
+                s = new ORectangle2D(p1, p1);
+                s.setColor(color);
+                s.setFill(relleno);
+                s.setStroke(stroke);
                 return s;
             case ELIPSE:
-                s = new Ellipse2D.Double();
-                ((Ellipse2D) s).setFrameFromDiagonal(p1, p1);
+//                s = new OEllipse2D(p1,p1);
                 return s;
             default:
                 return s = null;
         }
     }
 
+    /**
+     * * CLASE AMODIFICAR CUANDO IMPLEMEMTE TODAS
+     */
     private void updateShape(Point2D p1, Point2D p2) {
         if (s instanceof Line2D) {
             ((Line2D) s).setLine(p1, p2);
@@ -104,25 +111,18 @@ public class Lienzo extends javax.swing.JPanel {
         }
     }
 
-    private Shape getSelectedShape(Point2D p) {
+    private IOShape getSelectedShape(Point2D p) {
         //Puedo recorrer el vector normal, porque inserto los elementos al estilo FIFO en un ArrayList
-        for (Shape s : vShape) {
-            if (contains((Shape) s, p)) {
+        for (IOShape s : vShape) {
+            if (s.contains(p)) {
                 return s;
             }
         }
         return null;
     }
 
-    public boolean contains(Shape sh, Point2D p) {
-        if (sh instanceof Line2D) {
-            return isNear((Line2D) sh, p);
-        } else {
-            return sh.contains(p);
-        }
-    }
-
     public void setLocation(Shape s, Point2D p) {
+
         if (s instanceof Line2D) {
             double dx = p.getX() - ((Line2D) s).getX1();
             double dy = p.getY() - ((Line2D) s).getY1();
@@ -184,8 +184,8 @@ public class Lienzo extends javax.swing.JPanel {
         } else {
             s = getSelectedShape(evt.getPoint());
             if (s != null) {
-                double x = (s instanceof Line2D) ? ((Line2D) s).getX1() : s.getBounds2D().getX();
-                double y = (s instanceof Line2D) ? ((Line2D) s).getY1() : s.getBounds2D().getY();
+                double x = s.getBoundsX();
+                double y = s.getBoundsY();
                 dXY.setLocation(x - p.getX(), y - p.getY());
             }
         }
@@ -199,18 +199,46 @@ public class Lienzo extends javax.swing.JPanel {
         Point pEvt = evt.getPoint();
 
         if (!editar) {
-            if (forma != Lienzo.PUNTO) {
-                updateShape(p, evt.getPoint());
-            }
+            s.updateShape(p, evt.getPoint());
         } else {
-            setLocation(s, new Point2D.Double(pEvt.getX() + dXY.getX(), pEvt.getY() + dXY.getY()));
+            if (s != null) {
+                s.setLocation(new Point2D.Double(pEvt.getX() + dXY.getX(), pEvt.getY() + dXY.getY()));
+            }
         }
         this.repaint();
     }//GEN-LAST:event_formMouseDragged
 
-    public void setColor(Color color) {
-        this.color = color;
-        this.repaint();
+    void setImageOriginal(BufferedImage img) {
+        if (img != null) {
+            setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
+            this.img = img;
+            setImageActual(img);
+        }
+    }
+
+    public BufferedImage getImageOriginal() {
+        return this.img;
+    }
+
+    public BufferedImage volcado(BufferedImage img) {
+        Graphics2D g = img.createGraphics();
+        vShape.stream().forEach((sh) -> {
+            sh.draw(g);
+        });
+        return img;
+    }
+
+    void setImageActual(BufferedImage imgDest) {
+        setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
+        this.imgDest = imgDest;
+    }
+
+    public BufferedImage getImageActual() {
+        return this.imgDest;
+    }
+
+    public static void setColor(Color color) {
+        Lienzo.color = color;
     }
 
     public Color getColor() {
@@ -233,67 +261,32 @@ public class Lienzo extends javax.swing.JPanel {
         this.p = p;
     }
 
-    public boolean isRelleno() {
-        return relleno;
+    public static boolean isRelleno() {
+        return Lienzo.relleno;
     }
 
-    public void setRelleno(boolean relleno) {
-        this.relleno = relleno;
-        repaint();
+    public static void setRelleno(boolean relleno) {
+        Lienzo.relleno = relleno;
+        //repaint();
     }
 
     public boolean isEditar() {
         return editar;
     }
 
-    public void setEditar(boolean editar) {
-        this.editar = editar;
+    public static void setEditar(boolean editar) {
+        Lienzo.editar = editar;
     }
 
     public Stroke getStroke() {
-        return stroke;
+        return Lienzo.stroke;
     }
 
-    public void setStroke(Stroke sk) {
-        this.stroke = sk;
-        repaint();
+    public static void setStroke(Stroke sk) {
+        stroke = sk;
+        //repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-
-    void setImageOriginal(BufferedImage img) {
-        if(img!=null){
-            setPreferredSize(new Dimension(img.getWidth(),img.getHeight()));
-            this.img = img;
-            setImageActual(img);
-        }
-    }
-    
-    public BufferedImage getImageOriginal(){
-        return this.img;
-    }
-    
-    public BufferedImage volcado(BufferedImage img){
-        Graphics2D g=img.createGraphics();
-        g.setColor(color);
-        g.setStroke(stroke);
-        for (Shape s : vShape) {
-            if (relleno) {
-                g.fill(s);
-            }
-            g.draw(s);
-        }
-        return img;
-    }
-    
-    void setImageActual(BufferedImage imgDest) {
-        setPreferredSize(new Dimension(img.getWidth(),img.getHeight()));
-        this.imgDest = imgDest;
-    }
-    
-    public BufferedImage getImageActual(){
-        return this.imgDest;
-    }
-    
 }
