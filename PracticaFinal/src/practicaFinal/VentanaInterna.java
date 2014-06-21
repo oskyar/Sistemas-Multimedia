@@ -6,6 +6,8 @@
 
 package practicaFinal;
 
+import practicaFinal.Lienzo;
+
 /**
  *
  * @author oskyar

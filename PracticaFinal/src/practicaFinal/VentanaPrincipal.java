@@ -5,6 +5,10 @@
  */
 package practicaFinal;
 
+import practicaFinal.filtros.MultiplicacionOp;
+import practicaFinal.filtros.RestaOp;
+import practicaFinal.filtros.SobelOp;
+import practicaFinal.filtros.UmbralizacionOp;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;

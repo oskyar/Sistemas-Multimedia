@@ -5,6 +5,9 @@
  */
 package practicaFinal;
 
+import practicaFinal.shapes.ORectangle2D;
+import practicaFinal.shapes.IOShape;
+import practicaFinal.shapes.OPoint2D;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;

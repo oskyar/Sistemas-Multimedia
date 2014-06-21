@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package practicaFinal;
+package practicaFinal.shapes;
 
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
