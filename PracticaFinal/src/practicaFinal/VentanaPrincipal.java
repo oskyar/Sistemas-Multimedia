@@ -75,6 +75,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonLinea = new javax.swing.JToggleButton();
         botonRectangulo = new javax.swing.JToggleButton();
         botonOvalo = new javax.swing.JToggleButton();
+        botonCurvaControl = new javax.swing.JToggleButton();
         botonesPaletas = new javax.swing.JPanel();
         botonPaletaColor = new javax.swing.JRadioButton();
         botonPaletaImagen = new javax.swing.JRadioButton();
@@ -186,6 +187,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         BotonesFiguras.add(botonOvalo);
+
+        BotonesMenu.add(botonCurvaControl);
+        botonCurvaControl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Ovalo.gif"))); // NOI18N
+        botonCurvaControl.setFocusable(false);
+        botonCurvaControl.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonCurvaControl.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        botonCurvaControl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonCurvaControlMouseClicked(evt);
+            }
+        });
+        BotonesFiguras.add(botonCurvaControl);
 
         botonesPaletas.setAlignmentX(0.0F);
         botonesPaletas.setAlignmentY(0.0F);
@@ -1349,6 +1362,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_sobelMenuActionPerformed
 
+    private void botonCurvaControlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonCurvaControlMouseClicked
+        labelFigura.setText("Curva con punto de control");
+        botonCurvaControl.setSelected(true);
+        Lienzo.setForma(Lienzo.CURVACONTROL);        
+    }//GEN-LAST:event_botonCurvaControlMouseClicked
+
     public VentanaInterna getVentanaInterna() {
         return vi;
     }
@@ -1375,6 +1394,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton botonColorRojo;
     private javax.swing.JButton botonColorVerde;
     private javax.swing.JButton botonContraste;
+    private javax.swing.JToggleButton botonCurvaControl;
     private javax.swing.JButton botonDisminuir;
     private javax.swing.JButton botonIluminar;
     private javax.swing.JToggleButton botonLapiz;

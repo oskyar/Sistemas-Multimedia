@@ -21,6 +21,7 @@ import practicaFinal.shapes.IOShape;
 import practicaFinal.shapes.OEllipse2D;
 import practicaFinal.shapes.OLine2D;
 import practicaFinal.shapes.OPoint2D;
+import practicaFinal.shapes.OQuadCurve2D;
 import practicaFinal.shapes.ORectangle2D;
 
 /**
@@ -33,6 +34,7 @@ public class Lienzo extends javax.swing.JPanel {
     final static int LINEA = 1;
     final static int RECTANGULO = 2;
     final static int ELIPSE = 3;
+    final static int CURVACONTROL = 4;
 
     //Variables privadas
     private static Color color;
@@ -40,6 +42,7 @@ public class Lienzo extends javax.swing.JPanel {
     private static Stroke stroke;
     private static boolean relleno;
     private static boolean editar;
+    private boolean ctrlCurva = false;
     private Point2D p;
     private IOShape s;
     private final ArrayList<IOShape> vShape;
@@ -66,7 +69,7 @@ public class Lienzo extends javax.swing.JPanel {
         if (imgDest != null) {
             g2d.drawImage(imgDest, 0, 0, this);
         }
-        
+
         for (IOShape sh : vShape) {
             sh.draw(g2d);
         }
@@ -102,6 +105,12 @@ public class Lienzo extends javax.swing.JPanel {
                 s.setFill(relleno);
                 s.setStroke(stroke);
                 return s;
+            case CURVACONTROL:
+                s = new OQuadCurve2D(p1, p1, p1);
+                s.setColor(color);
+                s.setFill(relleno);
+                s.setStroke(stroke);
+                return s;
             default:
                 return s = null;
         }
@@ -109,11 +118,11 @@ public class Lienzo extends javax.swing.JPanel {
 
     private IOShape getSelectedShape(Point2D p) {
         //Recorro el vector al revés, porque la primera figura en dibujarse es la última en seleccionarse.
-        for(int i=vShape.size()-1; i>=0; i--){
-            if(vShape.get(i).contains(p)){
+        for (int i = vShape.size() - 1; i >= 0; i--) {
+            if (vShape.get(i).contains(p)) {
                 return vShape.get(i);
             }
-       }
+        }
 
         return null;
     }
@@ -156,26 +165,41 @@ public class Lienzo extends javax.swing.JPanel {
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         p = evt.getPoint();
         if (!editar) {
-            vShape.add(createShape(p, p));
+            if (!ctrlCurva) {
+                vShape.add(createShape(p, p));
+            } else {
+                s.setPoint(evt.getPoint());
+            }
         } else {
             s = getSelectedShape(evt.getPoint());
             if (s != null) {
                 double x = s.getBoundsX();
                 double y = s.getBoundsY();
                 dXY.setLocation(x - p.getX(), y - p.getY());
+
             }
         }
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
         formMouseDragged(evt);
+        //Si la curva de control está activada y se ha pintado la línea pero  el punto de control NO.
+        if(forma==Lienzo.CURVACONTROL && ctrlCurva == false){
+            ctrlCurva = true;
+        }else{
+            ctrlCurva = false;
+        }
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         Point pEvt = evt.getPoint();
 
         if (!editar) {
-            s.updateShape(p, evt.getPoint());
+            if(!ctrlCurva){
+                s.updateShape(p, evt.getPoint());
+            }else{
+                s.setPoint(evt.getPoint());
+            }
         } else {
             if (s != null) {
                 s.setLocation(new Point2D.Double(pEvt.getX() + dXY.getX(), pEvt.getY() + dXY.getY()));

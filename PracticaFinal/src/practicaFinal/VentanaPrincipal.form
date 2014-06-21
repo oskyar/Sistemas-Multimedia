@@ -239,6 +239,22 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="botonOvaloMouseClicked"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JToggleButton" name="botonCurvaControl">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="BotonesMenu"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/iconos/Ovalo.gif"/>
+                </Property>
+                <Property name="focusable" type="boolean" value="false"/>
+                <Property name="horizontalTextPosition" type="int" value="0"/>
+                <Property name="verticalTextPosition" type="int" value="3"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="botonCurvaControlMouseClicked"/>
+              </Events>
+            </Component>
             <Container class="javax.swing.JPanel" name="botonesPaletas">
               <Properties>
                 <Property name="alignmentX" type="float" value="0.0"/>
