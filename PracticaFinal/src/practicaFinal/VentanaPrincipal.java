@@ -5,10 +5,6 @@
  */
 package practicaFinal;
 
-import practicaFinal.filtros.MultiplicacionOp;
-import practicaFinal.filtros.RestaOp;
-import practicaFinal.filtros.SobelOp;
-import practicaFinal.filtros.UmbralizacionOp;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -25,7 +21,12 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
+import practicaFinal.filtros.MultiplicacionOp;
+import practicaFinal.filtros.RestaOp;
+import practicaFinal.filtros.SobelOp;
+import practicaFinal.filtros.UmbralizacionOp;
 import sm.image.KernelProducer;
 
 /**
@@ -74,11 +75,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonLapiz = new javax.swing.JToggleButton();
         botonLinea = new javax.swing.JToggleButton();
         botonRectangulo = new javax.swing.JToggleButton();
+        botonRectanguloRedondeado = new javax.swing.JToggleButton();
         botonOvalo = new javax.swing.JToggleButton();
         botonCurvaControl = new javax.swing.JToggleButton();
+        botonCurvaCubicaSegmentada = new javax.swing.JToggleButton();
         botonesPaletas = new javax.swing.JPanel();
         botonPaletaColor = new javax.swing.JRadioButton();
         botonPaletaImagen = new javax.swing.JRadioButton();
+        panelIzquierdo = new javax.swing.JPanel();
+        colorFrontal = new javax.swing.JButton();
+        colorFondo = new javax.swing.JButton();
         cuerpo = new javax.swing.JPanel();
         escritorio = new javax.swing.JDesktopPane();
         pie = new javax.swing.JPanel();
@@ -176,6 +182,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         BotonesFiguras.add(botonRectangulo);
 
+        BotonesMenu.add(botonRectanguloRedondeado);
+        botonRectanguloRedondeado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Rectangulo.gif"))); // NOI18N
+        botonRectanguloRedondeado.setFocusable(false);
+        botonRectanguloRedondeado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonRectanguloRedondeado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        botonRectanguloRedondeado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonRectanguloRedondeadoMouseClicked(evt);
+            }
+        });
+        BotonesFiguras.add(botonRectanguloRedondeado);
+
         BotonesMenu.add(botonOvalo);
         botonOvalo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Ovalo.gif"))); // NOI18N
         botonOvalo.setFocusable(false);
@@ -199,6 +217,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         BotonesFiguras.add(botonCurvaControl);
+
+        BotonesMenu.add(botonCurvaCubicaSegmentada);
+        botonCurvaCubicaSegmentada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Ovalo.gif"))); // NOI18N
+        botonCurvaCubicaSegmentada.setFocusable(false);
+        botonCurvaCubicaSegmentada.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonCurvaCubicaSegmentada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        botonCurvaCubicaSegmentada.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonCurvaCubicaSegmentadaMouseClicked(evt);
+            }
+        });
+        BotonesFiguras.add(botonCurvaCubicaSegmentada);
 
         botonesPaletas.setAlignmentX(0.0F);
         botonesPaletas.setAlignmentY(0.0F);
@@ -238,6 +268,40 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         paletaOpciones.add(BotonesFiguras);
 
         getContentPane().add(paletaOpciones, java.awt.BorderLayout.PAGE_START);
+
+        panelIzquierdo.setMaximumSize(new java.awt.Dimension(12, 50));
+        panelIzquierdo.setMinimumSize(new java.awt.Dimension(12, 50));
+        panelIzquierdo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        colorFrontal.setFocusable(false);
+        colorFrontal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        colorFrontal.setMaximumSize(new java.awt.Dimension(30, 30));
+        colorFrontal.setMinimumSize(new java.awt.Dimension(30, 30));
+        colorFrontal.setPreferredSize(new java.awt.Dimension(30, 30));
+        colorFrontal.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        colorFrontal.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        colorFrontal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorFrontalActionPerformed(evt);
+            }
+        });
+        panelIzquierdo.add(colorFrontal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, -1, -1));
+
+        colorFondo.setAlignmentX(-10.0F);
+        colorFondo.setFocusable(false);
+        colorFondo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        colorFondo.setMaximumSize(new java.awt.Dimension(30, 30));
+        colorFondo.setMinimumSize(new java.awt.Dimension(30, 30));
+        colorFondo.setPreferredSize(new java.awt.Dimension(30, 30));
+        colorFondo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        colorFondo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorFondoActionPerformed(evt);
+            }
+        });
+        panelIzquierdo.add(colorFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
+
+        getContentPane().add(panelIzquierdo, java.awt.BorderLayout.LINE_START);
 
         cuerpo.setPreferredSize(new java.awt.Dimension(772, 400));
         cuerpo.setLayout(new java.awt.BorderLayout());
@@ -654,9 +718,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGap(0, 60, Short.MAX_VALUE)
             .addGroup(panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelGrosorLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(0, 5, Short.MAX_VALUE)
                     .addComponent(grosor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 5, Short.MAX_VALUE)))
         );
         panelGrosorLayout.setVerticalGroup(
             panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1365,8 +1429,38 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void botonCurvaControlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonCurvaControlMouseClicked
         labelFigura.setText("Curva con punto de control");
         botonCurvaControl.setSelected(true);
-        Lienzo.setForma(Lienzo.CURVACONTROL);        
+        Lienzo.setForma(Lienzo.CURVACONTROL);
     }//GEN-LAST:event_botonCurvaControlMouseClicked
+
+    private void botonCurvaCubicaSegmentadaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonCurvaCubicaSegmentadaMouseClicked
+        // TODO add your handling code here:
+        labelFigura.setText("Curva cúbica segmentada");
+        botonCurvaCubicaSegmentada.setSelected(true);
+        Lienzo.setForma(Lienzo.CURVACUBICACONTROL);
+    }//GEN-LAST:event_botonCurvaCubicaSegmentadaMouseClicked
+
+    private void colorFrontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorFrontalActionPerformed
+        Color newColor = JColorChooser.showDialog(
+                VentanaPrincipal.this,
+                "Escoge un color frontal",
+                colorFrontal.getBackground());
+        colorFrontal.setBackground(newColor);
+    }//GEN-LAST:event_colorFrontalActionPerformed
+
+    private void colorFondoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorFondoActionPerformed
+        Color newColor = JColorChooser.showDialog(
+                VentanaPrincipal.this,
+                "Escoge color para el fondo",
+                colorFondo.getBackground());
+        colorFondo.setBackground(newColor);
+    }//GEN-LAST:event_colorFondoActionPerformed
+
+    private void botonRectanguloRedondeadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonRectanguloRedondeadoMouseClicked
+      
+        labelFigura.setText("Rectángulo con esquinas redondeadas");
+        botonRectanguloRedondeado.setSelected(true);
+        Lienzo.setForma(Lienzo.RECTANGULOREDONDEADO);
+    }//GEN-LAST:event_botonRectanguloRedondeadoMouseClicked
 
     public VentanaInterna getVentanaInterna() {
         return vi;
@@ -1395,6 +1489,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton botonColorVerde;
     private javax.swing.JButton botonContraste;
     private javax.swing.JToggleButton botonCurvaControl;
+    private javax.swing.JToggleButton botonCurvaCubicaSegmentada;
     private javax.swing.JButton botonDisminuir;
     private javax.swing.JButton botonIluminar;
     private javax.swing.JToggleButton botonLapiz;
@@ -1404,12 +1499,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JRadioButton botonPaletaColor;
     private javax.swing.JRadioButton botonPaletaImagen;
     private javax.swing.JToggleButton botonRectangulo;
+    private javax.swing.JToggleButton botonRectanguloRedondeado;
     private javax.swing.JButton botonRotacion180;
     private javax.swing.JButton botonRotacion270;
     private javax.swing.JButton botonRotacion90;
     private javax.swing.JPanel botonesPaletas;
     private javax.swing.JCheckBox checkboxEditar;
     private javax.swing.JCheckBox checkboxRelleno;
+    private javax.swing.JButton colorFondo;
+    private javax.swing.JButton colorFrontal;
     private javax.swing.JPanel contenedorBrillo;
     private javax.swing.JPanel contenedorColores;
     private javax.swing.JPanel contenedorContraste;
@@ -1437,6 +1535,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel panelColores;
     private javax.swing.JPanel panelGrosor;
     private javax.swing.JPanel panelImagen;
+    private javax.swing.JPanel panelIzquierdo;
     private javax.swing.JPanel panelLabelFigura;
     private javax.swing.JPanel panelRelleno;
     private javax.swing.JPanel paneles;

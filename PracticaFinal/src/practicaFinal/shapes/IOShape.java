@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,37 +17,38 @@ import java.awt.geom.Point2D;
  */
 public interface IOShape {
 
-    public abstract double getBoundsX();
+    public double getX();
+    
+    public double getY();
+    
+    public ArrayList<Point2D> getArrayPoints();
 
-    public abstract void setX(Double x);
+    public void setPoint(ArrayList<Point2D> vPoints);
 
-    public abstract double getBoundsY();
+    public Point2D getOnePoint(int index);
 
-    public abstract void setY(Double y);
+    public void setOnePoint(int index, Point2D p);
+    
+    public int getCtrlPoints();
 
-    public abstract Point2D getPoint();
+    public Stroke getStroke();
 
-    public abstract void setPoint(Point2D p);
+    public void setStroke(Stroke sk);
 
-    public abstract Stroke getStroke();
+    public Color getColor();
 
-    public abstract void setStroke(Stroke sk);
+    public void setColor(Color c);
 
-    public abstract Color getColor();
+    public boolean getFill();
 
-    public abstract void setColor(Color c);
+    public void setFill(boolean fill);
 
-    public abstract boolean getFill();
+    public void draw(Graphics2D g2d);
 
-    public abstract void setFill(boolean fill);
+    public boolean contains(Point2D p);
 
-    public abstract void draw(Graphics2D g2d);
+    public void setLocation(Point2D p);
 
-    public abstract boolean contains(Point2D p);
+    public void updateShape(Point2D p1, Point2D p2);
 
-    public abstract void setLocation(Point2D p);
-
-    public abstract void updateShape(Point2D p1, Point2D p2);
-
-    //public abstract double getX();
 }

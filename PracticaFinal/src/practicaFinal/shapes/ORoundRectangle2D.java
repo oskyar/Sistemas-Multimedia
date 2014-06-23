@@ -3,40 +3,42 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package practicaFinal.shapes;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.RectangularShape;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 /**
  *
  * @author oskyar
  */
-public class OEllipse2D extends Ellipse2D.Double implements IOShape {
+public class ORoundRectangle2D extends RoundRectangle2D.Double implements IOShape{
 
     private Color color;
     private boolean fill;
+    private Point2D p;
     private Stroke stroke;
     
-    private final int CTRLPOINTS=0;
+    private final int CTRLPOINTS = 0;
 
-    public OEllipse2D(Point2D p1, double width, double height) {
-        super(p1.getX(), p1.getY(), width, height);
+    public ORoundRectangle2D(Point2D p1, Point2D p2, double arcWidth, double arcHeight){
+        super(p1.getX() ,p1.getY(), Math.abs(p1.getX()-p2.getX()), Math.abs(p1.getY()-p2.getY()), arcWidth, arcHeight);
     }
-
-    public OEllipse2D(Point2D p1, Point2D p2) {
-        super(p1.getX(), p1.getY(), Math.abs(p1.getX() - p2.getX()), Math.abs(p1.getY() - p2.getY()));
+    
+    public ORoundRectangle2D(Point2D p1, double width, double height, double arcWidth, double arcHeight){
+        super(p1.getX(),p1.getY(),width,height, arcWidth, arcHeight);
     }
-
-    public OEllipse2D(OEllipse2D rect) {
-        super(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
-    }
+    
+    public ORoundRectangle2D(double x, double y, double width, double height, double arcWidth, double arcHeight){
+        super(x,y,width,height, arcWidth, arcHeight);
+    }    
 
     @Override
     public Stroke getStroke() {
@@ -45,9 +47,8 @@ public class OEllipse2D extends Ellipse2D.Double implements IOShape {
 
     @Override
     public void setStroke(Stroke sk) {
-        if (sk != null) {
+        if(sk != null)
             this.stroke = sk;
-        }
     }
 
     @Override
@@ -57,9 +58,8 @@ public class OEllipse2D extends Ellipse2D.Double implements IOShape {
 
     @Override
     public void setColor(Color c) {
-        if (c != null) {
+        if( c !=null) 
             this.color = c;
-        }
     }
 
     @Override
@@ -76,9 +76,8 @@ public class OEllipse2D extends Ellipse2D.Double implements IOShape {
     public void draw(Graphics2D g2d) {
         g2d.setPaint(getColor());
         g2d.setStroke(getStroke());
-        if (fill) {
+        if(fill)
             g2d.fill(this);
-        }
         g2d.draw(this);
     }
 
@@ -117,7 +116,7 @@ public class OEllipse2D extends Ellipse2D.Double implements IOShape {
     public int getCtrlPoints() {
         return this.CTRLPOINTS;
     }
-    
+
     @Override
     public double getX(){
         return super.getBounds2D().getX();
@@ -126,6 +125,5 @@ public class OEllipse2D extends Ellipse2D.Double implements IOShape {
     @Override
     public double getY(){
         return super.getBounds2D().getY();
-    }
-
+    }    
 }

@@ -14,15 +14,14 @@ import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.function.Consumer;
 import practicaFinal.shapes.IOShape;
+import practicaFinal.shapes.OCubicCurve2D;
 import practicaFinal.shapes.OEllipse2D;
 import practicaFinal.shapes.OLine2D;
 import practicaFinal.shapes.OPoint2D;
 import practicaFinal.shapes.OQuadCurve2D;
 import practicaFinal.shapes.ORectangle2D;
+import practicaFinal.shapes.ORoundRectangle2D;
 
 /**
  *
@@ -35,6 +34,8 @@ public class Lienzo extends javax.swing.JPanel {
     final static int RECTANGULO = 2;
     final static int ELIPSE = 3;
     final static int CURVACONTROL = 4;
+    final static int CURVACUBICACONTROL = 5;
+    final static int RECTANGULOREDONDEADO = 6;
 
     //Variables privadas
     private static Color color;
@@ -42,13 +43,15 @@ public class Lienzo extends javax.swing.JPanel {
     private static Stroke stroke;
     private static boolean relleno;
     private static boolean editar;
-    private boolean ctrlCurva = false;
+    //Para controlar por qué punto de control vamos
+    private static int ctrlCurva = 0;
     private Point2D p;
     private IOShape s;
     private final ArrayList<IOShape> vShape;
     private final Point2D dXY;
     private BufferedImage img;
     private BufferedImage imgDest;
+    private int maxPuntosControl;
 
     /**
      * Constructor sin parámetros de la clase Lienzo
@@ -86,34 +89,50 @@ public class Lienzo extends javax.swing.JPanel {
                 s.setColor(color);
                 s.setFill(relleno);
                 s.setStroke(stroke);
-                return s;
+                break;
             case LINEA:
                 s = new OLine2D(p1, p1);
                 s.setColor(color);
                 s.setFill(relleno);
                 s.setStroke(stroke);
-                return s;
+                break;
             case RECTANGULO:
                 s = new ORectangle2D(p1, p1);
                 s.setColor(color);
                 s.setFill(relleno);
                 s.setStroke(stroke);
-                return s;
+                break;
             case ELIPSE:
                 s = new OEllipse2D(p1, p1);
                 s.setColor(color);
                 s.setFill(relleno);
                 s.setStroke(stroke);
-                return s;
+                break;
             case CURVACONTROL:
                 s = new OQuadCurve2D(p1, p1, p1);
                 s.setColor(color);
                 s.setFill(relleno);
                 s.setStroke(stroke);
-                return s;
+                break;
+            case CURVACUBICACONTROL:
+                s = new OCubicCurve2D(p1, p1, p1, p1);
+                s.setColor(color);
+                s.setFill(relleno);
+                s.setStroke(stroke);
+                break;
+            case RECTANGULOREDONDEADO:
+                s = new ORoundRectangle2D(p1, p1, 30, 30);
+                s.setColor(color);
+                s.setFill(relleno);
+                s.setStroke(stroke);
+                break;            
             default:
-                return s = null;
+                s = null;
+                return s;
         }
+        maxPuntosControl = s.getCtrlPoints();
+        ctrlCurva = 0;
+        return s;
     }
 
     private IOShape getSelectedShape(Point2D p) {
@@ -123,7 +142,6 @@ public class Lienzo extends javax.swing.JPanel {
                 return vShape.get(i);
             }
         }
-
         return null;
     }
 
@@ -165,18 +183,19 @@ public class Lienzo extends javax.swing.JPanel {
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         p = evt.getPoint();
         if (!editar) {
-            if (!ctrlCurva) {
+            if (ctrlCurva == 0 ) {
                 vShape.add(createShape(p, p));
             } else {
-                s.setPoint(evt.getPoint());
+                if (s != null) {
+                    s.setOnePoint(ctrlCurva - 1, p);
+                }
             }
         } else {
             s = getSelectedShape(evt.getPoint());
             if (s != null) {
-                double x = s.getBoundsX();
-                double y = s.getBoundsY();
+                double x = s.getX();
+                double y = s.getY();
                 dXY.setLocation(x - p.getX(), y - p.getY());
-
             }
         }
     }//GEN-LAST:event_formMousePressed
@@ -184,10 +203,10 @@ public class Lienzo extends javax.swing.JPanel {
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
         formMouseDragged(evt);
         //Si la curva de control está activada y se ha pintado la línea pero  el punto de control NO.
-        if(forma==Lienzo.CURVACONTROL && ctrlCurva == false){
-            ctrlCurva = true;
-        }else{
-            ctrlCurva = false;
+        if(maxPuntosControl != 0){
+            if (ctrlCurva++ == maxPuntosControl) {
+                ctrlCurva = 0;
+            }
         }
     }//GEN-LAST:event_formMouseReleased
 
@@ -195,10 +214,10 @@ public class Lienzo extends javax.swing.JPanel {
         Point pEvt = evt.getPoint();
 
         if (!editar) {
-            if(!ctrlCurva){
-                s.updateShape(p, evt.getPoint());
-            }else{
-                s.setPoint(evt.getPoint());
+            if (ctrlCurva == 0) {
+                s.updateShape(p, pEvt);
+            } else {
+                s.setOnePoint(ctrlCurva - 1, pEvt);
             }
         } else {
             if (s != null) {
@@ -250,6 +269,7 @@ public class Lienzo extends javax.swing.JPanel {
     }
 
     public static void setForma(int forma) {
+        Lienzo.ctrlCurva=0;
         Lienzo.forma = forma;
     }
 
@@ -274,6 +294,7 @@ public class Lienzo extends javax.swing.JPanel {
     }
 
     public static void setEditar(boolean editar) {
+        Lienzo.ctrlCurva=0;
         Lienzo.editar = editar;
     }
 
@@ -283,6 +304,22 @@ public class Lienzo extends javax.swing.JPanel {
 
     public static void setStroke(Stroke sk) {
         stroke = sk;
+    }
+
+    public int getMaxPuntosControl() {
+        return this.maxPuntosControl;
+    }
+
+    public void setMaxPuntosControl(int num) {
+        this.maxPuntosControl = num;
+    }
+
+    public int getCtrlCurva() {
+        return this.ctrlCurva;
+    }
+
+    public void setCtrlCurva(int num) {
+        this.ctrlCurva = num;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

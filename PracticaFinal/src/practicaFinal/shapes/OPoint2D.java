@@ -10,6 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 /**
  *
@@ -20,6 +21,8 @@ public class OPoint2D extends Line2D.Double implements IOShape {
     private Color color;
     private boolean fill;
     private Stroke stroke;
+    
+    private final int CTRLPOINTS=0;
 
     public OPoint2D(Point2D p1, double width, double height) {
         super(p1.getX(), p1.getY(), p1.getX(), p1.getY());
@@ -27,36 +30,6 @@ public class OPoint2D extends Line2D.Double implements IOShape {
 
     public OPoint2D(Point2D p1, Point2D p2) {
         super(p1.getX(), p1.getY(), p1.getX(), p1.getY());
-    }
-
-    @Override
-    public double getBoundsX() {
-        return super.getX1();
-    }
-
-    @Override
-    public void setX(java.lang.Double x) {
-
-    }
-
-    @Override
-    public double getBoundsY() {
-        return super.getY1();
-    }
-
-    @Override
-    public void setY(java.lang.Double y) {
-
-    }
-
-    @Override
-    public Point2D getPoint() {
-        return super.getP1();
-    }
-
-    @Override
-    public void setPoint(Point2D p) {
-        super.setLine(p, p);
     }
 
     @Override
@@ -119,6 +92,41 @@ public class OPoint2D extends Line2D.Double implements IOShape {
     @Override
     public void updateShape(Point2D p1, Point2D p2) {
         //Nada que añadir al punto
+    }
+
+    @Override
+    public ArrayList<Point2D> getArrayPoints() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setPoint(ArrayList<Point2D> vPoints) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Point2D getOnePoint(int index) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setOnePoint(int index, Point2D p) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getCtrlPoints() {
+        return this.CTRLPOINTS;
+    }
+
+    @Override
+    public double getX() {
+        return super.getX1();
+    }
+
+    @Override
+    public double getY() {
+        return super.getY1();
     }
 
 }

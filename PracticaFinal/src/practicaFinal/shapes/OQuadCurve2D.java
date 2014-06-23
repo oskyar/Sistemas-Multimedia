@@ -7,12 +7,11 @@
 package practicaFinal.shapes;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
-import java.awt.geom.RectangularShape;
+import java.util.ArrayList;
 
 /**
  *
@@ -22,49 +21,23 @@ public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape{
 
     private Color color;
     private boolean fill;
-    private Point2D p;
+    private ArrayList<Point2D> vPoints;
     private Stroke stroke;
+    
+    private final int CTRLPOINTS=1;
 
     public OQuadCurve2D(Point2D p1, Point2D ctrl, Point2D p2){
         super(p1.getX(),p1.getY(),ctrl.getX(),ctrl.getY(),p2.getX(),p2.getY());
-        p=ctrl;
+        vPoints = new ArrayList<>();
+        vPoints.add(ctrl);
     }
     
     
     public OQuadCurve2D(OQuadCurve2D qc){
         super(qc.getX1(),qc.getY1(),qc.getCtrlX(),qc.getCtrlY(),qc.getX2(),qc.getY2());
+        vPoints = new ArrayList<>();
+        vPoints.add(new Point2D.Double(qc.getCtrlX(),qc.getCtrlY()));
     }   
-
-    @Override
-    public double getBoundsX() {
-        return getBounds2D().getX();
-    }
-
-    @Override
-    public void setX(java.lang.Double x) {
-        //this.p.setLocation(x, y);
-    }
-
-    @Override
-    public double getBoundsY() {
-        return getBounds2D().getY();
-    }
-
-    @Override
-    public void setY(java.lang.Double y) {
-        
-    }
-
-    @Override
-    public Point2D getPoint() {
-        return p;
-    }
-
-    @Override
-    public void setPoint(Point2D p) {
-        this.p=p;
-        this.setCurve(this.getP1(), p, this.getP2());
-    }
 
     @Override
     public Stroke getStroke() {
@@ -109,13 +82,54 @@ public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape{
 
     @Override
     public void setLocation(Point2D p) {
+        double dx = p.getX() - this.getX1();
+        double dy = p.getY() - this.getY1();
         
-    //    r.setFrame(p, new Dimension((int) r.getWidth(), (int) r.getHeight()));
+        Point2D newP2 = new Point2D.Double(this.getX2() + dx, this.getY2() + dy);
+        Point2D newCtrl = new Point2D.Double(this.getCtrlX()+ dx, this.getCtrlY()+ dy);
+        vPoints.set(0,newCtrl);
+        this.setCurve(p,newCtrl,newP2);
     }
 
     @Override
     public void updateShape(Point2D p1, Point2D p2) {
-        this.setCurve(p1, this.p, p2);
+        this.setCurve(p1, vPoints.get(0), p2);
+    }
+
+    @Override
+    public ArrayList<Point2D> getArrayPoints() {
+        return this.vPoints;
+    }
+
+    @Override
+    public void setPoint(ArrayList<Point2D> vPoints) {
+        this.vPoints = vPoints;
+    }
+
+    @Override
+    public Point2D getOnePoint(int index) {
+        return this.vPoints.get(index);
+    }
+
+    @Override
+    public void setOnePoint(int index, Point2D p) {
+        this.vPoints.set(index, p);
+        this.updateShape(this.getP1(), this.getP2());
+    }
+
+    @Override
+    public int getCtrlPoints() {
+        return this.CTRLPOINTS;
+    }
+
+    @Override
+    public double getX() {
+        return super.getX1();
+    }
+
+    @Override
+    public double getY() {
+        return super.getY1();
     }
        
 }
