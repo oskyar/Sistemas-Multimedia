@@ -55,6 +55,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Lienzo.setColor(Color.BLACK);
         Lienzo.setForma(Lienzo.PUNTO);
         Lienzo.setStroke(new BasicStroke(((Integer) grosor.getValue()).floatValue()));
+        colorFrontal.setBackground(Color.BLACK);
+        colorFondo.setBackground(Color.WHITE);
     }
 
     /**
@@ -280,6 +282,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         colorFrontal.setPreferredSize(new java.awt.Dimension(30, 30));
         colorFrontal.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         colorFrontal.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        colorFrontal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                colorFrontalMouseClicked(evt);
+            }
+        });
         colorFrontal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 colorFrontalActionPerformed(evt);
@@ -294,6 +301,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         colorFondo.setMinimumSize(new java.awt.Dimension(30, 30));
         colorFondo.setPreferredSize(new java.awt.Dimension(30, 30));
         colorFondo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        colorFondo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                colorFondoMouseClicked(evt);
+            }
+        });
         colorFondo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 colorFondoActionPerformed(evt);
@@ -951,32 +963,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_guardarActionPerformed
 
     private void botonColorNegroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorNegroMouseClicked
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
         Lienzo.setColor(Color.black);
     }//GEN-LAST:event_botonColorNegroMouseClicked
 
     private void botonColorRojoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorRojoMouseClicked
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
         Lienzo.setColor(Color.red);
     }//GEN-LAST:event_botonColorRojoMouseClicked
 
     private void botonColorAzulMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorAzulMouseClicked
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
         Lienzo.setColor(Color.blue);
     }//GEN-LAST:event_botonColorAzulMouseClicked
 
     private void botonColorBlancoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorBlancoMouseClicked
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
         Lienzo.setColor(Color.white);
     }//GEN-LAST:event_botonColorBlancoMouseClicked
 
     private void botonColorAmarilloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorAmarilloMouseClicked
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
         Lienzo.setColor(Color.yellow);
     }//GEN-LAST:event_botonColorAmarilloMouseClicked
 
     private void botonColorVerdeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorVerdeMouseClicked
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
         Lienzo.setColor(Color.green);
     }//GEN-LAST:event_botonColorVerdeMouseClicked
 
@@ -1440,27 +1446,49 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonCurvaCubicaSegmentadaMouseClicked
 
     private void colorFrontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorFrontalActionPerformed
-        Color newColor = JColorChooser.showDialog(
-                VentanaPrincipal.this,
-                "Escoge un color frontal",
-                colorFrontal.getBackground());
-        colorFrontal.setBackground(newColor);
+
     }//GEN-LAST:event_colorFrontalActionPerformed
 
     private void colorFondoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorFondoActionPerformed
-        Color newColor = JColorChooser.showDialog(
-                VentanaPrincipal.this,
-                "Escoge color para el fondo",
-                colorFondo.getBackground());
-        colorFondo.setBackground(newColor);
+
     }//GEN-LAST:event_colorFondoActionPerformed
 
     private void botonRectanguloRedondeadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonRectanguloRedondeadoMouseClicked
-      
+
         labelFigura.setText("Rectángulo con esquinas redondeadas");
         botonRectanguloRedondeado.setSelected(true);
         Lienzo.setForma(Lienzo.RECTANGULOREDONDEADO);
     }//GEN-LAST:event_botonRectanguloRedondeadoMouseClicked
+
+    private void colorFrontalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorFrontalMouseClicked
+        if (evt.getClickCount() % 2 == 1) {
+            Lienzo.setColor(colorFrontal.getBackground());
+        } else if (evt.getClickCount() % 2 == 0) {
+            Color newColor = JColorChooser.showDialog(
+                    VentanaPrincipal.this,
+                    "Escoge un color frontal",
+                    colorFrontal.getBackground());
+            if (newColor != null) {
+                colorFrontal.setBackground(newColor);
+                Lienzo.setColor(colorFrontal.getBackground());
+            }
+        }
+    }//GEN-LAST:event_colorFrontalMouseClicked
+
+    private void colorFondoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorFondoMouseClicked
+        if (evt.getClickCount() % 2 == 1) {
+            Lienzo.setColor(colorFondo.getBackground());
+        } else if (evt.getClickCount() % 2 == 0) {
+            Color newColor = JColorChooser.showDialog(
+                    VentanaPrincipal.this,
+                    "Escoge un color de fondo",
+                    colorFondo.getBackground());
+            if (newColor != null) {
+                colorFondo.setBackground(newColor);
+                Lienzo.setColor(colorFondo.getBackground());
+            }
+        }
+    }//GEN-LAST:event_colorFondoMouseClicked
 
     public VentanaInterna getVentanaInterna() {
         return vi;
