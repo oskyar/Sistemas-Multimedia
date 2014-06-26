@@ -6,6 +6,7 @@
 package practicaFinal.shapes;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
  */
 public interface IOShape {
 
+    public String getName();
+    
     public double getX();
     
     public double getY();
@@ -31,17 +34,33 @@ public interface IOShape {
     
     public int getCtrlPoints();
 
+    public int getStrokeType();
+    
+    public void setStrokeType(int strokeType);
+    
     public Stroke getStroke();
+    
+    public void setStrokeWidth(float width);
+    
+    public float getStrokeWidth();
 
     public void setStroke(Stroke sk);
+    
+    public Color getStrokeColor();
+    
+    public void setStrokeColor(Color color);
+    
+    public Color getFillColor();
+    
+    public void setFillColor(Color color);
+    
+    public int getFillType();
 
-    public Color getColor();
+    public void setFillType(int fill);
 
-    public void setColor(Color c);
+    public GradientPaint getGradientColor();
 
-    public boolean getFill();
-
-    public void setFill(boolean fill);
+    public void setGradientColor(GradientPaint gradientColor);
 
     public void draw(Graphics2D g2d);
 
@@ -50,5 +69,7 @@ public interface IOShape {
     public void setLocation(Point2D p);
 
     public void updateShape(Point2D p1, Point2D p2);
+    
+    public IOShape clone();
 
 }

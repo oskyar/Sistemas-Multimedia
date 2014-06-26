@@ -6,8 +6,10 @@
 
 package practicaFinal.shapes;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
@@ -20,11 +22,15 @@ import java.util.ArrayList;
  * @author oskyar
  */
 public class ORectangle2D extends Rectangle2D.Double implements IOShape{
-
-    private Color color;
-    private boolean fill;
+    public static final String NAME="Rectángulo";
+    private int fillType;
+    private int strokeType;
+    private Color fillColor;
+    private Color strokeColor;
+    private GradientPaint gradientColor;
     private Point2D p;
     private Stroke stroke;
+    private float strokeWidth;
     
     private final int CTRLPOINTS = 0;
 
@@ -52,33 +58,24 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     }
 
     @Override
-    public Color getColor() {
-        return this.color;
-    }
-
-    @Override
-    public void setColor(Color c) {
-        if( c !=null) 
-            this.color = c;
-    }
-
-    @Override
-    public boolean getFill() {
-        return this.fill;
-    }
-
-    @Override
-    public void setFill(boolean fill) {
-        this.fill = fill;
-    }
-
-    @Override
     public void draw(Graphics2D g2d) {
-        g2d.setPaint(getColor());
-        g2d.setStroke(getStroke());
-        if(fill)
-            g2d.fill(this);
+        if(strokeType==0){
+            stroke = new BasicStroke(strokeWidth);
+        }else if(strokeType == 1){
+            final float dash[] = {1.0f,0.f,20.0f};
+            stroke = new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, dash, 0.0f);
+        }
+        g2d.setStroke(stroke);
+        g2d.setColor(strokeColor);
         g2d.draw(this);
+        
+        g2d.setColor(fillColor);
+        if(fillType==1){
+            g2d.fill(this);
+        }else if(fillType==2){
+            g2d.setPaint(gradientColor);
+            g2d.fill(this);
+        }
     }
 
     @Override
@@ -90,6 +87,11 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     @Override
     public void updateShape(Point2D p1, Point2D p2) {
         setFrameFromDiagonal(p1, p2);
+        p1= new Point2D.Double(this.getBounds2D().getX(),this.getBounds2D().getY());
+        p2=new Point2D.Double(p2.getX()+this.getBounds2D().getX(),p2.getY()+this.getBounds2D().getY());
+        if(fillType==2){
+            gradientColor = new GradientPaint(p1, gradientColor.getColor1(), p2, gradientColor.getColor2());
+        }
     }
 
     @Override
@@ -126,4 +128,74 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     public double getY(){
         return super.getBounds2D().getY();
     }    
+
+    @Override
+    public int getFillType() {
+        return fillType;
+    }
+
+    @Override
+    public void setFillType(int fillType) {
+        this.fillType = fillType;
+    }
+
+    @Override
+    public int getStrokeType() {
+        return strokeType;
+    }
+
+    @Override
+    public void setStrokeType(int strokeType) {
+        this.strokeType = strokeType;
+    }
+
+    @Override
+    public Color getFillColor() {
+        return fillColor;
+    }
+
+    @Override
+    public void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
+    }
+
+    @Override
+    public Color getStrokeColor() {
+        return strokeColor;
+    }
+
+    @Override
+    public void setStrokeColor(Color strokeColor) {
+        this.strokeColor = strokeColor;
+    }
+
+    @Override
+    public GradientPaint getGradientColor() {
+        return gradientColor;
+    }
+
+    @Override
+    public void setGradientColor(GradientPaint gradientColor) {
+        this.gradientColor = gradientColor;
+    }
+
+    @Override
+    public float getStrokeWidth() {
+        return strokeWidth;
+    }
+
+    @Override
+    public void setStrokeWidth(float strokeWidth) {
+        this.strokeWidth = strokeWidth;
+    }   
+
+    @Override
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public IOShape clone() {
+        return (IOShape) super.clone();
+    }
 }

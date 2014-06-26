@@ -7,6 +7,7 @@ package practicaFinal;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
@@ -18,15 +19,18 @@ import java.awt.image.LookupTable;
 import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
+import javax.swing.ListModel;
 import practicaFinal.filtros.MultiplicacionOp;
 import practicaFinal.filtros.RestaOp;
 import practicaFinal.filtros.SobelOp;
 import practicaFinal.filtros.UmbralizacionOp;
+import practicaFinal.shapes.IOShape;
 import sm.image.KernelProducer;
 
 /**
@@ -52,11 +56,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonLapiz.setSelected(true);
         panelColor.setVisible(true);
         panelImagen.setVisible(false);
-        Lienzo.setColor(Color.BLACK);
+        Lienzo.setStrokeColor(Color.BLACK);
+        Lienzo.setFillColor(null);
         Lienzo.setForma(Lienzo.PUNTO);
         Lienzo.setStroke(new BasicStroke(((Integer) grosor.getValue()).floatValue()));
-        colorFrontal.setBackground(Color.BLACK);
-        colorFondo.setBackground(Color.WHITE);
+        strokeColor.setBackground(Color.BLACK);
+        gradientColor.setBackground(null);
+        labelTextGradientColor.setVisible(false);
+        gradientColor.setVisible(false);
+        labelTextFillColor.setVisible(false);
+        fillColor.setVisible(false);
+        Lienzo.setFillColor(fillColor.getBackground());
+        Lienzo.setGradientColor(gradientColor.getBackground());
+        escritorio.addComponentListener(null);
     }
 
     /**
@@ -85,10 +97,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonPaletaColor = new javax.swing.JRadioButton();
         botonPaletaImagen = new javax.swing.JRadioButton();
         panelIzquierdo = new javax.swing.JPanel();
-        colorFrontal = new javax.swing.JButton();
-        colorFondo = new javax.swing.JButton();
         cuerpo = new javax.swing.JPanel();
         escritorio = new javax.swing.JDesktopPane();
+        panelDerecho = new javax.swing.JPanel();
+        contenedorFiguras = new javax.swing.JPanel();
+        figureList = new javax.swing.JList();
+        reloadShapes = new javax.swing.JButton();
+        cloneShape = new javax.swing.JButton();
+        removeShape = new javax.swing.JButton();
         pie = new javax.swing.JPanel();
         paneles = new javax.swing.JPanel();
         panelImagen = new javax.swing.JPanel();
@@ -117,13 +133,27 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonColorBlanco = new javax.swing.JButton();
         botonColorVerde = new javax.swing.JButton();
         botonColorAmarillo = new javax.swing.JButton();
-        contenedorGrosor = new javax.swing.JPanel();
-        panelGrosor = new javax.swing.JPanel();
-        grosor = new javax.swing.JSpinner();
         contenedorEditarRelleno = new javax.swing.JPanel();
         panelRelleno = new javax.swing.JPanel();
-        checkboxRelleno = new javax.swing.JCheckBox();
         checkboxEditar = new javax.swing.JCheckBox();
+        contenedorRelleno = new javax.swing.JPanel();
+        fillList = new javax.swing.JComboBox();
+        labelTextFillColor = new javax.swing.JLabel();
+        gradientColor = new javax.swing.JButton();
+        fillColor = new javax.swing.JButton();
+        labelTextGradientColor = new javax.swing.JLabel();
+        contenedorBorde = new javax.swing.JPanel();
+        strokeList = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
+        grosor = new javax.swing.JSpinner();
+        labelTextBorderColor = new javax.swing.JLabel();
+        strokeColor = new javax.swing.JButton();
+        contenedorEstiloBorde = new javax.swing.JPanel();
+        styleStrokeList = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        grosor1 = new javax.swing.JSpinner();
+        labelTextBorderColor1 = new javax.swing.JLabel();
+        strokeColor1 = new javax.swing.JButton();
         panelLabelFigura = new javax.swing.JPanel();
         labelFigura = new javax.swing.JLabel();
         menu = new javax.swing.JMenuBar();
@@ -274,50 +304,98 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelIzquierdo.setMaximumSize(new java.awt.Dimension(12, 50));
         panelIzquierdo.setMinimumSize(new java.awt.Dimension(12, 50));
         panelIzquierdo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        colorFrontal.setFocusable(false);
-        colorFrontal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        colorFrontal.setMaximumSize(new java.awt.Dimension(30, 30));
-        colorFrontal.setMinimumSize(new java.awt.Dimension(30, 30));
-        colorFrontal.setPreferredSize(new java.awt.Dimension(30, 30));
-        colorFrontal.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        colorFrontal.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        colorFrontal.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                colorFrontalMouseClicked(evt);
-            }
-        });
-        colorFrontal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                colorFrontalActionPerformed(evt);
-            }
-        });
-        panelIzquierdo.add(colorFrontal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, -1, -1));
-
-        colorFondo.setAlignmentX(-10.0F);
-        colorFondo.setFocusable(false);
-        colorFondo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        colorFondo.setMaximumSize(new java.awt.Dimension(30, 30));
-        colorFondo.setMinimumSize(new java.awt.Dimension(30, 30));
-        colorFondo.setPreferredSize(new java.awt.Dimension(30, 30));
-        colorFondo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        colorFondo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                colorFondoMouseClicked(evt);
-            }
-        });
-        colorFondo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                colorFondoActionPerformed(evt);
-            }
-        });
-        panelIzquierdo.add(colorFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
-
         getContentPane().add(panelIzquierdo, java.awt.BorderLayout.LINE_START);
 
         cuerpo.setPreferredSize(new java.awt.Dimension(772, 400));
         cuerpo.setLayout(new java.awt.BorderLayout());
+
+        escritorio.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                escritorioComponentAdded(evt);
+            }
+        });
+        escritorio.addHierarchyListener(new java.awt.event.HierarchyListener() {
+            public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
+                escritorioHierarchyChanged(evt);
+            }
+        });
+        escritorio.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                escritorioFocusGained(evt);
+            }
+        });
         cuerpo.add(escritorio, java.awt.BorderLayout.CENTER);
+
+        panelDerecho.setLayout(new java.awt.GridBagLayout());
+
+        contenedorFiguras.setBorder(javax.swing.BorderFactory.createTitledBorder("Figuras"));
+        contenedorFiguras.setToolTipText("");
+        contenedorFiguras.setMaximumSize(new java.awt.Dimension(400, 300));
+        contenedorFiguras.setMinimumSize(new java.awt.Dimension(300, 200));
+        contenedorFiguras.setName(""); // NOI18N
+        contenedorFiguras.setPreferredSize(new java.awt.Dimension(150, 235));
+        java.awt.FlowLayout flowLayout2 = new java.awt.FlowLayout(java.awt.FlowLayout.LEADING);
+        flowLayout2.setAlignOnBaseline(true);
+        contenedorFiguras.setLayout(flowLayout2);
+
+        figureList.setMaximumSize(new java.awt.Dimension(100, 600));
+        figureList.setMinimumSize(new java.awt.Dimension(100, 50));
+        figureList.setVisibleRowCount(15);
+        figureList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                figureListMouseClicked(evt);
+            }
+        });
+        contenedorFiguras.add(figureList);
+        figureList.getAccessibleContext().setAccessibleName("");
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 13;
+        panelDerecho.add(contenedorFiguras, gridBagConstraints);
+
+        reloadShapes.setText("Recargar");
+        reloadShapes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reloadShapesActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 5;
+        panelDerecho.add(reloadShapes, gridBagConstraints);
+
+        cloneShape.setText("C");
+        cloneShape.setContentAreaFilled(false);
+        cloneShape.setEnabled(false);
+        cloneShape.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cloneShapeMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 16;
+        panelDerecho.add(cloneShape, gridBagConstraints);
+
+        removeShape.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconoborrar2.png"))); // NOI18N
+        removeShape.setContentAreaFilled(false);
+        removeShape.setEnabled(false);
+        removeShape.setMinimumSize(new java.awt.Dimension(34, 34));
+        removeShape.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                removeShapeMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 16;
+        panelDerecho.add(removeShape, gridBagConstraints);
+
+        cuerpo.add(panelDerecho, java.awt.BorderLayout.LINE_END);
 
         getContentPane().add(cuerpo, java.awt.BorderLayout.CENTER);
 
@@ -330,6 +408,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelImagen.setLayout(new javax.swing.BoxLayout(panelImagen, javax.swing.BoxLayout.LINE_AXIS));
 
         contenedorBrillo.setBorder(javax.swing.BorderFactory.createTitledBorder("Brillo"));
+        contenedorBrillo.setToolTipText("Brillo de la imagen");
         contenedorBrillo.setMaximumSize(new java.awt.Dimension(200, 90));
         contenedorBrillo.setMinimumSize(new java.awt.Dimension(95, 90));
         contenedorBrillo.setLayout(new java.awt.GridBagLayout());
@@ -367,6 +446,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorEfecto.setLayout(new java.awt.GridBagLayout());
 
         listaEfectos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano" }));
+        listaEfectos.setToolTipText("Filtro de imagen");
         listaEfectos.setMaximumSize(new java.awt.Dimension(170, 50));
         listaEfectos.setMinimumSize(new java.awt.Dimension(170, 30));
         listaEfectos.setPreferredSize(null);
@@ -566,6 +646,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorColores.setLayout(flowLayout1);
 
         panelColores.setBorder(javax.swing.BorderFactory.createTitledBorder("Color"));
+        panelColores.setToolTipText("Color con borde y relleno");
         panelColores.setMaximumSize(new java.awt.Dimension(89, 90));
         panelColores.setMinimumSize(new java.awt.Dimension(89, 90));
         panelColores.setPreferredSize(new java.awt.Dimension(125, 90));
@@ -703,52 +784,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         panelColor.add(contenedorColores);
 
-        contenedorGrosor.setBorder(javax.swing.BorderFactory.createTitledBorder("Grosor"));
-        contenedorGrosor.setMaximumSize(new java.awt.Dimension(90, 90));
-        contenedorGrosor.setMinimumSize(new java.awt.Dimension(90, 90));
-        contenedorGrosor.setPreferredSize(new java.awt.Dimension(90, 90));
-        contenedorGrosor.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
-
-        panelGrosor.setMaximumSize(new java.awt.Dimension(70, 50));
-        panelGrosor.setMinimumSize(new java.awt.Dimension(60, 50));
-        panelGrosor.setPreferredSize(new java.awt.Dimension(60, 50));
-
-        grosor.setMaximumSize(new java.awt.Dimension(50, 28));
-        grosor.setMinimumSize(new java.awt.Dimension(50, 28));
-        grosor.setPreferredSize(new java.awt.Dimension(50, 28));
-        grosor.setValue(1);
-        grosor.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                grosorStateChanged(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelGrosorLayout = new javax.swing.GroupLayout(panelGrosor);
-        panelGrosor.setLayout(panelGrosorLayout);
-        panelGrosorLayout.setHorizontalGroup(
-            panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
-            .addGroup(panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGrosorLayout.createSequentialGroup()
-                    .addGap(0, 5, Short.MAX_VALUE)
-                    .addComponent(grosor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 5, Short.MAX_VALUE)))
-        );
-        panelGrosorLayout.setVerticalGroup(
-            panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-            .addGroup(panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGrosorLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(grosor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-
-        contenedorGrosor.add(panelGrosor);
-
-        panelColor.add(contenedorGrosor);
-
         contenedorEditarRelleno.setBorder(javax.swing.BorderFactory.createTitledBorder(" "));
+        contenedorEditarRelleno.setToolTipText("Opciones");
         contenedorEditarRelleno.setMaximumSize(new java.awt.Dimension(100, 90));
         contenedorEditarRelleno.setMinimumSize(new java.awt.Dimension(95, 90));
         contenedorEditarRelleno.setPreferredSize(new java.awt.Dimension(95, 90));
@@ -760,21 +797,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelRelleno.setMinimumSize(new java.awt.Dimension(90, 80));
         panelRelleno.setPreferredSize(new java.awt.Dimension(90, 80));
         panelRelleno.setLayout(new java.awt.GridLayout(2, 1));
-
-        checkboxRelleno.setText("Relleno");
-        checkboxRelleno.setActionCommand("");
-        checkboxRelleno.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        checkboxRelleno.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                checkboxRellenoStateChanged(evt);
-            }
-        });
-        checkboxRelleno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkboxRellenoActionPerformed(evt);
-            }
-        });
-        panelRelleno.add(checkboxRelleno);
 
         checkboxEditar.setText("Editar");
         checkboxEditar.setActionCommand("");
@@ -792,6 +814,248 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorEditarRelleno.add(panelRelleno);
 
         panelColor.add(contenedorEditarRelleno);
+
+        contenedorRelleno.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipo de Relleno y color"));
+        contenedorRelleno.setToolTipText("Tipo de Relleno y Color");
+        contenedorRelleno.setMaximumSize(new java.awt.Dimension(180, 90));
+        contenedorRelleno.setMinimumSize(new java.awt.Dimension(180, 55));
+        contenedorRelleno.setPreferredSize(new java.awt.Dimension(180, 58));
+        java.awt.GridBagLayout contenedorRellenoLayout = new java.awt.GridBagLayout();
+        contenedorRellenoLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0};
+        contenedorRellenoLayout.rowHeights = new int[] {0, 5, 0};
+        contenedorRelleno.setLayout(contenedorRellenoLayout);
+
+        fillList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sin relleno", "Liso", "Degradado" }));
+        fillList.setToolTipText("Tipo de Relleno");
+        fillList.setMaximumSize(new java.awt.Dimension(200, 30));
+        fillList.setMinimumSize(new java.awt.Dimension(115, 22));
+        fillList.setPreferredSize(new java.awt.Dimension(155, 22));
+        fillList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fillListActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 7;
+        contenedorRelleno.add(fillList, gridBagConstraints);
+
+        labelTextFillColor.setText("Color");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        contenedorRelleno.add(labelTextFillColor, gridBagConstraints);
+
+        gradientColor.setBackground(java.awt.Color.white);
+        gradientColor.setToolTipText("Color del relleno");
+        gradientColor.setFocusable(false);
+        gradientColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        gradientColor.setMaximumSize(new java.awt.Dimension(20, 20));
+        gradientColor.setMinimumSize(new java.awt.Dimension(30, 20));
+        gradientColor.setPreferredSize(new java.awt.Dimension(25, 25));
+        gradientColor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        gradientColor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                gradientColorMouseClicked(evt);
+            }
+        });
+        gradientColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gradientColorActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 25.0;
+        gridBagConstraints.weighty = 25.0;
+        contenedorRelleno.add(gradientColor, gridBagConstraints);
+
+        fillColor.setBackground(java.awt.Color.black);
+        fillColor.setToolTipText("Color del relleno");
+        fillColor.setFocusable(false);
+        fillColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        fillColor.setMaximumSize(new java.awt.Dimension(20, 20));
+        fillColor.setMinimumSize(new java.awt.Dimension(30, 20));
+        fillColor.setPreferredSize(new java.awt.Dimension(25, 25));
+        fillColor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        fillColor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fillColorMouseClicked(evt);
+            }
+        });
+        fillColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fillColorActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 25.0;
+        gridBagConstraints.weighty = 25.0;
+        contenedorRelleno.add(fillColor, gridBagConstraints);
+
+        labelTextGradientColor.setText("Color2");
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        contenedorRelleno.add(labelTextGradientColor, gridBagConstraints);
+
+        panelColor.add(contenedorRelleno);
+
+        contenedorBorde.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipo de Borde y color"));
+        contenedorBorde.setToolTipText("");
+        contenedorBorde.setMaximumSize(new java.awt.Dimension(200, 90));
+        java.awt.GridBagLayout contenedorRelleno1Layout = new java.awt.GridBagLayout();
+        contenedorRelleno1Layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0};
+        contenedorRelleno1Layout.rowHeights = new int[] {0, 5, 0};
+        contenedorBorde.setLayout(contenedorRelleno1Layout);
+
+        strokeList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Línea continua", "Línea discontinua" }));
+        strokeList.setToolTipText("Tipo de Relleno");
+        strokeList.setMaximumSize(new java.awt.Dimension(200, 30));
+        strokeList.setMinimumSize(new java.awt.Dimension(115, 22));
+        strokeList.setPreferredSize(new java.awt.Dimension(155, 22));
+        strokeList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                strokeListActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 7;
+        contenedorBorde.add(strokeList, gridBagConstraints);
+
+        jLabel1.setText("Grosor");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        contenedorBorde.add(jLabel1, gridBagConstraints);
+
+        grosor.setToolTipText("Grosor");
+        grosor.setMaximumSize(new java.awt.Dimension(50, 28));
+        grosor.setMinimumSize(new java.awt.Dimension(50, 28));
+        grosor.setPreferredSize(new java.awt.Dimension(50, 28));
+        grosor.setValue(1);
+        grosor.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                grosorStateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        contenedorBorde.add(grosor, gridBagConstraints);
+
+        labelTextBorderColor.setText("Color");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        contenedorBorde.add(labelTextBorderColor, gridBagConstraints);
+
+        strokeColor.setToolTipText("Color del borde");
+        strokeColor.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        strokeColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        strokeColor.setMaximumSize(new java.awt.Dimension(60, 20));
+        strokeColor.setMinimumSize(new java.awt.Dimension(60, 20));
+        strokeColor.setPreferredSize(new java.awt.Dimension(25, 25));
+        strokeColor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                strokeColorMouseClicked(evt);
+            }
+        });
+        strokeColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                strokeColorActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        contenedorBorde.add(strokeColor, gridBagConstraints);
+
+        panelColor.add(contenedorBorde);
+
+        contenedorEstiloBorde.setBorder(javax.swing.BorderFactory.createTitledBorder("Estilos Borde"));
+        contenedorEstiloBorde.setToolTipText("Estilos para el borde");
+        contenedorEstiloBorde.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorEstiloBorde.setLayout(new java.awt.GridBagLayout());
+
+        styleStrokeList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Línea continua", "Línea discontinua" }));
+        styleStrokeList.setToolTipText("Tipo de Relleno");
+        styleStrokeList.setMaximumSize(new java.awt.Dimension(200, 30));
+        styleStrokeList.setMinimumSize(new java.awt.Dimension(115, 22));
+        styleStrokeList.setPreferredSize(new java.awt.Dimension(155, 22));
+        styleStrokeList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                styleStrokeListActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 7;
+        contenedorEstiloBorde.add(styleStrokeList, gridBagConstraints);
+
+        jLabel2.setText("Grosor");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        contenedorEstiloBorde.add(jLabel2, gridBagConstraints);
+
+        grosor1.setToolTipText("Grosor");
+        grosor1.setMaximumSize(new java.awt.Dimension(50, 28));
+        grosor1.setMinimumSize(new java.awt.Dimension(50, 28));
+        grosor1.setPreferredSize(new java.awt.Dimension(50, 28));
+        grosor1.setValue(1);
+        grosor1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                grosor1StateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        contenedorEstiloBorde.add(grosor1, gridBagConstraints);
+
+        labelTextBorderColor1.setText("Color");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        contenedorEstiloBorde.add(labelTextBorderColor1, gridBagConstraints);
+
+        strokeColor1.setToolTipText("Color del borde");
+        strokeColor1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        strokeColor1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        strokeColor1.setMaximumSize(new java.awt.Dimension(60, 20));
+        strokeColor1.setMinimumSize(new java.awt.Dimension(60, 20));
+        strokeColor1.setPreferredSize(new java.awt.Dimension(25, 25));
+        strokeColor1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                strokeColor1MouseClicked(evt);
+            }
+        });
+        strokeColor1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                strokeColor1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        contenedorEstiloBorde.add(strokeColor1, gridBagConstraints);
+
+        panelColor.add(contenedorEstiloBorde);
 
         paneles.add(panelColor);
 
@@ -919,9 +1183,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonLineaMouseClicked
 
     private void botonRectanguloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonRectanguloMouseClicked
+
         labelFigura.setText("Rectángulo");
         botonRectangulo.setSelected(true);
         Lienzo.setForma(Lienzo.RECTANGULO);
+
+
     }//GEN-LAST:event_botonRectanguloMouseClicked
 
     private void botonOvaloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonOvaloMouseClicked
@@ -963,28 +1230,37 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_guardarActionPerformed
 
     private void botonColorNegroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorNegroMouseClicked
-        Lienzo.setColor(Color.black);
+        setColorButtons(Color.black);
     }//GEN-LAST:event_botonColorNegroMouseClicked
 
     private void botonColorRojoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorRojoMouseClicked
-        Lienzo.setColor(Color.red);
+        setColorButtons(Color.red);
     }//GEN-LAST:event_botonColorRojoMouseClicked
 
     private void botonColorAzulMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorAzulMouseClicked
-        Lienzo.setColor(Color.blue);
+        setColorButtons(Color.blue);
     }//GEN-LAST:event_botonColorAzulMouseClicked
 
     private void botonColorBlancoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorBlancoMouseClicked
-        Lienzo.setColor(Color.white);
+        setColorButtons(Color.white);
     }//GEN-LAST:event_botonColorBlancoMouseClicked
 
     private void botonColorAmarilloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorAmarilloMouseClicked
-        Lienzo.setColor(Color.yellow);
+        setColorButtons(Color.yellow);
     }//GEN-LAST:event_botonColorAmarilloMouseClicked
 
     private void botonColorVerdeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonColorVerdeMouseClicked
-        Lienzo.setColor(Color.green);
+        setColorButtons(Color.green);
     }//GEN-LAST:event_botonColorVerdeMouseClicked
+
+    private void setColorButtons(Color color) {
+        Lienzo.setFillColor(color);
+        Lienzo.setStrokeColor(color);
+        fillColor.setBackground(color);
+        gradientColor.setBackground(color);
+        strokeColor.setBackground(color);
+
+    }
 
     private void abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirActionPerformed
         JFileChooser dlg = new JFileChooser();
@@ -1018,24 +1294,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Lienzo.setForma(Lienzo.PUNTO);
     }//GEN-LAST:event_botonLapizMouseClicked
 
-    private void checkboxRellenoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxRellenoStateChanged
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        Lienzo.setRelleno(checkboxRelleno.isSelected());
-    }//GEN-LAST:event_checkboxRellenoStateChanged
-
     private void checkboxEditarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxEditarStateChanged
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
         Lienzo.setEditar(checkboxEditar.isSelected());
     }//GEN-LAST:event_checkboxEditarStateChanged
 
     private void grosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosorStateChanged
-        VentanaInterna vInt = (VentanaInterna) escritorio.getSelectedFrame();
-        Lienzo.setStroke(new BasicStroke(((Integer) grosor.getValue()).floatValue()));
+        Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
     }//GEN-LAST:event_grosorStateChanged
-
-    private void checkboxRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkboxRellenoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_checkboxRellenoActionPerformed
 
     private void menuRescaleOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRescaleOpActionPerformed
         VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
@@ -1445,13 +1710,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Lienzo.setForma(Lienzo.CURVACUBICACONTROL);
     }//GEN-LAST:event_botonCurvaCubicaSegmentadaMouseClicked
 
-    private void colorFrontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorFrontalActionPerformed
+    private void gradientColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradientColorActionPerformed
 
-    }//GEN-LAST:event_colorFrontalActionPerformed
-
-    private void colorFondoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorFondoActionPerformed
-
-    }//GEN-LAST:event_colorFondoActionPerformed
+    }//GEN-LAST:event_gradientColorActionPerformed
 
     private void botonRectanguloRedondeadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonRectanguloRedondeadoMouseClicked
 
@@ -1460,35 +1721,197 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Lienzo.setForma(Lienzo.RECTANGULOREDONDEADO);
     }//GEN-LAST:event_botonRectanguloRedondeadoMouseClicked
 
-    private void colorFrontalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorFrontalMouseClicked
-        if (evt.getClickCount() % 2 == 1) {
-            Lienzo.setColor(colorFrontal.getBackground());
-        } else if (evt.getClickCount() % 2 == 0) {
+    private void gradientColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gradientColorMouseClicked
+        if (evt.getClickCount() % 2 == 0 || gradientColor.getBackground() == null) {
             Color newColor = JColorChooser.showDialog(
                     VentanaPrincipal.this,
-                    "Escoge un color frontal",
-                    colorFrontal.getBackground());
+                    "Escoge 2º color para el GRADIENTE",
+                    gradientColor.getBackground());
             if (newColor != null) {
-                colorFrontal.setBackground(newColor);
-                Lienzo.setColor(colorFrontal.getBackground());
+                gradientColor.setBackground(newColor);
+                Lienzo.setGradientColor(gradientColor.getBackground());
             }
+        } else if (evt.getClickCount() % 2 == 1) {
+            Lienzo.setGradientColor(gradientColor.getBackground());
         }
-    }//GEN-LAST:event_colorFrontalMouseClicked
+    }//GEN-LAST:event_gradientColorMouseClicked
 
-    private void colorFondoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorFondoMouseClicked
-        if (evt.getClickCount() % 2 == 1) {
-            Lienzo.setColor(colorFondo.getBackground());
-        } else if (evt.getClickCount() % 2 == 0) {
+    private void fillListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillListActionPerformed
+        switch (fillList.getSelectedIndex()) {
+            case 0:
+                Lienzo.setFillType(0);
+                Lienzo.setFillColor(null);
+                labelTextFillColor.setVisible(false);
+                fillColor.setVisible(false);
+                labelTextGradientColor.setVisible(false);
+                gradientColor.setVisible(false);
+                break;
+            case 1:
+                Lienzo.setFillType(1);
+                Lienzo.setFillColor(fillColor.getBackground());
+                labelTextFillColor.setVisible(true);
+                fillColor.setVisible(true);
+                labelTextGradientColor.setVisible(false);
+                gradientColor.setVisible(false);
+                break;
+            case 2:
+                Lienzo.setFillType(2);
+                Lienzo.setFillColor(fillColor.getBackground());
+                Lienzo.setGradientColor(gradientColor.getBackground());
+                labelTextFillColor.setVisible(true);
+                fillColor.setVisible(true);
+                labelTextGradientColor.setVisible(true);
+                gradientColor.setVisible(true);
+                break;
+        }
+    }//GEN-LAST:event_fillListActionPerformed
+
+    private void strokeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strokeListActionPerformed
+        switch (strokeList.getSelectedIndex()) {
+            case 0: //Línea continua
+                Lienzo.setStrokeType(0);
+                Lienzo.setStrokeColor(strokeColor.getBackground());
+                Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
+                break;
+            case 1://Línea DIScontinua
+                Lienzo.setStrokeType(1);
+                Lienzo.setStrokeColor(strokeColor.getBackground());
+                Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
+                break;
+
+        }
+    }//GEN-LAST:event_strokeListActionPerformed
+
+    private void strokeColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strokeColorMouseClicked
+        if (evt.getClickCount() % 2 == 0 || strokeColor.getBackground() == null) {
             Color newColor = JColorChooser.showDialog(
                     VentanaPrincipal.this,
-                    "Escoge un color de fondo",
-                    colorFondo.getBackground());
+                    "Escoge un color para el TRAZO",
+                    strokeColor.getBackground());
             if (newColor != null) {
-                colorFondo.setBackground(newColor);
-                Lienzo.setColor(colorFondo.getBackground());
+                strokeColor.setBackground(newColor);
+                Lienzo.setStrokeColor(strokeColor.getBackground());
+            }
+        } else if (evt.getClickCount() % 2 == 1) {
+            Lienzo.setStrokeColor(strokeColor.getBackground());
+        }
+    }//GEN-LAST:event_strokeColorMouseClicked
+
+    private void strokeColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strokeColorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_strokeColorActionPerformed
+
+    private void fillColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fillColorMouseClicked
+        if (evt.getClickCount() % 2 == 0 || fillColor.getBackground() == null) {
+            Color newColor = JColorChooser.showDialog(
+                    VentanaPrincipal.this,
+                    "Escoge un color de RELLENO",
+                    fillColor.getBackground());
+            if (newColor != null) {
+                fillColor.setBackground(newColor);
+                Lienzo.setFillColor(fillColor.getBackground());
+            }
+        } else if (evt.getClickCount() % 2 == 1) {
+            Lienzo.setFillColor(fillColor.getBackground());
+        }
+    }//GEN-LAST:event_fillColorMouseClicked
+
+    private void fillColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillColorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fillColorActionPerformed
+
+    private void styleStrokeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleStrokeListActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_styleStrokeListActionPerformed
+
+    private void grosor1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosor1StateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_grosor1StateChanged
+
+    private void strokeColor1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strokeColor1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_strokeColor1MouseClicked
+
+    private void strokeColor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strokeColor1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_strokeColor1ActionPerformed
+
+    private void escritorioComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_escritorioComponentAdded
+
+    }//GEN-LAST:event_escritorioComponentAdded
+
+    private void escritorioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_escritorioFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_escritorioFocusGained
+
+    private void escritorioHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_escritorioHierarchyChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_escritorioHierarchyChanged
+
+    private void reloadShapesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadShapesActionPerformed
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            Vector<String> listData = new Vector();
+            int i = 0;
+            for (IOShape s : vi.getLienzo().getvShape()) {
+                listData.add(s.getName() + " " + ++i);
+            }
+            figureList.setListData(listData);
+        }
+    }//GEN-LAST:event_reloadShapesActionPerformed
+
+    private void figureListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_figureListMouseClicked
+        int index = figureList.getSelectedIndex();
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+
+            removeShape.setEnabled(true);
+            cloneShape.setEnabled(true);
+        }
+    }//GEN-LAST:event_figureListMouseClicked
+
+    private void removeShapeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeShapeMouseClicked
+        int index = figureList.getSelectedIndex();
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            int selectedIndices[] = figureList.getSelectedIndices();
+            if (selectedIndices.length > 0) {
+                for(int i=0; i < selectedIndices.length ; i++){
+                    vi.getLienzo().getvShape().remove(selectedIndices[i]);
+                }
+                Vector<String> listData = new Vector();
+                int i = 0;
+                for (IOShape s : vi.getLienzo().getvShape()) {
+                    listData.add(s.getName() + " " + ++i);
+                }
+                figureList.setListData(listData);
+                removeShape.setEnabled(false);
+                cloneShape.setEnabled(false);
+                repaint();
             }
         }
-    }//GEN-LAST:event_colorFondoMouseClicked
+    }//GEN-LAST:event_removeShapeMouseClicked
+
+    private void cloneShapeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cloneShapeMouseClicked
+        int index = figureList.getSelectedIndex();
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            if (figureList.getSelectedIndex() >= 0) {
+                IOShape s = vi.getLienzo().getvShape().get(index);
+                IOShape sClone = s.clone();
+                vi.getLienzo().getvShape().add(sClone);
+                Vector<String> listData = new Vector();
+                int i = 0;
+                for (IOShape sh : vi.getLienzo().getvShape()) {
+                    listData.add(sh.getName() + " " + ++i);
+                }
+                figureList.setListData(listData);
+                //removeShape.setEnabled(false);
+                //cloneShape.setEnabled(false);
+                repaint();
+            }
+        }
+    }//GEN-LAST:event_cloneShapeMouseClicked
 
     public VentanaInterna getVentanaInterna() {
         return vi;
@@ -1533,25 +1956,37 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton botonRotacion90;
     private javax.swing.JPanel botonesPaletas;
     private javax.swing.JCheckBox checkboxEditar;
-    private javax.swing.JCheckBox checkboxRelleno;
-    private javax.swing.JButton colorFondo;
-    private javax.swing.JButton colorFrontal;
+    private javax.swing.JButton cloneShape;
+    private javax.swing.JPanel contenedorBorde;
     private javax.swing.JPanel contenedorBrillo;
     private javax.swing.JPanel contenedorColores;
     private javax.swing.JPanel contenedorContraste;
     private javax.swing.JPanel contenedorEditarRelleno;
     private javax.swing.JPanel contenedorEfecto;
     private javax.swing.JPanel contenedorEscala;
-    private javax.swing.JPanel contenedorGrosor;
+    private javax.swing.JPanel contenedorEstiloBorde;
+    private javax.swing.JPanel contenedorFiguras;
+    private javax.swing.JPanel contenedorRelleno;
     private javax.swing.JPanel contenedorRotacion;
     private javax.swing.JPanel cuerpo;
     private javax.swing.JMenu edicion;
     private javax.swing.JDesktopPane escritorio;
+    private javax.swing.JList figureList;
+    private javax.swing.JButton fillColor;
+    private javax.swing.JComboBox fillList;
+    private javax.swing.JButton gradientColor;
     private javax.swing.JSpinner grosor;
+    private javax.swing.JSpinner grosor1;
     private javax.swing.ButtonGroup grupoPaletas;
     private javax.swing.JMenuItem guardar;
     private javax.swing.JMenu imagen;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel labelFigura;
+    private javax.swing.JLabel labelTextBorderColor;
+    private javax.swing.JLabel labelTextBorderColor1;
+    private javax.swing.JLabel labelTextFillColor;
+    private javax.swing.JLabel labelTextGradientColor;
     private javax.swing.JComboBox listaEfectos;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenuItem menuConvolveOp;
@@ -1561,17 +1996,23 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel paletaOpciones;
     private javax.swing.JPanel panelColor;
     private javax.swing.JPanel panelColores;
-    private javax.swing.JPanel panelGrosor;
+    private javax.swing.JPanel panelDerecho;
     private javax.swing.JPanel panelImagen;
     private javax.swing.JPanel panelIzquierdo;
     private javax.swing.JPanel panelLabelFigura;
     private javax.swing.JPanel panelRelleno;
     private javax.swing.JPanel paneles;
     private javax.swing.JPanel pie;
+    private javax.swing.JButton reloadShapes;
+    private javax.swing.JButton removeShape;
     private javax.swing.JMenuItem restar;
     private javax.swing.JSlider sliderBrillo;
     private javax.swing.JSlider sliderRotacion;
     private javax.swing.JMenuItem sobelMenu;
+    private javax.swing.JButton strokeColor;
+    private javax.swing.JButton strokeColor1;
+    private javax.swing.JComboBox strokeList;
+    private javax.swing.JComboBox styleStrokeList;
     private javax.swing.JMenuItem umbralizacion;
     private javax.swing.JCheckBoxMenuItem verBarraEstado;
     // End of variables declaration//GEN-END:variables

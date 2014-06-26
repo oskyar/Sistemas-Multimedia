@@ -7,6 +7,7 @@ package practicaFinal;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -15,6 +16,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import practicaFinal.shapes.IOShape;
+import practicaFinal.shapes.IVariableChangeListener;
 import practicaFinal.shapes.OCubicCurve2D;
 import practicaFinal.shapes.OEllipse2D;
 import practicaFinal.shapes.OLine2D;
@@ -27,7 +29,7 @@ import practicaFinal.shapes.ORoundRectangle2D;
  *
  * @author Óscar
  */
-public class Lienzo extends javax.swing.JPanel {
+public class Lienzo extends javax.swing.JPanel{
 
     final static int PUNTO = 0;
     final static int LINEA = 1;
@@ -38,16 +40,21 @@ public class Lienzo extends javax.swing.JPanel {
     final static int RECTANGULOREDONDEADO = 6;
 
     //Variables privadas
-    private static Color color;
+    private static Color strokeColor;
+    private static Color fillColor;
+    private static Color gradientColor;
     private static int forma;
+    private static int fillType;
+    private static int strokeType;
+    private static float strokeWidth;
     private static Stroke stroke;
-    private static boolean relleno;
+    //private static boolean relleno;
     private static boolean editar;
     //Para controlar por qué punto de control vamos
     private static int ctrlCurva = 0;
     private Point2D p;
     private IOShape s;
-    private final ArrayList<IOShape> vShape;
+    private ArrayList<IOShape> vShape;
     private final Point2D dXY;
     private BufferedImage img;
     private BufferedImage imgDest;
@@ -86,50 +93,44 @@ public class Lienzo extends javax.swing.JPanel {
         switch (forma) {
             case PUNTO:
                 s = new OPoint2D(p1, p1);
-                s.setColor(color);
-                s.setFill(relleno);
-                s.setStroke(stroke);
                 break;
             case LINEA:
                 s = new OLine2D(p1, p1);
-                s.setColor(color);
-                s.setFill(relleno);
-                s.setStroke(stroke);
                 break;
             case RECTANGULO:
                 s = new ORectangle2D(p1, p1);
-                s.setColor(color);
-                s.setFill(relleno);
-                s.setStroke(stroke);
                 break;
             case ELIPSE:
                 s = new OEllipse2D(p1, p1);
-                s.setColor(color);
-                s.setFill(relleno);
-                s.setStroke(stroke);
                 break;
             case CURVACONTROL:
                 s = new OQuadCurve2D(p1, p1, p1);
-                s.setColor(color);
-                s.setFill(relleno);
-                s.setStroke(stroke);
                 break;
             case CURVACUBICACONTROL:
                 s = new OCubicCurve2D(p1, p1, p1, p1);
-                s.setColor(color);
-                s.setFill(relleno);
-                s.setStroke(stroke);
                 break;
             case RECTANGULOREDONDEADO:
                 s = new ORoundRectangle2D(p1, p1, 30, 30);
-                s.setColor(color);
-                s.setFill(relleno);
-                s.setStroke(stroke);
-                break;            
+                break;
             default:
                 s = null;
                 return s;
         }
+        //Código común para todas las formas...
+        s.setStrokeColor(strokeColor);
+        switch (fillType) {
+            case 2:
+                GradientPaint objectGradient = new GradientPaint(p1, fillColor, p2, gradientColor);
+                s.setGradientColor(objectGradient);
+                break;
+            case 1:
+                s.setFillColor(fillColor);
+                break;
+        }
+        s.setFillType(fillType);
+        s.setStrokeType(strokeType);
+        //s.setStroke(stroke);
+        s.setStrokeWidth(strokeWidth);
         maxPuntosControl = s.getCtrlPoints();
         ctrlCurva = 0;
         return s;
@@ -183,7 +184,7 @@ public class Lienzo extends javax.swing.JPanel {
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         p = evt.getPoint();
         if (!editar) {
-            if (ctrlCurva == 0 ) {
+            if (ctrlCurva == 0) {
                 vShape.add(createShape(p, p));
             } else {
                 if (s != null) {
@@ -203,7 +204,7 @@ public class Lienzo extends javax.swing.JPanel {
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
         formMouseDragged(evt);
         //Si la curva de control está activada y se ha pintado la línea pero  el punto de control NO.
-        if(maxPuntosControl != 0){
+        if (maxPuntosControl != 0) {
             if (ctrlCurva++ == maxPuntosControl) {
                 ctrlCurva = 0;
             }
@@ -256,12 +257,12 @@ public class Lienzo extends javax.swing.JPanel {
         return this.imgDest;
     }
 
-    public static void setColor(Color color) {
-        Lienzo.color = color;
+    public static void setFillColor(Color color) {
+        Lienzo.fillColor = color;
     }
 
-    public Color getColor() {
-        return color;
+    public Color getFillColor() {
+        return Lienzo.fillColor;
     }
 
     public static int getForma() {
@@ -269,7 +270,7 @@ public class Lienzo extends javax.swing.JPanel {
     }
 
     public static void setForma(int forma) {
-        Lienzo.ctrlCurva=0;
+        Lienzo.ctrlCurva = 0;
         Lienzo.forma = forma;
     }
 
@@ -281,20 +282,12 @@ public class Lienzo extends javax.swing.JPanel {
         this.p = p;
     }
 
-    public static boolean isRelleno() {
-        return Lienzo.relleno;
-    }
-
-    public static void setRelleno(boolean relleno) {
-        Lienzo.relleno = relleno;
-    }
-
     public boolean isEditar() {
         return editar;
     }
 
     public static void setEditar(boolean editar) {
-        Lienzo.ctrlCurva=0;
+        Lienzo.ctrlCurva = 0;
         Lienzo.editar = editar;
     }
 
@@ -314,13 +307,61 @@ public class Lienzo extends javax.swing.JPanel {
         this.maxPuntosControl = num;
     }
 
-    public int getCtrlCurva() {
-        return this.ctrlCurva;
+    public static int getCtrlCurva() {
+        return Lienzo.ctrlCurva;
     }
 
-    public void setCtrlCurva(int num) {
-        this.ctrlCurva = num;
+    public static void setCtrlCurva(int num) {
+        Lienzo.ctrlCurva = num;
     }
+
+    public static int getFillType() {
+        return fillType;
+    }
+
+    public static void setFillType(int fillType) {
+        Lienzo.fillType = fillType;
+    }
+
+    public static Color getGradientColor() {
+        return gradientColor;
+    }
+
+    public static void setGradientColor(Color gradientColor) {
+        Lienzo.gradientColor = gradientColor;
+    }
+
+    public static Color getStrokeColor() {
+        return strokeColor;
+    }
+
+    public static void setStrokeColor(Color strokeColor) {
+        Lienzo.strokeColor = strokeColor;
+    }
+
+    public static int getStrokeType() {
+        return strokeType;
+    }
+
+    public static void setStrokeType(int strokeType) {
+        Lienzo.strokeType = strokeType;
+    }
+
+    public static float getStrokeWidth() {
+        return strokeWidth;
+    }
+
+    public static void setStrokeWidth(float strokeWidth) {
+        Lienzo.strokeWidth = strokeWidth;
+    }
+    
+    public ArrayList<IOShape> getvShape() {
+        return vShape;
+    }
+
+    public void setvShape(ArrayList<IOShape> vShape) {
+        this.vShape = vShape;
+    }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
