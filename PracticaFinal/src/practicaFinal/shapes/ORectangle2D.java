@@ -27,25 +27,39 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     private int strokeType;
     private Color fillColor;
     private Color strokeColor;
-    private GradientPaint gradientColor;
+    private Color gradientColor;
+    private GradientPaint gradient;
     private Point2D p;
     private Stroke stroke;
     private float strokeWidth;
+    private ORectangle2D frame;
     
     private final int CTRLPOINTS = 0;
 
     public ORectangle2D(Point2D p1, double width, double height){
         super(p1.getX(),p1.getY(),width,height);
+        inicialize();
+    }
+
+    public ORectangle2D(double x, double y, double width, double height){
+        super(x,y,width,height);
+        inicialize();
     }
     
     public ORectangle2D(Point2D p1, Point2D p2){
         super(p1.getX(),p1.getY(),Math.abs(p1.getX()-p2.getX()),Math.abs(p1.getY()-p2.getY()));
+        inicialize();
     }    
     
-    public ORectangle2D(ORectangle2D rect){
+    public ORectangle2D(Rectangle2D rect){
         super(rect.getX(),rect.getY(),rect.getWidth(),rect.getHeight());
+        inicialize();
     }
 
+    private void inicialize(){
+        
+    }
+    
     @Override
     public Stroke getStroke() {
         return this.stroke;
@@ -73,7 +87,7 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
         if(fillType==1){
             g2d.fill(this);
         }else if(fillType==2){
-            g2d.setPaint(gradientColor);
+            g2d.setPaint(gradient);
             g2d.fill(this);
         }
     }
@@ -90,7 +104,7 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
         p1= new Point2D.Double(this.getBounds2D().getX(),this.getBounds2D().getY());
         p2=new Point2D.Double(p2.getX()+this.getBounds2D().getX(),p2.getY()+this.getBounds2D().getY());
         if(fillType==2){
-            gradientColor = new GradientPaint(p1, gradientColor.getColor1(), p2, gradientColor.getColor2());
+            gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
         }
     }
 
@@ -170,13 +184,14 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     }
 
     @Override
-    public GradientPaint getGradientColor() {
+    public Color getGradientColor() {
         return gradientColor;
     }
 
     @Override
-    public void setGradientColor(GradientPaint gradientColor) {
+    public void setGradientColor(Color gradientColor) {
         this.gradientColor = gradientColor;
+        gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), gradientColor);
     }
 
     @Override
@@ -198,4 +213,27 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     public IOShape clone() {
         return (IOShape) super.clone();
     }
+
+    @Override
+    public GradientPaint getGradient() {
+        return gradient;
+    }
+
+    @Override
+    public void setGradient(GradientPaint gradient) {
+        this.gradient = gradient;
+    }
+    
+
+    @Override
+    public void drawFrame(Graphics2D g2d) {
+        frame = new ORectangle2D( this.getX()-4, this.getY()-4, this.getWidth()+8, getHeight()+8);
+        frame.setStrokeWidth(3);
+        frame.setStrokeType(1);
+        frame.setStrokeColor(Color.RED);
+        frame.setFillType(0);
+        frame.draw(g2d);
+        //return frame;
+    }  
+    
 }

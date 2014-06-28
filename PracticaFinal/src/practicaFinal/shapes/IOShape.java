@@ -58,11 +58,17 @@ public interface IOShape {
 
     public void setFillType(int fill);
 
-    public GradientPaint getGradientColor();
+    public Color getGradientColor();
 
-    public void setGradientColor(GradientPaint gradientColor);
+    public void setGradientColor(Color gradientColor);
+    
+    public GradientPaint getGradient();
+
+    public void setGradient(GradientPaint gradientColor);
 
     public void draw(Graphics2D g2d);
+    
+    public void drawFrame(Graphics2D g2d);
 
     public boolean contains(Point2D p);
 
@@ -71,5 +77,6 @@ public interface IOShape {
     public void updateShape(Point2D p1, Point2D p2);
     
     public IOShape clone();
+
 
 }
