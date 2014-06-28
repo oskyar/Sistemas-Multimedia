@@ -11,13 +11,16 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.Vector;
 import practicaFinal.shapes.IOShape;
 import practicaFinal.shapes.OCubicCurve2D;
 import practicaFinal.shapes.OEllipse2D;
@@ -70,11 +73,10 @@ public class Lienzo extends javax.swing.JPanel {
     private IOShape s;
     private ArrayList<IOShape> vShape;
     private ArrayList<Integer> vShapeSelected;
-    private final ArrayList<Point2D> vdXY;
+    private ArrayList<Point2D> vdXY;
     private BufferedImage img;
     private BufferedImage imgDest;
     private int maxPuntosControl;
-    private static boolean keyControl;
 
     /**
      * Constructor sin parámetros de la clase Lienzo
@@ -87,7 +89,6 @@ public class Lienzo extends javax.swing.JPanel {
         vShapeSelected = new ArrayList();
         editar = false;
         vdXY = new ArrayList<>();
-        keyControl = false;
     }
 
     @Override
@@ -208,7 +209,7 @@ public class Lienzo extends javax.swing.JPanel {
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         p = evt.getPoint();
-        if (!editar) {
+        if (!evt.isControlDown() && vShapeSelected.isEmpty()) {
             if (ctrlCurva == 0) {
                 vShape.add(createShape(p, p));
             } else {
@@ -223,41 +224,27 @@ public class Lienzo extends javax.swing.JPanel {
                 double x, y;
                 x = s.getX();
                 y = s.getY();
-                if (evt.getButton() == 1 && keyControl) {
-                    //Si no está seleccionada la forma se selecciona
-                    if (!vShapeSelected.contains(vShape.indexOf(s))) {
-                        vShapeSelected.add(vShape.indexOf(s));
-                        vdXY.add(new Point2D.Double(x - p.getX(), y - p.getY()));
-                    } else {
-                        vdXY.remove(vShapeSelected.indexOf(vShape.indexOf(s)));
-                        vShapeSelected.remove(vShapeSelected.indexOf(vShape.indexOf(s)));
+                if (evt.getButton() == 1) {
+                    if (evt.isControlDown()) {
+                        //Si no está seleccionada la forma se selecciona
+                        if (!vShapeSelected.contains(vShape.indexOf(s))) {
+                            vShapeSelected.add(vShape.indexOf(s));
+                            vdXY.add(new Point2D.Double(x - p.getX(), y - p.getY()));
+                        } else {
+                            vdXY.remove(vShapeSelected.indexOf(vShape.indexOf(s)));
+                            vShapeSelected.remove(vShapeSelected.indexOf(vShape.indexOf(s)));
+                        }
+                    }
+                    for (int i = 0; i < vShapeSelected.size(); i++) {
+                        x = vShape.get(vShapeSelected.get(i)).getX();
+                        y = vShape.get(vShapeSelected.get(i)).getY();
+                        //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
+                        vdXY.set(i, new Point2D.Double(x - p.getX(), y - p.getY()));
                     }
                 }
             }
-            /* if (s != null) {
-             double x, y;
-             x = s.getX();
-             y = s.getY();
-             if (evt.getButton() == 1) {
-             vdXY.clear();
-             vShapeSelected.clear();
-             vdXY.add(new Point2D.Double(x - p.getX(), y - p.getY()));
-             vShapeSelected.add(vShape.indexOf(s));
-             } else if (evt.getButton() == 2) {
-             if (!vShapeSelected.contains(vShape.indexOf(s))) {
-             vdXY.add(new Point2D.Double(x - p.getX(), y - p.getY()));
-             vShapeSelected.add(vShape.indexOf(s));
-             }
-             } else if (evt.getButton() == 3) {
-             vdXY.add(new Point2D.Double(x - p.getX(), y - p.getY()));
-             //Compruebo que S existe en el vector vShape y luego si el valor que devuelve está contenido en vShapeSelected
-             if (vShapeSelected.contains(vShape.indexOf(s))) {
-             vdXY.remove(vShapeSelected.indexOf(vShape.indexOf(s)));
-             vShapeSelected.remove(vShapeSelected.indexOf(vShape.indexOf(s)));
-             }
-             }
-             }*/
         }
+        this.repaint();
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
@@ -268,12 +255,13 @@ public class Lienzo extends javax.swing.JPanel {
                 ctrlCurva = 0;
             }
         }
+        this.repaint();
     }//GEN-LAST:event_formMouseReleased
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         Point pEvt = evt.getPoint();
 
-        if (!editar) {
+        if (!evt.isControlDown() && vShapeSelected.isEmpty()) {
             if (ctrlCurva == 0) {
                 s.updateShape(p, pEvt);
             } else {
@@ -281,14 +269,19 @@ public class Lienzo extends javax.swing.JPanel {
             }
         } else {
 //            //if (vShape.get(vShapeSelected.get(0)) != null) {
-            if (s != null) {
-                if (vShapeSelected.contains(vShape.indexOf(s))) {
-                    //Si hay más de una figura seleccionada, se mueven todas.
+            //if (!vShapeSelected.isEmpty()) {
+            //Si hay más de una figura seleccionada, se mueven todas.
+            if (vShapeSelected.indexOf(vShape.indexOf(s)) != -1) {
+                if ( !evt.isControlDown()) {
                     for (int i = 0; i < vShapeSelected.size(); i++) {
                         //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
+//                    vShape.get(vShapeSelected.get(i)).setLocation(new Point2D.Double(pEvt.getX() + vdXY.get(i).getX(), pEvt.getY() + vdXY.get(i).getY()));
                         vShape.get(vShapeSelected.get(i)).setLocation(new Point2D.Double(pEvt.getX() + vdXY.get(i).getX(), pEvt.getY() + vdXY.get(i).getY()));
 //                s.setLocation(new Point2D.Double(pEvt.getX() + vdXY.get(0).getX(), pEvt.getY() + vdXY.get(0).getY()));
+
                     }
+                    System.err.println(evt.getButton());
+                    //this.repaint();
                 }
             }
         }
@@ -502,12 +495,13 @@ public class Lienzo extends javax.swing.JPanel {
         }
     }
 
-    public static boolean isKeyControl() {
-        return keyControl;
+    public ArrayList<Point2D> getVdXY() {
+        return vdXY;
     }
 
-    public static void setKeyControl(boolean keyControl) {
-        Lienzo.keyControl = keyControl;
+    public void setVdXY(ArrayList<Point2D> vdXY) {
+        this.vdXY = vdXY;
     }
-
+    
+    
 }

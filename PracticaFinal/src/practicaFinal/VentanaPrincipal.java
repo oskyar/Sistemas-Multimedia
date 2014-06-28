@@ -11,12 +11,11 @@ import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
@@ -26,11 +25,9 @@ import java.awt.image.RescaleOp;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.input.KeyCode;
 import javax.imageio.ImageIO;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
@@ -54,16 +51,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     //Guardo la última ventana interna creada
     private VentanaInterna vi;
     private int numVentanas;
-    KeyListener keyListener;
 
     public VentanaPrincipal() {
         initComponents();
         this.setTitle("PAINT 2.0 Professional - Óscar Zafra");
         numVentanas = 0;
-        vi = new VentanaInterna();
-        escritorio.add(vi);
-        vi.setVisible(true);
-        vi.setTitle("Lienzo " + ++numVentanas);
+        vi = this.newWindows();
         botonLapiz.setSelected(true);
         panelColor.setVisible(true);
         panelImagen.setVisible(false);
@@ -86,24 +79,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Lienzo.setGradientColor(gradientColor.getBackground());
         //Un evento creado por mi para saber si se está presionando la tecla Control
         figureList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        
+        //escritorio.dispatchEvent(new MouseEvent(escritorio,MouseEvent.MOUSE_RELEASED, 0, MouseEvent.NOBUTTON, 0, 0, 0, false));
 //Evento para tener en cuenta cuando se pusa la tecla CONTROL del teclado.
         //Usada para seleccionar o deseleccionar shapes del lienzo.
-        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-        manager.addKeyEventDispatcher(new KeyEventDispatcher() {
-            @Override
-            public boolean dispatchKeyEvent(KeyEvent e) {
-                if (e.getID() == KeyEvent.KEY_PRESSED) {
-                    if(e.getKeyCode()==e.VK_CONTROL){
-                        Lienzo.setKeyControl(true);
-                        return true;
-                    }
-                }
-                Lienzo.setKeyControl(false);
-                return false;
-            }
-        } );
+        keyboardEvent();
+
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -167,9 +149,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonColorBlanco = new javax.swing.JButton();
         botonColorVerde = new javax.swing.JButton();
         botonColorAmarillo = new javax.swing.JButton();
-        contenedorEditarRelleno = new javax.swing.JPanel();
-        panelRelleno = new javax.swing.JPanel();
-        checkboxEditar = new javax.swing.JCheckBox();
         contenedorRelleno = new javax.swing.JPanel();
         fillList = new javax.swing.JComboBox();
         labelTextFillColor = new javax.swing.JLabel();
@@ -841,37 +820,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         panelColor.add(contenedorColores);
 
-        contenedorEditarRelleno.setBorder(javax.swing.BorderFactory.createTitledBorder(" "));
-        contenedorEditarRelleno.setToolTipText("Opciones");
-        contenedorEditarRelleno.setMaximumSize(new java.awt.Dimension(100, 90));
-        contenedorEditarRelleno.setMinimumSize(new java.awt.Dimension(95, 90));
-        contenedorEditarRelleno.setPreferredSize(new java.awt.Dimension(95, 90));
-        contenedorEditarRelleno.setLayout(new java.awt.GridLayout(0, 1));
-
-        panelRelleno.setBorder(null);
-        panelRelleno.setToolTipText("");
-        panelRelleno.setMaximumSize(new java.awt.Dimension(90, 80));
-        panelRelleno.setMinimumSize(new java.awt.Dimension(90, 80));
-        panelRelleno.setPreferredSize(new java.awt.Dimension(90, 80));
-        panelRelleno.setLayout(new java.awt.GridLayout(2, 1));
-
-        checkboxEditar.setText("Editar");
-        checkboxEditar.setActionCommand("");
-        checkboxEditar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        checkboxEditar.setMaximumSize(new java.awt.Dimension(69, 10));
-        checkboxEditar.setMinimumSize(new java.awt.Dimension(69, 10));
-        checkboxEditar.setPreferredSize(new java.awt.Dimension(69, 10));
-        checkboxEditar.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                checkboxEditarStateChanged(evt);
-            }
-        });
-        panelRelleno.add(checkboxEditar);
-
-        contenedorEditarRelleno.add(panelRelleno);
-
-        panelColor.add(contenedorEditarRelleno);
-
         contenedorRelleno.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipo de Relleno y color"));
         contenedorRelleno.setToolTipText("Tipo de Relleno y Color");
         contenedorRelleno.setMaximumSize(new java.awt.Dimension(180, 90));
@@ -1255,12 +1203,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonOvaloMouseClicked
 
     private void nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoActionPerformed
-
-        VentanaInterna vi = new VentanaInterna();
-        escritorio.add(vi);
-        vi.setTitle("Lienzo " + ++numVentanas);
-        vi.setVisible(true);
-        setVentanaInterna(vi);
+        figureList.clearSelection();
+        vi = newWindows();
 
     }//GEN-LAST:event_nuevoActionPerformed
 
@@ -1275,7 +1219,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 img = vi.getLienzo().volcado(img);
 
                 ImageIO.write(img, "jpg", f);
-                //Código 
+                //Código
             } catch (IOException ex) {
                 Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1346,16 +1290,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonLapiz.setSelected(true);
         Lienzo.setForma(Lienzo.PUNTO);
     }//GEN-LAST:event_botonLapizMouseClicked
-
-    private void checkboxEditarStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_checkboxEditarStateChanged
-        Lienzo.setEditar(checkboxEditar.isSelected());
-        vi.getLienzo().addKeyListener(keyListener);
-        /* if(checkboxEditar.isSelected()){
-         }else{
-         VentanaInterna vi = (VentanaInterna) (escritorio.getSelectedFrame());
-         vi.getLienzo().getvShapeSelected().clear();
-         }*/
-    }//GEN-LAST:event_checkboxEditarStateChanged
 
     private void grosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosorStateChanged
         Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
@@ -1940,22 +1874,21 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_reloadShapesActionPerformed
 
     private void figureListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_figureListMouseClicked
-        if (checkboxEditar.isSelected()) {
-            VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
-            if (vi != null) {
-                int selectedShapes[] = figureList.getSelectedIndices();
-                vi.getLienzo().getvShapeSelected().clear();
-                ArrayList<IOShape> vShapes = vi.getLienzo().getvShape();
-                for (int index : selectedShapes) {
-                    vi.getLienzo().getvShapeSelected().add(index);
-                    //((IOShape)vShapes.get(index)).drawFrame();
-                    //                 vi.getLienzo().getvShapeSelected().put(index,frame);
-                    repaint();
-                }
 
-                removeShape.setEnabled(true);
-                cloneShape.setEnabled(true);
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        if (vi != null) {
+            int selectedShapes[] = figureList.getSelectedIndices();
+            vi.getLienzo().getvShapeSelected().clear();
+            vi.getLienzo().getvShape();
+            for (int index : selectedShapes) {
+                vi.getLienzo().getvShapeSelected().add(index);
+                vi.getLienzo().getVdXY().add(new Point2D.Double());
+                repaint();
             }
+
+            removeShape.setEnabled(true);
+            cloneShape.setEnabled(true);
+
         }
     }//GEN-LAST:event_figureListMouseClicked
 
@@ -2034,6 +1967,84 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.vi = vi;
     }
 
+    public void eventoEscritorioShapes() {
+        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        figureList.clearSelection();
+        if (vi != null) {
+            Vector<String> listData = new Vector();
+            int i = 0;
+            for (IOShape s : vi.getLienzo().getvShape()) {
+                listData.add(s.getName() + " " + ++i);
+            }
+            figureList.setListData(listData);
+            if (!vi.getLienzo().getvShapeSelected().isEmpty()) {
+                int selectedIndices[] = new int[vi.getLienzo().getvShapeSelected().size()];
+                i = 0;
+                for (Integer index : vi.getLienzo().getvShapeSelected()) {
+                    selectedIndices[i++] = index;
+                }
+                figureList.setSelectedIndices(selectedIndices);
+            }
+        }
+    }
+
+    public final void keyboardEvent() {
+        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        manager.addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                if (e.getID() == KeyEvent.KEY_PRESSED) {
+                    if (e.getKeyCode() == e.VK_ESCAPE) {
+                        if (vi != null) {
+                            vi.getLienzo().getvShapeSelected().clear();
+                            repaint();
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+
+    public final VentanaInterna newWindows() {
+        
+        figureList.setListData(new Vector());
+        VentanaInterna vi = new VentanaInterna();
+        escritorio.add(vi);
+        vi.setTitle("Lienzo " + ++numVentanas);
+        vi.setVisible(true);
+        setVentanaInterna(vi);
+        vi.getLienzo().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                eventoEscritorioShapes();
+                repaint();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                eventoEscritorioShapes();
+                repaint();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                eventoEscritorioShapes();
+                repaint();
+            }
+        });
+        return vi;
+    }    
+    
+    public VentanaInterna selectInterna(){
+        figureList.clearSelection();
+        eventoEscritorioShapes();
+        
+        return (VentanaInterna) escritorio.getSelectedFrame();
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -2068,13 +2079,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton botonRotacion270;
     private javax.swing.JButton botonRotacion90;
     private javax.swing.JPanel botonesPaletas;
-    private javax.swing.JCheckBox checkboxEditar;
     private javax.swing.JButton cloneShape;
     private javax.swing.JPanel contenedorBorde;
     private javax.swing.JPanel contenedorBrillo;
     private javax.swing.JPanel contenedorColores;
     private javax.swing.JPanel contenedorContraste;
-    private javax.swing.JPanel contenedorEditarRelleno;
     private javax.swing.JPanel contenedorEfecto;
     private javax.swing.JPanel contenedorEscala;
     private javax.swing.JPanel contenedorEstiloBorde;
@@ -2113,7 +2122,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel panelImagen;
     private javax.swing.JPanel panelIzquierdo;
     private javax.swing.JPanel panelLabelFigura;
-    private javax.swing.JPanel panelRelleno;
     private javax.swing.JPanel paneles;
     private javax.swing.JPanel pie;
     private javax.swing.JButton reloadShapes;
