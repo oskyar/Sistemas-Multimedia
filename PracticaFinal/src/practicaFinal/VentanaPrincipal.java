@@ -61,9 +61,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelColor.setVisible(true);
         panelImagen.setVisible(false);
         Lienzo.setStrokeColor(Color.BLACK);
+        Lienzo.setStrokeType(Lienzo.STROKE_CONTINUOUS);
+        Lienzo.setStrokeWidth(1.0f);
         Lienzo.setFillColor(Color.BLACK);
+        Lienzo.setGradientColor(Color.WHITE);
+        Lienzo.setFillType(Lienzo.TYPE_FILL_NONE);
         Lienzo.setForma(Lienzo.PUNTO);
-        Lienzo.setStroke(new BasicStroke(((Integer) grosor.getValue()).floatValue()));
+        //Lienzo.setStroke(new BasicStroke(((Integer) grosor.getValue()).floatValue()));
         try {
             vi.setMaximum(true);
         } catch (PropertyVetoException ex) {
@@ -1838,7 +1842,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             Lienzo.setFillColor(fillColor.getBackground());
         }
         if (vi != null) {
-            vi.getLienzo().changeColorProperty(Lienzo.COLOR_FILL, Lienzo.getFillColor(), null);
+            vi.getLienzo().changeColorProperty(Lienzo.COLOR_FILL, fillColor.getBackground(), null);
         }
     }//GEN-LAST:event_fillColorMouseClicked
 

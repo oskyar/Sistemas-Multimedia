@@ -73,6 +73,7 @@ public class Lienzo extends javax.swing.JPanel {
     private BufferedImage img;
     private BufferedImage imgDest;
     private int maxPuntosControl;
+    private Point2D dGradientXYp1, dGradientXYp2;
 
     /**
      * Constructor sin parámetros de la clase Lienzo
@@ -142,6 +143,8 @@ public class Lienzo extends javax.swing.JPanel {
                 s.setFillColor(fillColor);
                 break;
             case 2:
+                s.setFillColor(fillColor);
+                s.setGradientColor(gradientColor);
                 GradientPaint gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
                 s.setGradient(gradient);
                 break;
@@ -213,6 +216,13 @@ public class Lienzo extends javax.swing.JPanel {
                     s.setOnePoint(ctrlCurva - 1, p);
                 }
             }
+        } else if (evt.isAltDown() && !vShapeSelected.isEmpty()) {
+            for (Integer i : vShapeSelected) {
+                //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
+                if(vShape.get(vShapeSelected.get(i)).getFillType()==Lienzo.COLOR_GRADIENT){
+                    vShape.get(vShapeSelected.get(i)).createGradient(p, p);
+                }
+            }
         } else {
             s = getSelectedShape(evt.getPoint());
             //Compruebo que se pincha con el botón izquierdo del ratón
@@ -220,7 +230,7 @@ public class Lienzo extends javax.swing.JPanel {
                 double x, y;
                 x = s.getX();
                 y = s.getY();
-                if (evt.getButton() == 1) {
+                if (evt.getButton() == evt.BUTTON1) {
                     if (evt.isControlDown()) {
                         //Si no está seleccionada la forma se selecciona
                         if (!vShapeSelected.contains(vShape.indexOf(s))) {
@@ -236,6 +246,10 @@ public class Lienzo extends javax.swing.JPanel {
                         y = vShape.get(vShapeSelected.get(i)).getY();
                         //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
                         vdXY.set(i, new Point2D.Double(x - p.getX(), y - p.getY()));
+                        if(vShape.get(vShapeSelected.get(i)).getFillType()==Lienzo.TYPE_FILL_GRADIENT){
+                            dGradientXYp1 = new Point2D.Double(vShape.get(vShapeSelected.get(i)).getGradient().getPoint1().getX() - p.getX(), vShape.get(vShapeSelected.get(i)).getGradient().getPoint1().getY() - p.getY());
+                            dGradientXYp2 = new Point2D.Double(vShape.get(vShapeSelected.get(i)).getGradient().getPoint2().getX() - p.getX(), vShape.get(vShapeSelected.get(i)).getGradient().getPoint2().getY() - p.getY());
+                        }
                     }
                 }
             }
@@ -263,12 +277,26 @@ public class Lienzo extends javax.swing.JPanel {
             } else {
                 s.setOnePoint(ctrlCurva - 1, pEvt);
             }
+        } else if (evt.isAltDown() && !vShapeSelected.isEmpty()) {
+            for (Integer i : vShapeSelected) {
+                //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
+                if(vShape.get(vShapeSelected.get(i)).getFillType()==Lienzo.TYPE_FILL_GRADIENT){
+                    vShape.get(vShapeSelected.get(i)).updateGradient(p, pEvt);
+                }
+            }
         } else {
+            //Si encuentra alguna forma seleccionada
             if (vShapeSelected.indexOf(vShape.indexOf(s)) != -1) {
                 if (!evt.isControlDown()) {
                     for (int i = 0; i < vShapeSelected.size(); i++) {
+                        IOShape sh = vShape.get(vShapeSelected.get(i));
                         //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
-                        vShape.get(vShapeSelected.get(i)).setLocation(new Point2D.Double(pEvt.getX() + vdXY.get(i).getX(), pEvt.getY() + vdXY.get(i).getY()));
+                        sh.setLocation(new Point2D.Double(pEvt.getX() + vdXY.get(i).getX(), pEvt.getY() + vdXY.get(i).getY()));
+                        if (sh.getFillType() == TYPE_FILL_GRADIENT) {
+                            Point2D p1 = new Point2D.Double(pEvt.getX() + dGradientXYp1.getX(), pEvt.getY() + dGradientXYp1.getY());
+                            Point2D p2 = new Point2D.Double(pEvt.getX() + dGradientXYp2.getX(), pEvt.getY() + dGradientXYp2.getY());
+                            sh.updateGradient(p1, p2);
+                        }
                     }
                 }
             }
@@ -476,11 +504,13 @@ public class Lienzo extends javax.swing.JPanel {
             for (int index : vShapeSelected) {
                 vShape.get(index).setFillColor(color1);
                 vShape.get(index).setFillType(typeFill);
+                System.err.println("tipo fill " + typeFill);
                 if (typeFill == TYPE_FILL_GRADIENT) {
                     vShape.get(index).setGradientColor(color2);
                 }
             }
         }
+        repaint();
     }
 
     public ArrayList<Point2D> getVdXY() {
@@ -510,7 +540,7 @@ public class Lienzo extends javax.swing.JPanel {
         }
         repaint();
     }
-    
+
     void changeWidthStrokeProperty(float width) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
@@ -519,7 +549,7 @@ public class Lienzo extends javax.swing.JPanel {
         }
         repaint();
     }
-    
+
     void changeStrokeTypeProperty(int strokeType) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
@@ -527,5 +557,5 @@ public class Lienzo extends javax.swing.JPanel {
             }
         }
         repaint();
-    }    
+    }
 }

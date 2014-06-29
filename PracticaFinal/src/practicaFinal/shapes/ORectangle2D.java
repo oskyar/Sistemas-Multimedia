@@ -101,9 +101,11 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     @Override
     public void updateShape(Point2D p1, Point2D p2) {
         setFrameFromDiagonal(p1, p2);
-        p1= new Point2D.Double(this.getBounds2D().getX(),this.getBounds2D().getY());
-        p2=new Point2D.Double(p2.getX()+this.getBounds2D().getX(),p2.getY()+this.getBounds2D().getY());
+      //  p1= new Point2D.Double(this.getX(),this.getY());
+     //   p2=new Point2D.Double(p2.getX()+this.getX(),p2.getY()+this.getY());
         if(fillType==2){
+          //  p1= new Point2D.Double(this.getX()+gradient.getPoint1().getX(),this.getY()+gradient.getPoint1().getY());
+        //    p2=new Point2D.Double(this.getX()+gradient.getPoint2().getX(),this.getY()+gradient.getPoint2().getY());
             gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
         }
     }
@@ -171,6 +173,9 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     @Override
     public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
+        if(fillType==2){
+            gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), gradientColor);
+        }
     }
 
     @Override
@@ -228,12 +233,21 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     @Override
     public void drawFrame(Graphics2D g2d) {
         frame = new ORectangle2D( this.getX()-4, this.getY()-4, this.getWidth()+8, getHeight()+8);
-        frame.setStrokeWidth(3);
+        frame.setStrokeWidth(1);
         frame.setStrokeType(1);
         frame.setStrokeColor(Color.RED);
         frame.setFillType(0);
         frame.draw(g2d);
         //return frame;
     }  
+
+    @Override
+    public void createGradient(Point2D p1, Point2D p2) {
+        gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
+    }
     
+    @Override
+    public void updateGradient(Point2D p1, Point2D p2) {
+        gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
+    }
 }

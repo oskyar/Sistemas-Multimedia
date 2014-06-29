@@ -77,6 +77,9 @@ public interface IOShape {
     public void updateShape(Point2D p1, Point2D p2);
     
     public IOShape clone();
+    
+    public void createGradient(Point2D p1, Point2D p2);
 
+    public void updateGradient(Point2D p1, Point2D p2);
 
 }
