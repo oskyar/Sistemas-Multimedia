@@ -12,15 +12,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ContainerAdapter;
-import java.awt.event.ContainerEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Vector;
 import practicaFinal.shapes.IOShape;
 import practicaFinal.shapes.OCubicCurve2D;
 import practicaFinal.shapes.OEllipse2D;
@@ -516,4 +510,22 @@ public class Lienzo extends javax.swing.JPanel {
         }
         repaint();
     }
+    
+    void changeWidthStrokeProperty(float width) {
+        if (!vShapeSelected.isEmpty()) {
+            for (int index : vShapeSelected) {
+                vShape.get(index).setStrokeWidth(width);
+            }
+        }
+        repaint();
+    }
+    
+    void changeStrokeTypeProperty(int strokeType) {
+        if (!vShapeSelected.isEmpty()) {
+            for (int index : vShapeSelected) {
+                vShape.get(index).setStrokeType(strokeType);
+            }
+        }
+        repaint();
+    }    
 }

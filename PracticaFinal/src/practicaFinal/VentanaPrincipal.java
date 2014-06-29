@@ -11,9 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -35,7 +32,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.InternalFrameAdapter;
 import practicaFinal.filtros.MultiplicacionOp;
 import practicaFinal.filtros.RestaOp;
 import practicaFinal.filtros.SobelOp;
@@ -1296,6 +1292,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void grosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosorStateChanged
         Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
+        VentanaInterna vi = selectInternalWindows();
+        if (vi != null) {
+            vi.getLienzo().changeWidthStrokeProperty(Float.parseFloat(grosor.getValue().toString()));
+        }
     }//GEN-LAST:event_grosorStateChanged
 
     private void menuRescaleOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRescaleOpActionPerformed
@@ -1779,18 +1779,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_fillListActionPerformed
 
     private void strokeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strokeListActionPerformed
+        VentanaInterna vi = selectInternalWindows();
         switch (strokeList.getSelectedIndex()) {
             case Lienzo.STROKE_CONTINUOUS: //Línea continua
                 Lienzo.setStrokeType(Lienzo.STROKE_CONTINUOUS);
                 Lienzo.setStrokeColor(strokeColor.getBackground());
                 Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
+                if (vi != null) {
+                    vi.getLienzo().changeStrokeTypeProperty(Lienzo.STROKE_CONTINUOUS);
+                }
                 break;
             case Lienzo.STROKE_DISCONTINUOUS://Línea DIScontinua
                 Lienzo.setStrokeType(Lienzo.STROKE_DISCONTINUOUS);
                 Lienzo.setStrokeColor(strokeColor.getBackground());
                 Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
+                if (vi != null) {
+                    vi.getLienzo().changeStrokeTypeProperty(Lienzo.STROKE_DISCONTINUOUS);
+                }
                 break;
-
         }
     }//GEN-LAST:event_strokeListActionPerformed
 
@@ -1809,7 +1815,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             Lienzo.setStrokeColor(strokeColor.getBackground());
         }
         if (vi != null) {
-            vi.getLienzo().changeColorProperty(Lienzo.COLOR_FILL, strokeColor.getBackground(), null);
+            vi.getLienzo().changeColorProperty(Lienzo.COLOR_STROKE, strokeColor.getBackground(), null);
         }
     }//GEN-LAST:event_strokeColorMouseClicked
 
