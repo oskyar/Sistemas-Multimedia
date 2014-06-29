@@ -165,11 +165,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         labelTextBorderColor = new javax.swing.JLabel();
         strokeColor = new javax.swing.JButton();
         contenedorEstiloBorde = new javax.swing.JPanel();
-        styleStrokeList = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
-        grosor1 = new javax.swing.JSpinner();
-        labelTextBorderColor1 = new javax.swing.JLabel();
-        strokeColor1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        styleStrokeJoinList = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        styleStrokeCapList = new javax.swing.JComboBox();
         panelLabelFigura = new javax.swing.JPanel();
         labelFigura = new javax.swing.JLabel();
         menu = new javax.swing.JMenuBar();
@@ -995,73 +994,54 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorEstiloBorde.setBorder(javax.swing.BorderFactory.createTitledBorder("Estilos Borde"));
         contenedorEstiloBorde.setToolTipText("Estilos para el borde");
         contenedorEstiloBorde.setMaximumSize(new java.awt.Dimension(200, 90));
-        contenedorEstiloBorde.setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagLayout contenedorEstiloBordeLayout = new java.awt.GridBagLayout();
+        contenedorEstiloBordeLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
+        contenedorEstiloBordeLayout.rowHeights = new int[] {0, 5, 0};
+        contenedorEstiloBorde.setLayout(contenedorEstiloBordeLayout);
 
-        styleStrokeList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Línea continua", "Línea discontinua" }));
-        styleStrokeList.setToolTipText("Tipo de Relleno");
-        styleStrokeList.setMaximumSize(new java.awt.Dimension(200, 30));
-        styleStrokeList.setMinimumSize(new java.awt.Dimension(115, 22));
-        styleStrokeList.setPreferredSize(new java.awt.Dimension(155, 22));
-        styleStrokeList.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                styleStrokeListActionPerformed(evt);
-            }
-        });
+        jLabel3.setText("Inicio");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 7;
-        contenedorEstiloBorde.add(styleStrokeList, gridBagConstraints);
+        contenedorEstiloBorde.add(jLabel3, gridBagConstraints);
 
-        jLabel2.setText("Grosor");
+        styleStrokeJoinList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Bevel", "Miter", "Round" }));
+        styleStrokeJoinList.setToolTipText("Tipo de Línea");
+        styleStrokeJoinList.setMaximumSize(new java.awt.Dimension(200, 30));
+        styleStrokeJoinList.setMinimumSize(new java.awt.Dimension(115, 22));
+        styleStrokeJoinList.setPreferredSize(new java.awt.Dimension(155, 22));
+        styleStrokeJoinList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                styleStrokeJoinListActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 11;
+        contenedorEstiloBorde.add(styleStrokeJoinList, gridBagConstraints);
+
+        jLabel4.setText("Final");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        contenedorEstiloBorde.add(jLabel2, gridBagConstraints);
+        contenedorEstiloBorde.add(jLabel4, gridBagConstraints);
 
-        grosor1.setToolTipText("Grosor");
-        grosor1.setMaximumSize(new java.awt.Dimension(50, 28));
-        grosor1.setMinimumSize(new java.awt.Dimension(50, 28));
-        grosor1.setPreferredSize(new java.awt.Dimension(50, 28));
-        grosor1.setValue(1);
-        grosor1.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                grosor1StateChanged(evt);
+        styleStrokeCapList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Button", "Round", "Square" }));
+        styleStrokeCapList.setToolTipText("Tipo de Final de línea");
+        styleStrokeCapList.setMaximumSize(new java.awt.Dimension(200, 30));
+        styleStrokeCapList.setMinimumSize(new java.awt.Dimension(115, 22));
+        styleStrokeCapList.setPreferredSize(new java.awt.Dimension(155, 22));
+        styleStrokeCapList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                styleStrokeCapListActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        contenedorEstiloBorde.add(grosor1, gridBagConstraints);
-
-        labelTextBorderColor1.setText("Color");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
-        contenedorEstiloBorde.add(labelTextBorderColor1, gridBagConstraints);
-
-        strokeColor1.setToolTipText("Color del borde");
-        strokeColor1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        strokeColor1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        strokeColor1.setMaximumSize(new java.awt.Dimension(60, 20));
-        strokeColor1.setMinimumSize(new java.awt.Dimension(60, 20));
-        strokeColor1.setPreferredSize(new java.awt.Dimension(25, 25));
-        strokeColor1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                strokeColor1MouseClicked(evt);
-            }
-        });
-        strokeColor1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                strokeColor1ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        contenedorEstiloBorde.add(strokeColor1, gridBagConstraints);
+        gridBagConstraints.gridwidth = 11;
+        contenedorEstiloBorde.add(styleStrokeCapList, gridBagConstraints);
 
         panelColor.add(contenedorEstiloBorde);
 
@@ -1850,21 +1830,30 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_fillColorActionPerformed
 
-    private void styleStrokeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleStrokeListActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_styleStrokeListActionPerformed
+    private void styleStrokeJoinListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleStrokeJoinListActionPerformed
+        VentanaInterna vi = selectInternalWindows();
+        switch (styleStrokeJoinList.getSelectedIndex()) {
+            case Lienzo.STYLE_STROKE_JOIN_BEVEL:
+                Lienzo.setStrokeStyleJoinType(Lienzo.STYLE_STROKE_JOIN_BEVEL);
 
-    private void grosor1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosor1StateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_grosor1StateChanged
-
-    private void strokeColor1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strokeColor1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_strokeColor1MouseClicked
-
-    private void strokeColor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strokeColor1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_strokeColor1ActionPerformed
+                if (vi != null) {
+                    vi.getLienzo().changeStrokeStyleJoinProperty(Lienzo.STYLE_STROKE_JOIN_BEVEL);
+                }
+                break;
+            case Lienzo.STYLE_STROKE_JOIN_MITER:
+                Lienzo.setStrokeStyleJoinType(Lienzo.STYLE_STROKE_JOIN_MITER);
+                if (vi != null) {
+                    vi.getLienzo().changeStrokeStyleJoinProperty(Lienzo.STYLE_STROKE_JOIN_MITER);
+                }
+                break;
+            case Lienzo.STYLE_STROKE_JOIN_ROUND:
+                Lienzo.setStrokeStyleJoinType(Lienzo.STYLE_STROKE_JOIN_ROUND);
+                if (vi != null) {
+                    vi.getLienzo().changeStrokeStyleJoinProperty(Lienzo.STYLE_STROKE_JOIN_ROUND);
+                }
+                break;
+        }
+    }//GEN-LAST:event_styleStrokeJoinListActionPerformed
 
     private void escritorioComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_escritorioComponentAdded
 
@@ -1983,6 +1972,31 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_formMouseClicked
+
+    private void styleStrokeCapListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleStrokeCapListActionPerformed
+        VentanaInterna vi = selectInternalWindows();
+        switch (styleStrokeCapList.getSelectedIndex()) {
+            case Lienzo.STYLE_STROKE_CAP_BUTT:
+                Lienzo.setStrokeStyleCapType(Lienzo.STYLE_STROKE_CAP_BUTT);
+
+                if (vi != null) {
+                    vi.getLienzo().changeStrokeStyleCapProperty(Lienzo.STYLE_STROKE_CAP_BUTT);
+                }
+                break;
+            case Lienzo.STYLE_STROKE_CAP_ROUND:
+                Lienzo.setStrokeStyleCapType(Lienzo.STYLE_STROKE_CAP_ROUND);
+                if (vi != null) {
+                    vi.getLienzo().changeStrokeStyleCapProperty(Lienzo.STYLE_STROKE_CAP_ROUND);
+                }
+                break;
+            case Lienzo.STYLE_STROKE_CAP_SQUARE:
+                Lienzo.setStrokeStyleCapType(Lienzo.STYLE_STROKE_CAP_SQUARE);
+                if (vi != null) {
+                    vi.getLienzo().changeStrokeStyleCapProperty(Lienzo.STYLE_STROKE_CAP_SQUARE);
+                }
+                break;
+        }
+    }//GEN-LAST:event_styleStrokeCapListActionPerformed
 
     public VentanaInterna getVentanaInterna() {
         return vi;
@@ -2121,15 +2135,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JComboBox fillList;
     private javax.swing.JButton gradientColor;
     private javax.swing.JSpinner grosor;
-    private javax.swing.JSpinner grosor1;
     private javax.swing.ButtonGroup grupoPaletas;
     private javax.swing.JMenuItem guardar;
     private javax.swing.JMenu imagen;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel labelFigura;
     private javax.swing.JLabel labelTextBorderColor;
-    private javax.swing.JLabel labelTextBorderColor1;
     private javax.swing.JLabel labelTextFillColor;
     private javax.swing.JLabel labelTextGradientColor;
     private javax.swing.JComboBox listaEfectos;
@@ -2154,9 +2167,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JSlider sliderRotacion;
     private javax.swing.JMenuItem sobelMenu;
     private javax.swing.JButton strokeColor;
-    private javax.swing.JButton strokeColor1;
     private javax.swing.JComboBox strokeList;
-    private javax.swing.JComboBox styleStrokeList;
+    private javax.swing.JComboBox styleStrokeCapList;
+    private javax.swing.JComboBox styleStrokeJoinList;
     private javax.swing.JMenuItem umbralizacion;
     private javax.swing.JCheckBoxMenuItem verBarraEstado;
     // End of variables declaration//GEN-END:variables

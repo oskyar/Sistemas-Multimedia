@@ -33,6 +33,8 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     private Stroke stroke;
     private float strokeWidth;
     private ORectangle2D frame;
+    private int strokeJoin;
+    private int strokeCap;
     
     private final int CTRLPOINTS = 0;
 
@@ -77,7 +79,7 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
             stroke = new BasicStroke(strokeWidth);
         }else if(strokeType == 1){
             final float dash[] = {1.0f,0.f,20.0f};
-            stroke = new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, dash, 0.0f);
+            stroke = new BasicStroke(strokeWidth, strokeCap, strokeJoin, 10.0f, dash, 0.0f);
         }
         g2d.setStroke(stroke);
         g2d.setColor(strokeColor);
@@ -249,5 +251,25 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     @Override
     public void updateGradient(Point2D p1, Point2D p2) {
         gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
+    }
+
+    @Override
+    public int getStrokeJoinStyle() {
+        return strokeJoin;
+    }
+
+    @Override
+    public void setStrokeJoinStyle(int strokeJoin) {
+        this.strokeJoin = strokeJoin;
+    }
+
+    @Override
+    public int getStrokeCapStyle() {
+        return strokeCap;
+    }
+
+    @Override
+    public void setStrokeCapStyle(int strokeCap) {
+        this.strokeCap = strokeCap;
     }
 }

@@ -51,6 +51,14 @@ public class Lienzo extends javax.swing.JPanel {
     final static int TYPE_FILL_NONE = 0;
     final static int TYPE_FILL_SOLID = 1;
     final static int TYPE_FILL_GRADIENT = 2;
+    
+    final static int STYLE_STROKE_JOIN_BEVEL = 0;
+    final static int STYLE_STROKE_JOIN_MITER = 1;
+    final static int STYLE_STROKE_JOIN_ROUND = 2;
+    
+    final static int STYLE_STROKE_CAP_BUTT = 0;
+    final static int STYLE_STROKE_CAP_ROUND = 1;
+    final static int STYLE_STROKE_CAP_SQUARE = 2;
 
     //Variables privadas
     private static Color strokeColor;
@@ -59,6 +67,8 @@ public class Lienzo extends javax.swing.JPanel {
     private static int forma;
     private static int fillType;
     private static int strokeType;
+    private static int strokeStyleJoinType;
+    private static int strokeStyleCapType;
     private static float strokeWidth;
     private static Stroke stroke;
     //private static boolean relleno;
@@ -558,4 +568,41 @@ public class Lienzo extends javax.swing.JPanel {
         }
         repaint();
     }
+    
+    void changeStrokeStyleJoinProperty(int strokeType) {
+        if (!vShapeSelected.isEmpty()) {
+            for (int index : vShapeSelected) {
+                vShape.get(index).setStrokeJoinStyle(strokeType);
+            }
+        }
+        repaint();
+    }    
+    
+    void changeStrokeStyleCapProperty(int strokeType) {
+        if (!vShapeSelected.isEmpty()) {
+            for (int index : vShapeSelected) {
+                vShape.get(index).setStrokeCapStyle(strokeType);
+            }
+        }
+        repaint();
+    }    
+    
+
+    public static int getStrokeStyleJoinType() {
+        return strokeStyleJoinType;
+    }
+
+    public static void setStrokeStyleJoinType(int strokeStyleJoinType) {
+        Lienzo.strokeStyleJoinType = strokeStyleJoinType;
+    }
+
+    public static int getStrokeStyleCapType() {
+        return strokeStyleCapType;
+    }
+
+    public static void setStrokeStyleCapType(int strokeStyleCapType) {
+        Lienzo.strokeStyleCapType = strokeStyleCapType;
+    }
+    
+    
 }

@@ -38,6 +38,14 @@ public interface IOShape {
     
     public void setStrokeType(int strokeType);
     
+    public int getStrokeJoinStyle();
+    
+    public void setStrokeJoinStyle(int strokeJoin);
+    
+    public int getStrokeCapStyle();
+    
+    public void setStrokeCapStyle(int strokeCap);
+    
     public Stroke getStroke();
     
     public void setStrokeWidth(float width);
