@@ -50,6 +50,10 @@ public class Lienzo extends javax.swing.JPanel {
     final static int STROKE_CONTINUOUS = 0;
     final static int STROKE_DISCONTINUOUS = 1;
 
+    final static int COLOR_STROKE = 0;
+    final static int COLOR_FILL = 1;
+    final static int COLOR_GRADIENT = 2;
+
     final static int TYPE_FILL_NONE = 0;
     final static int TYPE_FILL_SOLID = 1;
     final static int TYPE_FILL_GRADIENT = 2;
@@ -360,7 +364,7 @@ public class Lienzo extends javax.swing.JPanel {
         Lienzo.fillColor = color;
     }
 
-    public Color getFillColor() {
+    public static Color getFillColor() {
         return Lienzo.fillColor;
     }
 
@@ -479,7 +483,6 @@ public class Lienzo extends javax.swing.JPanel {
                 vShape.get(index).setFillColor(color1);
                 vShape.get(index).setFillType(typeFill);
                 if (typeFill == TYPE_FILL_GRADIENT) {
-                    System.err.println("Entra");
                     vShape.get(index).setGradientColor(color2);
                 }
             }
@@ -494,4 +497,23 @@ public class Lienzo extends javax.swing.JPanel {
         this.vdXY = vdXY;
     }
 
+    void changeColorProperty(int TYPE_COLOR, Color color1, Color color2) {
+        if (!vShapeSelected.isEmpty()) {
+            for (int index : vShapeSelected) {
+                switch (TYPE_COLOR) {
+                    case COLOR_STROKE:
+                        vShape.get(index).setStrokeColor(color1);
+                        break;
+                    case COLOR_FILL:
+                        vShape.get(index).setFillColor(color1);
+                        break;
+                    case COLOR_GRADIENT:
+                        vShape.get(index).setFillColor(color1);
+                        vShape.get(index).setGradientColor(color2);
+                        break;
+                }
+            }
+        }
+        repaint();
+    }
 }

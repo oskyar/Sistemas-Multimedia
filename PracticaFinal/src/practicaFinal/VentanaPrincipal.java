@@ -1718,6 +1718,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRectanguloRedondeadoMouseClicked
 
     private void gradientColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gradientColorMouseClicked
+        VentanaInterna vi = selectInternalWindows();
         if (evt.getClickCount() % 2 == 0 || gradientColor.getBackground() == null) {
             Color newColor = JColorChooser.showDialog(
                     VentanaPrincipal.this,
@@ -1729,6 +1730,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         } else if (evt.getClickCount() % 2 == 1) {
             Lienzo.setGradientColor(gradientColor.getBackground());
+        }
+        if (vi != null) {
+            vi.getLienzo().changeColorProperty(Lienzo.COLOR_GRADIENT, fillColor.getBackground(), gradientColor.getBackground());
         }
     }//GEN-LAST:event_gradientColorMouseClicked
 
@@ -1791,6 +1795,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_strokeListActionPerformed
 
     private void strokeColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strokeColorMouseClicked
+        VentanaInterna vi = selectInternalWindows();
         if (evt.getClickCount() % 2 == 0 || strokeColor.getBackground() == null) {
             Color newColor = JColorChooser.showDialog(
                     VentanaPrincipal.this,
@@ -1803,6 +1808,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         } else if (evt.getClickCount() % 2 == 1) {
             Lienzo.setStrokeColor(strokeColor.getBackground());
         }
+        if (vi != null) {
+            vi.getLienzo().changeColorProperty(Lienzo.COLOR_FILL, strokeColor.getBackground(), null);
+        }
     }//GEN-LAST:event_strokeColorMouseClicked
 
     private void strokeColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strokeColorActionPerformed
@@ -1810,6 +1818,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_strokeColorActionPerformed
 
     private void fillColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fillColorMouseClicked
+        VentanaInterna vi = selectInternalWindows();
         if (evt.getClickCount() % 2 == 0 || fillColor.getBackground() == null) {
             Color newColor = JColorChooser.showDialog(
                     VentanaPrincipal.this,
@@ -1821,6 +1830,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         } else if (evt.getClickCount() % 2 == 1) {
             Lienzo.setFillColor(fillColor.getBackground());
+        }
+        if (vi != null) {
+            vi.getLienzo().changeColorProperty(Lienzo.COLOR_FILL, Lienzo.getFillColor(), null);
         }
     }//GEN-LAST:event_fillColorMouseClicked
 
