@@ -187,6 +187,7 @@ public class Lienzo extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        setBackground(new java.awt.Color(254, 254, 254));
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 formMouseDragged(evt);
@@ -229,8 +230,8 @@ public class Lienzo extends javax.swing.JPanel {
         } else if (evt.isAltDown() && !vShapeSelected.isEmpty()) {
             for (Integer i : vShapeSelected) {
                 //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
-                if(vShape.get(vShapeSelected.get(i)).getFillType()==Lienzo.COLOR_GRADIENT){
-                    vShape.get(vShapeSelected.get(i)).createGradient(p, p);
+                if(vShape.get(i).getFillType()==Lienzo.COLOR_GRADIENT){
+                    vShape.get(i).createGradient(p, p);
                 }
             }
         } else {
@@ -290,8 +291,8 @@ public class Lienzo extends javax.swing.JPanel {
         } else if (evt.isAltDown() && !vShapeSelected.isEmpty()) {
             for (Integer i : vShapeSelected) {
                 //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
-                if(vShape.get(vShapeSelected.get(i)).getFillType()==Lienzo.TYPE_FILL_GRADIENT){
-                    vShape.get(vShapeSelected.get(i)).updateGradient(p, pEvt);
+                if(vShape.get(i).getFillType()==Lienzo.TYPE_FILL_GRADIENT){
+                    vShape.get(i).updateGradient(p, pEvt);
                 }
             }
         } else {
@@ -315,52 +316,7 @@ public class Lienzo extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseDragged
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        /* p = evt.getPoint();
-         if (!editar) {
-         if (ctrlCurva == 0) {
-         vShape.add(createShape(p, p));
-         } else {
-         if (s != null) {
-         s.setOnePoint(ctrlCurva - 1, p);
-         }
-         }
-         } else {
-         s = getSelectedShape(evt.getPoint());
-         if (s != null) {
-         double x, y;
-         x = s.getX();
-         y = s.getY();
-         //Compruebo que se pincha con el botón izquierdo del ratón
-         if (evt.getButton() == 1) {
-         //Si no está seleccionada la forma se selecciona
-         if(!vShapeSelected.contains(vShape.indexOf(s))){
-         if(!keyControl){
-         vdXY.clear();
-         vShapeSelected.clear();
-         }
-         vShapeSelected.add(vShape.indexOf(s));
-         vdXY.add(new Point2D.Double(x - p.getX(), y - p.getY()));
-         }else{
-         if(keyControl){
-         vdXY.remove(vShapeSelected.indexOf(vShape.indexOf(s)));
-         vShapeSelected.remove(vShapeSelected.indexOf(vShape.indexOf(s)));
-         }
-         }
-         } /*else if (evt.getButton() == 2) {
-         if (!vShapeSelected.contains(vShape.indexOf(s))) {
-         vdXY.add(new Point2D.Double(x - p.getX(), y - p.getY()));
-         vShapeSelected.add(vShape.indexOf(s));
-         }
-         } else if (evt.getButton() == 3) {
-         vdXY.add(new Point2D.Double(x - p.getX(), y - p.getY()));
-         //Compruebo que S existe en el vector vShape y luego si el valor que devuelve está contenido en vShapeSelected
-         if (vShapeSelected.contains(vShape.indexOf(s))) {
-         vdXY.remove(vShapeSelected.indexOf(vShape.indexOf(s)));
-         vShapeSelected.remove(vShapeSelected.indexOf(vShape.indexOf(s)));
-         }
-         }*
-         }
-         }*/
+
     }//GEN-LAST:event_formMouseClicked
 
     void setImageOriginal(BufferedImage img) {
@@ -377,9 +333,9 @@ public class Lienzo extends javax.swing.JPanel {
 
     public BufferedImage volcado(BufferedImage img) {
         Graphics2D g = img.createGraphics();
-        vShape.stream().forEach((sh) -> {
+        for (IOShape sh: vShape){
             sh.draw(g);
-        });
+        }
         return img;
     }
 
@@ -512,9 +468,9 @@ public class Lienzo extends javax.swing.JPanel {
     void changeFillProperty(int typeFill, Color color1, Color color2) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
-                vShape.get(index).setFillColor(color1);
                 vShape.get(index).setFillType(typeFill);
                 System.err.println("tipo fill " + typeFill);
+                vShape.get(index).setFillColor(color1);
                 if (typeFill == TYPE_FILL_GRADIENT) {
                     vShape.get(index).setGradientColor(color2);
                 }

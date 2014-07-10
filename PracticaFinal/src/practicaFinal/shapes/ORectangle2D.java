@@ -72,13 +72,13 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
         if(sk != null)
             this.stroke = sk;
     }
-
+    
     @Override
     public void draw(Graphics2D g2d) {
         if(strokeType==0){
             stroke = new BasicStroke(strokeWidth);
         }else if(strokeType == 1){
-            final float dash[] = {1.0f,0.f,20.0f};
+            final float dash[] = {1.0f,0.0f,20.0f};
             stroke = new BasicStroke(strokeWidth, strokeCap, strokeJoin, 10.0f, dash, 0.0f);
         }
         g2d.setStroke(stroke);
@@ -176,7 +176,11 @@ public class ORectangle2D extends Rectangle2D.Double implements IOShape{
     public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
         if(fillType==2){
-            gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), gradientColor);
+            if(gradient != null){
+                gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), gradientColor);
+            }else{
+                gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), fillColor);
+            }
         }
     }
 

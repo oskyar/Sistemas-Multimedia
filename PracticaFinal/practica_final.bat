@@ -1,1 +1,1 @@
-java -jar practica_final.jar
+java -jar PracticaFinal.jar

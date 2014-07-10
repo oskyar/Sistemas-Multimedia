@@ -22,7 +22,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
+import practica12.filefilter.UtilFileFilter;
 import sm.image.KernelProducer;
 
 /**
@@ -117,6 +119,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         nuevo = new javax.swing.JMenuItem();
         abrir = new javax.swing.JMenuItem();
         guardar = new javax.swing.JMenuItem();
+        soundRecorder = new javax.swing.JMenuItem();
         edicion = new javax.swing.JMenu();
         verBarraEstado = new javax.swing.JCheckBoxMenuItem();
         imagen = new javax.swing.JMenu();
@@ -745,6 +748,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         archivo.add(guardar);
 
+        soundRecorder.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        soundRecorder.setText("Grabar Sonido");
+        soundRecorder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                soundRecorderActionPerformed(evt);
+            }
+        });
+        archivo.add(soundRecorder);
+
         menu.add(archivo);
 
         edicion.setText("Edición");
@@ -916,14 +928,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         if (resp == JFileChooser.APPROVE_OPTION) {
             try {
                 File f = dlg.getSelectedFile();
-                BufferedImage img = ImageIO.read(f);
-                VentanaInterna vi = new VentanaInterna();
-                vi.getLienzo().setImageOriginal(img);
-                //vi.getLienzo().setImageActual(img);
-                this.escritorio.add(vi);
-                vi.setVisible(true);
+                if(UtilFileFilter.isImage(f)){
+                    BufferedImage img = ImageIO.read(f);
+                    VentanaInterna vi = new VentanaInterna();
+                    vi.getLienzo().setImageOriginal(img);
+                    VentanaPrincipal.escritorio.add(vi);
+                    vi.setVisible(true);
+                }else if(UtilFileFilter.isSound(f)){
+                    VentanaInternaReproductor vi = new VentanaInternaReproductor(f);
+                    VentanaPrincipal.escritorio.add(vi);
+                    vi.setVisible(true);
+                }
             } catch (Exception ex) {
-                System.err.println("Error al leer la imagen");
+                System.err.println("Error al leer el archivo");
             }
         }
     }//GEN-LAST:event_abrirActionPerformed
@@ -1362,12 +1379,45 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_sobelMenuActionPerformed
 
+    private void soundRecorderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_soundRecorderActionPerformed
+        JFileChooser dlg = new JFileChooser();
+        VentanaInternaGrabador vig = null;
+        File newF;
+        int resp = dlg.showOpenDialog(this);
+        if (resp == JFileChooser.APPROVE_OPTION) {
+            try {
+                File f = dlg.getSelectedFile();
+                 if (UtilFileFilter.getExtension(f) == null) {
+                    newF = new File(f.getAbsolutePath() + ".wav");
+                    vig = new VentanaInternaGrabador(newF);
+                } else if (!UtilFileFilter.getExtension(f).equals("wav")) {
+                    String fileName = f.getName();
+                    newF = new File(fileName + ".wav");
+                    vig = new VentanaInternaGrabador(newF);
+                } else {
+                    vig = new VentanaInternaGrabador(f);
+                }
+            } catch (Exception ex) {
+                System.err.println("Error al leer archivo");
+            }
+        }
+        if(vig != null) {
+            vig.setTitle("Grabar sonido");
+            VentanaPrincipal.escritorio.add(vig);
+            vig.setVisible(true);
+        }
+    }//GEN-LAST:event_soundRecorderActionPerformed
+
     public VentanaInterna getVentanaInterna() {
         return vi;
     }
 
     public void setVentanaInterna(VentanaInterna vi) {
         this.vi = vi;
+    }
+    
+    public static JDesktopPane getEscritorio(){
+        return VentanaPrincipal.escritorio;
     }
 
     /**
@@ -1413,7 +1463,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel contenedorRotacion;
     private javax.swing.JPanel cuerpo;
     private javax.swing.JMenu edicion;
-    private javax.swing.JDesktopPane escritorio;
+    private static javax.swing.JDesktopPane escritorio;
     private javax.swing.JSpinner grosor;
     private javax.swing.ButtonGroup grupoPaletas;
     private javax.swing.JMenuItem guardar;
@@ -1438,6 +1488,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JSlider sliderBrillo;
     private javax.swing.JSlider sliderRotacion;
     private javax.swing.JMenuItem sobelMenu;
+    private javax.swing.JMenuItem soundRecorder;
     private javax.swing.JMenuItem umbralizacion;
     private javax.swing.JCheckBoxMenuItem verBarraEstado;
     // End of variables declaration//GEN-END:variables

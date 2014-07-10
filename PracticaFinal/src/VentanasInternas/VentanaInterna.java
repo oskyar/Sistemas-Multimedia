@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package practicaFinal;
+package VentanasInternas;
 
+import practicaFinal.Lienzo;
 import practicaFinal.Lienzo;
 
 /**
