@@ -10,8 +10,10 @@ import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineEvent.Type;
 import javax.sound.sampled.LineListener;
 import javax.swing.JFileChooser;
+import javax.swing.JInternalFrame;
 import practicaFinal.VentanaPrincipal;
 import practicaFinal.filefilter.UtilFileFilter;
+import practicaFinal.filefilter.WAVSoundFileFilter;
 import practicaFinal.sound.SMSoundPlayerRecorder;
 
 /**
@@ -24,10 +26,11 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
      * Creates new form VentanaInterna
      */
     SMSoundPlayerRecorder recorder;
+    static boolean exist=false;
 
     public VentanaInternaGrabador() {
         initComponents();
-
+        exist=true;
         recorder = new SMSoundPlayerRecorder(new File("nuevo"));
         LineListener lineListener = new LineListener() {
             @Override
@@ -48,10 +51,12 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
     }
 
     public static void showSoundRecorder() {
-        VentanaInternaGrabador vi = new VentanaInternaGrabador();
-        VentanaPrincipal.getEscritorio().add(vi);
-        vi.setVisible(true);
-        vi.setTitle("Grabar sonido");
+        if(!exist){
+            VentanaInternaGrabador vi = new VentanaInternaGrabador();
+            VentanaPrincipal.getEscritorio().add(vi);
+            vi.setVisible(true);
+            vi.setTitle("Grabar sonido");
+        }
     }
 
     /**
@@ -70,6 +75,23 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(250, 120));
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         recorderGroup.add(recorderButton);
@@ -107,11 +129,11 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
         if (recorder != null) {
             recorder.stop();
-            //System.err.println("P: " + recorder.getSoundFile().getName());
             JFileChooser dlg = new JFileChooser();
+            dlg.addChoosableFileFilter(new WAVSoundFileFilter());
             int resp = dlg.showOpenDialog(this);
             File f = recorder.getSoundFile();
-            File newF=null;
+            File newF = null;
             if (resp == JFileChooser.APPROVE_OPTION) {
                 try {
                     newF = dlg.getSelectedFile();
@@ -122,21 +144,25 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
                     }
                     //Renombramos el fichero por el elegido en la ventana de diálogo.
                     if (!f.renameTo(newF)) {
-                       System.err.println("NO se ha pododido cambiar el nombre del fichero");
+                        System.err.println("NO se ha pododido cambiar el nombre del fichero");
                     }
 
                 } catch (Exception ex) {
                     System.err.println("Error al leer archivo");
                 }
-            }
-            VentanaInternaReproductor vir = new VentanaInternaReproductor(newF);
-            VentanaPrincipal.getEscritorio().add(vir);
-            vir.setVisible(true);
-            if (newF != null) {
-                vir.setTitle(newF.getName());
+                VentanaInternaReproductor vir = new VentanaInternaReproductor(newF);
+                VentanaPrincipal.getEscritorio().add(vir);
+                vir.setVisible(true);
+                if (newF != null) {
+                    vir.setTitle(newF.getName());
+                }
             }
         }
     }//GEN-LAST:event_stopButtonActionPerformed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        exist=false;
+    }//GEN-LAST:event_formInternalFrameClosing
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
