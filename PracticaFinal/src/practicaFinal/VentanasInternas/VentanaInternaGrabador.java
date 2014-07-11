@@ -25,11 +25,10 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
      */
     SMSoundPlayerRecorder recorder;
 
-    public VentanaInternaGrabador(final File f) {
+    public VentanaInternaGrabador() {
         initComponents();
 
-        recorder = new SMSoundPlayerRecorder(f);
-        this.setTitle(f.getName());
+        recorder = new SMSoundPlayerRecorder(new File("nuevo"));
         LineListener lineListener = new LineListener() {
             @Override
             public void update(LineEvent event) {
@@ -49,8 +48,7 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
     }
 
     public static void showSoundRecorder() {
-        File f = new File("nuevo");
-        VentanaInternaGrabador vi = new VentanaInternaGrabador(f);
+        VentanaInternaGrabador vi = new VentanaInternaGrabador();
         VentanaPrincipal.getEscritorio().add(vi);
         vi.setVisible(true);
         vi.setTitle("Grabar sonido");
@@ -101,6 +99,7 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
 
     private void recorderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recorderButtonActionPerformed
         if (recorder != null) {
+            recorder.setSoundFile(new File("nuevo"));
             recorder.record();
         }
     }//GEN-LAST:event_recorderButtonActionPerformed
@@ -108,7 +107,7 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
         if (recorder != null) {
             recorder.stop();
-            System.err.println("P: " + recorder.getSoundFile().getName());
+            //System.err.println("P: " + recorder.getSoundFile().getName());
             JFileChooser dlg = new JFileChooser();
             int resp = dlg.showOpenDialog(this);
             File f = recorder.getSoundFile();
@@ -121,6 +120,7 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
                     } else if (!UtilFileFilter.getExtension(newF).equals("wav")) {
                         newF = new File(newF.getName() + ".wav");
                     }
+                    //Renombramos el fichero por el elegido en la ventana de diálogo.
                     if (!f.renameTo(newF)) {
                        System.err.println("NO se ha pododido cambiar el nombre del fichero");
                     }
