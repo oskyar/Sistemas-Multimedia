@@ -37,7 +37,15 @@ import javax.swing.JColorChooser;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.ListSelectionModel;
+import practicaFinal.filefilter.AVIVideoFileFilter;
+import practicaFinal.filefilter.GIFImageFileFilter;
+import practicaFinal.filefilter.JPEGImageFileFilter;
+import practicaFinal.filefilter.JPGImageFileFilter;
+import practicaFinal.filefilter.MIDISoundFileFilter;
+import practicaFinal.filefilter.MP3SoundFileFilter;
+import practicaFinal.filefilter.PNGImageFileFilter;
 import practicaFinal.filefilter.UtilFileFilter;
+import practicaFinal.filefilter.WAVSoundFileFilter;
 import practicaFinal.filtros.MultiplicacionOp;
 import practicaFinal.filtros.RestaOp;
 import practicaFinal.filtros.SobelOp;
@@ -65,8 +73,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonLapiz.setSelected(true);
         barraColor.setVisible(true);
         barraImagen.setVisible(true);
-//        panelColor.setVisible(true);
-//        panelImagen.setVisible(false);
         Lienzo.setStrokeColor(Color.BLACK);
         Lienzo.setStrokeType(Lienzo.STROKE_CONTINUOUS);
         Lienzo.setStrokeWidth(1.0f);
@@ -74,7 +80,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Lienzo.setGradientColor(Color.WHITE);
         Lienzo.setFillType(Lienzo.TYPE_FILL_NONE);
         Lienzo.setForma(Lienzo.PUNTO);
-        //Lienzo.setStroke(new BasicStroke(((Integer) grosor.getValue()).floatValue()));
         strokeColor.setBackground(Color.BLACK);
         gradientColor.setBackground(null);
         labelTextGradientColor.setVisible(false);
@@ -1407,6 +1412,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirActionPerformed
         JFileChooser dlg = new JFileChooser();
+        dlg.addChoosableFileFilter(new AVIVideoFileFilter());
+        dlg.addChoosableFileFilter(new GIFImageFileFilter());
+        dlg.addChoosableFileFilter(new JPGImageFileFilter());
+        dlg.addChoosableFileFilter(new JPEGImageFileFilter());
+        dlg.addChoosableFileFilter(new PNGImageFileFilter());
+        dlg.addChoosableFileFilter(new WAVSoundFileFilter());
+        dlg.addChoosableFileFilter(new MP3SoundFileFilter());
+        dlg.addChoosableFileFilter(new MIDISoundFileFilter());
+
         int resp = dlg.showOpenDialog(this);
         File f = null;
         if (resp == JFileChooser.APPROVE_OPTION) {
