@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package practicaFinal.VentanasInternas;
 
 import java.awt.image.BufferedImage;
@@ -18,32 +17,37 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
 
     public static void showImage(BufferedImage img) {
         VentanaInterna vi = new VentanaInterna();
-        vi.getLienzo().setImageOriginal(img);
-        VentanaPrincipal.getEscritorio().add(vi);
-        vi.setVisible(true);
-        vi.setSize(img.getWidth(), img.getHeight());
+        if (img != null) {
+            vi.getLienzo().setImageOriginal(img);
+            VentanaPrincipal.getEscritorio().add(vi);
+            vi.setVisible(true);
+            vi.setSize(img.getWidth(), img.getHeight());
+        }
     }
 
     public static void showImage(BufferedImage img, String title) {
         VentanaInterna vi = new VentanaInterna();
-        vi.getLienzo().setImageOriginal(img);
-        VentanaPrincipal.getEscritorio().add(vi);
-        vi.setVisible(true);
-        
-        double width, height;
-        if(VentanaPrincipal.getEscritorio().getWidth() < img.getWidth()){
-            width = VentanaPrincipal.getEscritorio().getWidth();
-        }else{
-            width = img.getWidth();
+        if (img != null) {
+            vi.getLienzo().setImageOriginal(img);
+            VentanaPrincipal.getEscritorio().add(vi);
+            vi.setVisible(true);
+
+            double width, height;
+            if (VentanaPrincipal.getEscritorio().getWidth() < img.getWidth()) {
+                width = VentanaPrincipal.getEscritorio().getWidth();
+            } else {
+                width = img.getWidth();
+            }
+            if (VentanaPrincipal.getEscritorio().getHeight() < img.getHeight()) {
+                height = VentanaPrincipal.getEscritorio().getHeight();
+            } else {
+                height = img.getHeight();
+            }
+
+            vi.setSize((int) width, (int) height);
         }
-        if(VentanaPrincipal.getEscritorio().getHeight() < img.getHeight()){
-            height = VentanaPrincipal.getEscritorio().getHeight();
-        }else{
-            height = img.getHeight();
-        }
-        
-        vi.setSize((int)width,(int)height);
         vi.setTitle(title);
+
     }
 
     /**
@@ -53,10 +57,10 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
         initComponents();
     }
 
-    public Lienzo getLienzo(){
+    public Lienzo getLienzo() {
         return lienzo2;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

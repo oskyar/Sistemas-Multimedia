@@ -9,6 +9,7 @@ import java.io.File;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineEvent.Type;
 import javax.sound.sampled.LineListener;
+import practicaFinal.VentanaPrincipal;
 import practicaFinal.sound.SMClipPlayer;
 import practicaFinal.sound.SMPlayer;
 
@@ -47,6 +48,13 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame {
         }
     }
 
+    public static void showJMFPlayer(File f, String name) {
+        VentanaInternaReproductor vi = new VentanaInternaReproductor(f);
+        VentanaPrincipal.getEscritorio().add(vi);
+        vi.setVisible(true);
+        vi.setTitle(f.getName());
+    }    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

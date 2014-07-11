@@ -48,10 +48,12 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
                 play.setVisible(false);
                 stop.setVisible(false);
                 add(areaVisual, BorderLayout.CENTER);
-            }
-            Component panelControl = player.getControlPanelComponent();
-            if (panelControl != null) {
-                add(panelControl, BorderLayout.SOUTH);
+                //Meto aqui el panel de control para que de esta forma solo 
+                //se muestre con videos y para sonidos mi panel personalizado.
+                Component panelControl = player.getControlPanelComponent();
+                if (panelControl != null) {
+                    add(panelControl, BorderLayout.SOUTH);
+                }
             }
             pack();
 
