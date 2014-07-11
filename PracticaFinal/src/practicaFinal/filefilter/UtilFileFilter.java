@@ -15,11 +15,11 @@ import java.io.File;
 public class UtilFileFilter {
     //Extensiones válidas
     public static enum Extensions{
-        jpg, jpeg, gif, png, wav, mp3, avi
+        jpg, jpeg, gif, png, wav, midi, mp3, avi
     };
     
     public static enum SoundExtensions{
-        wav, mp3
+        wav, midi, mp3
     };
 
     public static enum ImageExtensions{
@@ -36,15 +36,17 @@ public class UtilFileFilter {
      */
     public static String getExtension(File f){
         String name = f.getName();
-        String ext = "";
         //Guardo en la última posición que encuentra el punto (el punto inclusive)
         int lastPoint = name.lastIndexOf(".");
+        //Si no encuentro extensión devuelvo null
+        if(lastPoint == -1){
+            return null;
+        }
         //Le sumo uno para que no tenga en cuenta el punto
         lastPoint++;
         //Extraigo la extensión
-        ext = name.substring(lastPoint);
+        String ext = name.substring(lastPoint);
         ext = ext.toLowerCase();
-        System.err.println("EXtensión: " +ext);
         return ext;
     }
     
