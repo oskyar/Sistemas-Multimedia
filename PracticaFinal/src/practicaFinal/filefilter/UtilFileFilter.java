@@ -132,4 +132,38 @@ public class UtilFileFilter {
         }
         return false;
     }
+    
+    public static boolean isMp3File(File f){
+        String ext = getExtension(f);
+        return ext.equals("mp3");
+    }
+    public static boolean isWavFile(File f){
+        String ext = getExtension(f);
+        return ext.equals("wav");
+    }
+    public static boolean isMidiFile(File f){
+        String ext = getExtension(f);
+        return ext.equals("midi");
+    }
+    public static boolean isJpgFile(File f){
+        String ext = getExtension(f);
+        return ext.equals("jpg");
+    }
+    public static boolean isJpegFile(File f){
+        String ext = getExtension(f);
+        return ext.equals("jpeg");
+    }
+    public static boolean isPngFile(File f){
+        String ext = getExtension(f);
+        return ext.equals("png");
+    }
+    public static boolean isGifFile(File f){
+        String ext = getExtension(f);
+        return ext.equals("gif");
+    }
+    public static boolean isAviFile(File f){
+        String ext = getExtension(f);
+        return ext.equals("avi");
+    }
+   
 }

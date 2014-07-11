@@ -3,18 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package practicaFinal.filefilter;
+
+import java.io.File;
+import javax.swing.filechooser.FileFilter;
 
 /**
  *
  * @author oskyar
  */
-public class JPEGImageFileFilter extends ImageFileFilter{
+public class JPEGImageFileFilter extends FileFilter {
+
+    @Override
+    public boolean accept(File f) {
+        if (f.isDirectory()) {
+            return true;
+        }
+
+        return UtilFileFilter.isJpegFile(f);
+    }
 
     @Override
     public String getDescription() {
-        return "JPEG files (*.jpeg)"; 
+        return "JPEG files (*.jpeg)";
     }
-    
+
 }
