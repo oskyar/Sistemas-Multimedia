@@ -104,7 +104,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         GrupoColores = new javax.swing.ButtonGroup();
         grupoPaletas = new javax.swing.ButtonGroup();
         paletaOpciones = new javax.swing.JPanel();
-        BotonesFiguras = new javax.swing.JToolBar();
+        botonesFiguras = new javax.swing.JToolBar();
         botonLapiz = new javax.swing.JToggleButton();
         botonLinea = new javax.swing.JToggleButton();
         botonRectangulo = new javax.swing.JToggleButton();
@@ -115,16 +115,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonesPaletas = new javax.swing.JPanel();
         botonPaletaColor = new javax.swing.JRadioButton();
         botonPaletaImagen = new javax.swing.JRadioButton();
-        takeScreenshot = new javax.swing.JButton();
+        botonesMultimedia = new javax.swing.JToolBar();
+        iconWebcam = new javax.swing.JButton();
+        iconTakeScreenshot = new javax.swing.JButton();
+        iconSoundRecorder = new javax.swing.JButton();
         panelIzquierdo = new javax.swing.JPanel();
         cuerpo = new javax.swing.JPanel();
         escritorio = new javax.swing.JDesktopPane();
         panelDerecho = new javax.swing.JPanel();
         contenedorFiguras = new javax.swing.JPanel();
         figureList = new javax.swing.JList();
-        reloadShapes = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         cloneShape = new javax.swing.JButton();
         removeShape = new javax.swing.JButton();
+        reloadShapes = new javax.swing.JButton();
         pie = new javax.swing.JPanel();
         paneles = new javax.swing.JPanel();
         panelImagen = new javax.swing.JPanel();
@@ -170,8 +174,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         styleStrokeJoinList = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         styleStrokeCapList = new javax.swing.JComboBox();
-        styleStrokeCapList1 = new javax.swing.JComboBox();
-        jLabel5 = new javax.swing.JLabel();
         panelLabelFigura = new javax.swing.JPanel();
         labelFigura = new javax.swing.JLabel();
         menu = new javax.swing.JMenuBar();
@@ -179,10 +181,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         nuevo = new javax.swing.JMenuItem();
         abrir = new javax.swing.JMenuItem();
         guardar = new javax.swing.JMenuItem();
-        soundRecorder = new javax.swing.JMenuItem();
-        camera = new javax.swing.JMenuItem();
         edicion = new javax.swing.JMenu();
         verBarraEstado = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
         imagen = new javax.swing.JMenu();
         menuRescaleOp = new javax.swing.JMenuItem();
         menuConvolveOp = new javax.swing.JMenuItem();
@@ -190,6 +192,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         restar = new javax.swing.JMenuItem();
         multiplicar = new javax.swing.JMenuItem();
         sobelMenu = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        menuSoundRecorder = new javax.swing.JMenuItem();
+        menuTakeScreenshot = new javax.swing.JMenuItem();
+        menuWebcam = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -211,8 +217,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         paletaOpciones.setLayout(new javax.swing.BoxLayout(paletaOpciones, javax.swing.BoxLayout.LINE_AXIS));
 
-        BotonesFiguras.setRollover(true);
-        BotonesFiguras.setPreferredSize(new java.awt.Dimension(273, 50));
+        botonesFiguras.setMaximumSize(new java.awt.Dimension(500, 250));
 
         BotonesMenu.add(botonLapiz);
         botonLapiz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Lapiz.gif"))); // NOI18N
@@ -224,7 +229,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 botonLapizMouseClicked(evt);
             }
         });
-        BotonesFiguras.add(botonLapiz);
+        botonesFiguras.add(botonLapiz);
 
         BotonesMenu.add(botonLinea);
         botonLinea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Linea.gif"))); // NOI18N
@@ -236,7 +241,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 botonLineaMouseClicked(evt);
             }
         });
-        BotonesFiguras.add(botonLinea);
+        botonesFiguras.add(botonLinea);
 
         BotonesMenu.add(botonRectangulo);
         botonRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Rectangulo.gif"))); // NOI18N
@@ -248,7 +253,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 botonRectanguloMouseClicked(evt);
             }
         });
-        BotonesFiguras.add(botonRectangulo);
+        botonesFiguras.add(botonRectangulo);
 
         BotonesMenu.add(botonRectanguloRedondeado);
         botonRectanguloRedondeado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/RectanguloRedondeado.gif"))); // NOI18N
@@ -260,7 +265,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 botonRectanguloRedondeadoMouseClicked(evt);
             }
         });
-        BotonesFiguras.add(botonRectanguloRedondeado);
+        botonesFiguras.add(botonRectanguloRedondeado);
 
         BotonesMenu.add(botonOvalo);
         botonOvalo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Ovalo.gif"))); // NOI18N
@@ -272,7 +277,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 botonOvaloMouseClicked(evt);
             }
         });
-        BotonesFiguras.add(botonOvalo);
+        botonesFiguras.add(botonOvalo);
 
         BotonesMenu.add(botonCurvaControl);
         botonCurvaControl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Curva1control.gif"))); // NOI18N
@@ -284,7 +289,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 botonCurvaControlMouseClicked(evt);
             }
         });
-        BotonesFiguras.add(botonCurvaControl);
+        botonesFiguras.add(botonCurvaControl);
 
         BotonesMenu.add(botonCurvaCubicaSegmentada);
         botonCurvaCubicaSegmentada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Curva2control.gif"))); // NOI18N
@@ -296,7 +301,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 botonCurvaCubicaSegmentadaMouseClicked(evt);
             }
         });
-        BotonesFiguras.add(botonCurvaCubicaSegmentada);
+        botonesFiguras.add(botonCurvaCubicaSegmentada);
 
         botonesPaletas.setAlignmentX(0.0F);
         botonesPaletas.setAlignmentY(0.0F);
@@ -331,20 +336,49 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         botonesPaletas.add(botonPaletaImagen);
 
-        BotonesFiguras.add(botonesPaletas);
+        botonesFiguras.add(botonesPaletas);
 
-        takeScreenshot.setText("Captura");
-        takeScreenshot.setFocusable(false);
-        takeScreenshot.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        takeScreenshot.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        takeScreenshot.addActionListener(new java.awt.event.ActionListener() {
+        paletaOpciones.add(botonesFiguras);
+
+        botonesMultimedia.setRollover(true);
+
+        iconWebcam.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Camara.png"))); // NOI18N
+        iconWebcam.setToolTipText("Captura");
+        iconWebcam.setFocusable(false);
+        iconWebcam.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        iconWebcam.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        iconWebcam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                takeScreenshotActionPerformed(evt);
+                iconWebcamActionPerformed(evt);
             }
         });
-        BotonesFiguras.add(takeScreenshot);
+        botonesMultimedia.add(iconWebcam);
 
-        paletaOpciones.add(BotonesFiguras);
+        iconTakeScreenshot.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Capturar.png"))); // NOI18N
+        iconTakeScreenshot.setToolTipText("Captura");
+        iconTakeScreenshot.setFocusable(false);
+        iconTakeScreenshot.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        iconTakeScreenshot.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        iconTakeScreenshot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iconTakeScreenshotActionPerformed(evt);
+            }
+        });
+        botonesMultimedia.add(iconTakeScreenshot);
+
+        iconSoundRecorder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/microfono2.gif"))); // NOI18N
+        iconSoundRecorder.setToolTipText("Captura");
+        iconSoundRecorder.setFocusable(false);
+        iconSoundRecorder.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        iconSoundRecorder.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        iconSoundRecorder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iconSoundRecorderActionPerformed(evt);
+            }
+        });
+        botonesMultimedia.add(iconSoundRecorder);
+
+        paletaOpciones.add(botonesMultimedia);
 
         getContentPane().add(paletaOpciones, java.awt.BorderLayout.PAGE_START);
 
@@ -381,16 +415,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelDerecho.setLayout(new java.awt.GridBagLayout());
 
         contenedorFiguras.setBorder(javax.swing.BorderFactory.createTitledBorder("Figuras"));
-        contenedorFiguras.setToolTipText("");
-        contenedorFiguras.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        contenedorFiguras.setToolTipText("Figuras dibujadas");
+        contenedorFiguras.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         contenedorFiguras.setDoubleBuffered(false);
         contenedorFiguras.setMaximumSize(new java.awt.Dimension(400, 300));
         contenedorFiguras.setMinimumSize(new java.awt.Dimension(300, 200));
         contenedorFiguras.setName(""); // NOI18N
         contenedorFiguras.setPreferredSize(new java.awt.Dimension(150, 235));
-        java.awt.FlowLayout flowLayout2 = new java.awt.FlowLayout(java.awt.FlowLayout.LEADING);
-        flowLayout2.setAlignOnBaseline(true);
-        contenedorFiguras.setLayout(flowLayout2);
+        contenedorFiguras.setLayout(new java.awt.BorderLayout());
 
         figureList.setDoubleBuffered(true);
         figureList.setMaximumSize(new java.awt.Dimension(100, 600));
@@ -401,8 +433,30 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 figureListMouseClicked(evt);
             }
         });
-        contenedorFiguras.add(figureList);
+        contenedorFiguras.add(figureList, java.awt.BorderLayout.CENTER);
         figureList.getAccessibleContext().setAccessibleName("");
+
+        cloneShape.setText("C");
+        cloneShape.setContentAreaFilled(false);
+        cloneShape.setEnabled(false);
+        cloneShape.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cloneShapeMouseClicked(evt);
+            }
+        });
+        jPanel2.add(cloneShape);
+
+        removeShape.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconoborrar2.png"))); // NOI18N
+        removeShape.setContentAreaFilled(false);
+        removeShape.setEnabled(false);
+        removeShape.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                removeShapeMouseClicked(evt);
+            }
+        });
+        jPanel2.add(removeShape);
+
+        contenedorFiguras.add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -422,32 +476,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 5;
         panelDerecho.add(reloadShapes, gridBagConstraints);
-
-        cloneShape.setText("C");
-        cloneShape.setContentAreaFilled(false);
-        cloneShape.setEnabled(false);
-        cloneShape.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cloneShapeMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 16;
-        panelDerecho.add(cloneShape, gridBagConstraints);
-
-        removeShape.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconoborrar2.png"))); // NOI18N
-        removeShape.setContentAreaFilled(false);
-        removeShape.setEnabled(false);
-        removeShape.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                removeShapeMouseClicked(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 16;
-        panelDerecho.add(removeShape, gridBagConstraints);
 
         cuerpo.add(panelDerecho, java.awt.BorderLayout.LINE_END);
 
@@ -1059,21 +1087,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 11;
         contenedorEstiloBorde.add(styleStrokeCapList, gridBagConstraints);
 
-        styleStrokeCapList1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Button", "Round", "Square" }));
-        styleStrokeCapList1.setToolTipText("Tipo de Final de línea");
-        styleStrokeCapList1.setMaximumSize(new java.awt.Dimension(200, 30));
-        styleStrokeCapList1.setMinimumSize(new java.awt.Dimension(115, 22));
-        styleStrokeCapList1.setPreferredSize(new java.awt.Dimension(155, 22));
-        styleStrokeCapList1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                styleStrokeCapList1ActionPerformed(evt);
-            }
-        });
-        contenedorEstiloBorde.add(styleStrokeCapList1, new java.awt.GridBagConstraints());
-
-        jLabel5.setText("Final");
-        contenedorEstiloBorde.add(jLabel5, new java.awt.GridBagConstraints());
-
         panelColor.add(contenedorEstiloBorde);
 
         paneles.add(panelColor);
@@ -1104,6 +1117,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         archivo.add(nuevo);
 
         abrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        abrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/AbrirMedio.png"))); // NOI18N
         abrir.setText("Abrir");
         abrir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1122,37 +1136,29 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         archivo.add(guardar);
 
-        soundRecorder.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        soundRecorder.setText("Grabar Sonido");
-        soundRecorder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                soundRecorderActionPerformed(evt);
-            }
-        });
-        archivo.add(soundRecorder);
-
-        camera.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
-        camera.setText("Cámara");
-        camera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cameraActionPerformed(evt);
-            }
-        });
-        archivo.add(camera);
-
         menu.add(archivo);
 
-        edicion.setText("Edición");
+        edicion.setText("Ver");
 
-        verBarraEstado.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        verBarraEstado.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         verBarraEstado.setSelected(true);
-        verBarraEstado.setText("Ver barra estado");
+        verBarraEstado.setText("Barra de estado");
         verBarraEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 verBarraEstadoActionPerformed(evt);
             }
         });
         edicion.add(verBarraEstado);
+
+        jCheckBoxMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("Herramientas de colores");
+        edicion.add(jCheckBoxMenuItem1);
+
+        jCheckBoxMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jCheckBoxMenuItem2.setSelected(true);
+        jCheckBoxMenuItem2.setText("Herramientas de imagen");
+        edicion.add(jCheckBoxMenuItem2);
 
         menu.add(edicion);
 
@@ -1207,6 +1213,42 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         imagen.add(sobelMenu);
 
         menu.add(imagen);
+
+        jMenu1.setText("Multimedia");
+
+        menuSoundRecorder.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        menuSoundRecorder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/microfono2.gif"))); // NOI18N
+        menuSoundRecorder.setText("Grabar sonido");
+        menuSoundRecorder.setPreferredSize(new java.awt.Dimension(14, 24));
+        menuSoundRecorder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSoundRecorderActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuSoundRecorder);
+
+        menuTakeScreenshot.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
+        menuTakeScreenshot.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Capturar.png"))); // NOI18N
+        menuTakeScreenshot.setText("Tomar Captura");
+        menuTakeScreenshot.setToolTipText("Capturar en Vídeos ó Webcam");
+        menuTakeScreenshot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuTakeScreenshotActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuTakeScreenshot);
+
+        menuWebcam.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
+        menuWebcam.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Camara.png"))); // NOI18N
+        menuWebcam.setText("Webcam");
+        menuWebcam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuWebcamActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuWebcam);
+
+        menu.add(jMenu1);
 
         setJMenuBar(menu);
 
@@ -2065,15 +2107,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_styleStrokeCapListActionPerformed
 
-    private void styleStrokeCapList1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleStrokeCapList1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_styleStrokeCapList1ActionPerformed
+    private void iconTakeScreenshotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconTakeScreenshotActionPerformed
+        menuTakeScreenshotActionPerformed(null);
+    }//GEN-LAST:event_iconTakeScreenshotActionPerformed
 
-    private void soundRecorderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_soundRecorderActionPerformed
+    private void iconWebcamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconWebcamActionPerformed
+        VentanaInternaCamara.showWebcam();
+    }//GEN-LAST:event_iconWebcamActionPerformed
+
+    private void menuSoundRecorderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSoundRecorderActionPerformed
         VentanaInternaGrabador.showSoundRecorder();
-    }//GEN-LAST:event_soundRecorderActionPerformed
+    }//GEN-LAST:event_menuSoundRecorderActionPerformed
 
-    private void takeScreenshotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_takeScreenshotActionPerformed
+    private void menuWebcamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuWebcamActionPerformed
+        VentanaInternaCamara.showWebcam();
+    }//GEN-LAST:event_menuWebcamActionPerformed
+
+    private void menuTakeScreenshotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTakeScreenshotActionPerformed
+
         BufferedImage img = null;
         if (escritorio.getSelectedFrame() instanceof VentanaInternaCamara) {
             VentanaInternaCamara viC = (VentanaInternaCamara) escritorio.getSelectedFrame();
@@ -2085,15 +2136,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         VentanaInterna.showImage(img, "Nueva captura*");
 
-    }//GEN-LAST:event_takeScreenshotActionPerformed
+    }//GEN-LAST:event_menuTakeScreenshotActionPerformed
 
-    private void cameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cameraActionPerformed
-        VentanaInternaCamara vi = VentanaInternaCamara.getInstance();
-        if (vi != null) {
-            escritorio.add(vi);
-            vi.setVisible(true);
-        }
-    }//GEN-LAST:event_cameraActionPerformed
+    private void iconSoundRecorderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconSoundRecorderActionPerformed
+        VentanaInternaGrabador.showSoundRecorder();
+    }//GEN-LAST:event_iconSoundRecorderActionPerformed
 
     public VentanaInterna getVentanaInterna() {
         return vi;
@@ -2215,7 +2262,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToolBar BotonesFiguras;
     private javax.swing.ButtonGroup BotonesMenu;
     private javax.swing.ButtonGroup GrupoColores;
     private javax.swing.JMenuItem abrir;
@@ -2243,8 +2289,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton botonRotacion180;
     private javax.swing.JButton botonRotacion270;
     private javax.swing.JButton botonRotacion90;
+    private javax.swing.JToolBar botonesFiguras;
+    private javax.swing.JToolBar botonesMultimedia;
     private javax.swing.JPanel botonesPaletas;
-    private javax.swing.JMenuItem camera;
     private javax.swing.JButton cloneShape;
     private javax.swing.JPanel contenedorBorde;
     private javax.swing.JPanel contenedorBrillo;
@@ -2266,11 +2313,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JSpinner grosor;
     private javax.swing.ButtonGroup grupoPaletas;
     private javax.swing.JMenuItem guardar;
+    private javax.swing.JButton iconSoundRecorder;
+    private javax.swing.JButton iconTakeScreenshot;
+    private javax.swing.JButton iconWebcam;
     private javax.swing.JMenu imagen;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel labelFigura;
     private javax.swing.JLabel labelTextBorderColor;
     private javax.swing.JLabel labelTextFillColor;
@@ -2279,6 +2332,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenuItem menuConvolveOp;
     private javax.swing.JMenuItem menuRescaleOp;
+    private javax.swing.JMenuItem menuSoundRecorder;
+    private javax.swing.JMenuItem menuTakeScreenshot;
+    private javax.swing.JMenuItem menuWebcam;
     private javax.swing.JMenuItem multiplicar;
     private javax.swing.JMenuItem nuevo;
     private javax.swing.JPanel paletaOpciones;
@@ -2296,13 +2352,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JSlider sliderBrillo;
     private javax.swing.JSlider sliderRotacion;
     private javax.swing.JMenuItem sobelMenu;
-    private javax.swing.JMenuItem soundRecorder;
     private javax.swing.JButton strokeColor;
     private javax.swing.JComboBox strokeList;
     private javax.swing.JComboBox styleStrokeCapList;
-    private javax.swing.JComboBox styleStrokeCapList1;
     private javax.swing.JComboBox styleStrokeJoinList;
-    private javax.swing.JButton takeScreenshot;
     private javax.swing.JMenuItem umbralizacion;
     private javax.swing.JCheckBoxMenuItem verBarraEstado;
     // End of variables declaration//GEN-END:variables
