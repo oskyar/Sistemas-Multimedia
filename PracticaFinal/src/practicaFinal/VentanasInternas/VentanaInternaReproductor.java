@@ -10,8 +10,7 @@ import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineEvent.Type;
 import javax.sound.sampled.LineListener;
 import practicaFinal.VentanaPrincipal;
-import practicaFinal.sound.SMClipPlayer;
-import practicaFinal.sound.SMPlayer;
+import practicaFinal.sound.SMSoundPlayer;
 
 /**
  *
@@ -22,12 +21,12 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame {
     /**
      * Creates new form VentanaInterna
      */
-    SMClipPlayer player;
+    SMSoundPlayer player;
 
     public VentanaInternaReproductor(File f) {
         initComponents();
         if (f != null) {
-            player = new SMClipPlayer(f);
+            player = new SMSoundPlayer(f);
             this.setTitle(f.getName());
             LineListener lineListener = new LineListener() {
                 @Override
@@ -43,16 +42,16 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame {
                     }
                 }
             };
-            ((SMClipPlayer) player).setLineListener(lineListener);
+            ((SMSoundPlayer) player).setLineListener(lineListener);
             this.pack();
         }
     }
 
     public static void showJMFPlayer(File f, String name) {
-        VentanaInternaReproductor vi = new VentanaInternaReproductor(f);
-        VentanaPrincipal.getEscritorio().add(vi);
-        vi.setVisible(true);
-        vi.setTitle(f.getName());
+        VentanaInternaReproductor vir = new VentanaInternaReproductor(f);
+        VentanaPrincipal.getEscritorio().add(vir);
+        vir.setVisible(true);
+        vir.setTitle(f.getName());
     }    
     
     /**
