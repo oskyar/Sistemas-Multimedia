@@ -9,7 +9,9 @@ import java.io.File;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineEvent.Type;
 import javax.sound.sampled.LineListener;
+import javax.swing.JFileChooser;
 import practicaFinal.VentanaPrincipal;
+import practicaFinal.filefilter.UtilFileFilter;
 import practicaFinal.sound.SMSoundPlayerRecorder;
 
 /**
@@ -38,15 +40,20 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
                 if (event.getType() == Type.STOP) {
                     recorderButton.setEnabled(true);
                     stopButton.setEnabled(false);
-                    VentanaInternaReproductor vir = new VentanaInternaReproductor(f);
-                    VentanaPrincipal.getEscritorio().add(vir);
-                    vir.setVisible(true);
                 }
 
             }
         };
         ((SMSoundPlayerRecorder) recorder).setLineListener(lineListener);
         this.pack();
+    }
+
+    public static void showSoundRecorder() {
+        File f = new File("nuevo");
+        VentanaInternaGrabador vi = new VentanaInternaGrabador(f);
+        VentanaPrincipal.getEscritorio().add(vi);
+        vi.setVisible(true);
+        vi.setTitle("Grabar sonido");
     }
 
     /**
@@ -101,6 +108,33 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
         if (recorder != null) {
             recorder.stop();
+            System.err.println("P: " + recorder.getSoundFile().getName());
+            JFileChooser dlg = new JFileChooser();
+            int resp = dlg.showOpenDialog(this);
+            File f = recorder.getSoundFile();
+            File newF=null;
+            if (resp == JFileChooser.APPROVE_OPTION) {
+                try {
+                    newF = dlg.getSelectedFile();
+                    if (UtilFileFilter.getExtension(newF) == null) {
+                        newF = new File(newF.getPath() + ".wav");
+                    } else if (!UtilFileFilter.getExtension(newF).equals("wav")) {
+                        newF = new File(newF.getName() + ".wav");
+                    }
+                    if (!f.renameTo(newF)) {
+                       System.err.println("NO se ha pododido cambiar el nombre del fichero");
+                    }
+
+                } catch (Exception ex) {
+                    System.err.println("Error al leer archivo");
+                }
+            }
+            VentanaInternaReproductor vir = new VentanaInternaReproductor(newF);
+            VentanaPrincipal.getEscritorio().add(vir);
+            vir.setVisible(true);
+            if (newF != null) {
+                vir.setTitle(newF.getName());
+            }
         }
     }//GEN-LAST:event_stopButtonActionPerformed
 

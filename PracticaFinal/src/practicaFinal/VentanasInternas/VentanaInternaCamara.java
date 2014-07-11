@@ -5,7 +5,6 @@
  */
 package practicaFinal.VentanasInternas;
 
-
 import java.awt.Component;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -38,23 +37,28 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
     Player player;
 
     private VentanaInternaCamara() {
-            initComponents();
-            
+        initComponents();
+
         try {
             CaptureDeviceInfo deviceInfo;
             List<CaptureDeviceInfo> deviceList = CaptureDeviceManager.getDeviceList(new YUVFormat());
-            System.err.println(CaptureDeviceManager.getDeviceList(new YUVFormat()));
-            if(deviceList.size()>0){
+            if (deviceList.size() > 0) {
                 deviceInfo = deviceList.get(0);
                 MediaLocator ml = deviceInfo.getLocator();
                 player = Manager.createRealizedPlayer(ml);
                 Component areaVisual = player.getVisualComponent();
-                if (areaVisual != null ) add(areaVisual);
+                if (areaVisual != null) {
+                    add(areaVisual);
+                }
                 Component panelControl = player.getControlPanelComponent();
-                if (panelControl != null ) add(panelControl);
+                if (panelControl != null) {
+                    add(panelControl);
+                }
                 player.start();
+            } else {
+                System.err.println("No se ha encontrado ningún dispositivo de captura");
             }
-            
+
             this.pack();
         } catch (IOException ex) {
             Logger.getLogger(VentanaInternaCamara.class.getName()).log(Level.SEVERE, null, ex);
@@ -65,7 +69,6 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
         }
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -109,11 +112,12 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
         } else {
             return null;
         }
-    }    
-    
+    }
+
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
-    if(player != null)
-        player.close();
+        if (player != null) {
+            player.close();
+        }
     }//GEN-LAST:event_formInternalFrameClosing
 
     public void close() {
@@ -128,14 +132,14 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     public BufferedImage getFrame() {
-        FrameGrabbingControl fgc; 
-        String claseCtr = "javax.media.control.FrameGrabbingControl "; 
-        fgc = (FrameGrabbingControl)player.getControl(claseCtr ); 
-        Buffer bufferFrame = fgc.grabFrame(); 
-        BufferToImage bti; 
-        bti=new BufferToImage((VideoFormat)bufferFrame.getFormat()); 
-        Image img = bti.createImage(bufferFrame); 
-        return (BufferedImage)img; 
+        FrameGrabbingControl fgc;
+        String claseCtr = "javax.media.control.FrameGrabbingControl ";
+        fgc = (FrameGrabbingControl) player.getControl(claseCtr);
+        Buffer bufferFrame = fgc.grabFrame();
+        BufferToImage bti;
+        bti = new BufferToImage((VideoFormat) bufferFrame.getFormat());
+        Image img = bti.createImage(bufferFrame);
+        return (BufferedImage) img;
 
     }
 
