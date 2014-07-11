@@ -319,7 +319,7 @@ public class Lienzo extends javax.swing.JPanel {
 
     }//GEN-LAST:event_formMouseClicked
 
-    void setImageOriginal(BufferedImage img) {
+    public void setImageOriginal(BufferedImage img) {
         if (img != null) {
             setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
             this.img = img;

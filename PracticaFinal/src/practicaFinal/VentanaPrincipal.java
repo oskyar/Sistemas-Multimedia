@@ -5,11 +5,11 @@
  */
 package practicaFinal;
 
-import VentanasInternas.VentanaInternaReproductor;
-import VentanasInternas.VentanaInternaGrabador;
-import VentanasInternas.VentanaInterna;
-import VentanasInternas.VentanaInternaCamara;
-import VentanasInternas.VentanaInternaJMFPlayer;
+import Utils.JOptionPaneMultiInput;
+import practicaFinal.VentanasInternas.VentanaInternaGrabador;
+import practicaFinal.VentanasInternas.VentanaInterna;
+import practicaFinal.VentanasInternas.VentanaInternaCamara;
+import practicaFinal.VentanasInternas.VentanaInternaJMFPlayer;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
@@ -28,6 +28,7 @@ import java.awt.image.LookupTable;
 import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1240,7 +1241,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoActionPerformed
         //figureList.clearSelection();
-        vi = newWindows();
+        ArrayList<Integer> options = JOptionPaneMultiInput.showJOptionPaneMultiIpunt();
+        vi = newWindows(options.get(0),options.get(1));
 
     }//GEN-LAST:event_nuevoActionPerformed
 
@@ -1316,14 +1318,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 f = dlg.getSelectedFile();
                 if(UtilFileFilter.isImage(f)){
                     BufferedImage img = ImageIO.read(f);
-                    VentanaInterna vi = new VentanaInterna();
-                    vi.getLienzo().setImageOriginal(img);
-                    VentanaPrincipal.escritorio.add(vi);
-                    vi.setVisible(true);
+                    VentanaInterna.showImage(img, f.getName());
                 }else if(UtilFileFilter.isSound(f) || UtilFileFilter.isVideo(f)){
-                    VentanaInternaJMFPlayer vi = VentanaInternaJMFPlayer.getInstance(f);
-                    VentanaPrincipal.escritorio.add(vi);
-                    vi.setVisible(true);
+                    VentanaInternaJMFPlayer.showJMFPlayer(f,f.getName());
+                    
                 }
             } catch (Exception ex) {
                 System.err.println("Error al leer el archivo "+ f.getName());
@@ -2102,10 +2100,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_soundRecorderActionPerformed
 
     private void takeScreenshotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_takeScreenshotActionPerformed
-        if (escritorio.getSelectedFrame() instanceof VentanaInternaCamara) {
-            VentanaInternaCamara vi = (VentanaInternaCamara) escritorio.getSelectedFrame();
-            BufferedImage img = vi.getFrame();
+        BufferedImage img =null;
+        if (escritorio.getSelectedFrame() instanceof VentanaInternaCamara){
+            VentanaInternaCamara viC = (VentanaInternaCamara) escritorio.getSelectedFrame();
+            img = viC.getFrame();
+        }else if(escritorio.getSelectedFrame() instanceof VentanaInternaJMFPlayer){
+            VentanaInternaJMFPlayer viJmf = (VentanaInternaJMFPlayer) escritorio.getSelectedFrame();
+            img = viJmf.getFrame();
         }
+        
+        VentanaInterna.showImage(img, "Nueva captura*");
+        
     }//GEN-LAST:event_takeScreenshotActionPerformed
 
     private void cameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cameraActionPerformed
@@ -2193,6 +2198,37 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         return vi;
     }
 
+    public final VentanaInterna newWindows(int width, int height) {
+        final VentanaInterna vi = new VentanaInterna();
+        escritorio.add(vi);
+        vi.setSize(width, height);
+        //vi.getLienzo().setSize(width, height);
+        vi.setTitle("Lienzo " + ++numVentanas);
+        vi.setVisible(true);
+        setVentanaInterna(vi);
+        vi.getLienzo().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                eventoEscritorioShapes(vi);
+                repaint();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                eventoEscritorioShapes(vi);
+                repaint();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                eventoEscritorioShapes(vi);
+                repaint();
+            }
+        });
+        eventoEscritorioShapes(vi);
+        return vi;
+    }    
+    
     public VentanaInterna selectInternalWindows() {
         VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
         eventoEscritorioShapes(vi);
