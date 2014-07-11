@@ -106,6 +106,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         GrupoColores = new javax.swing.ButtonGroup();
         grupoPaletas = new javax.swing.ButtonGroup();
         paletaOpciones = new javax.swing.JPanel();
+        botonesArchivo = new javax.swing.JToolBar();
+        iconNew = new javax.swing.JButton();
+        iconOpen = new javax.swing.JButton();
+        iconSave = new javax.swing.JButton();
         botonesFiguras = new javax.swing.JToolBar();
         botonLapiz = new javax.swing.JToggleButton();
         botonLinea = new javax.swing.JToggleButton();
@@ -217,13 +221,63 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         paletaOpciones.setLayout(new javax.swing.BoxLayout(paletaOpciones, javax.swing.BoxLayout.LINE_AXIS));
 
-        botonesFiguras.setMaximumSize(new java.awt.Dimension(300, 40));
-        botonesFiguras.setMinimumSize(new java.awt.Dimension(250, 40));
+        botonesArchivo.setFloatable(false);
+        botonesArchivo.setRollover(true);
+        botonesArchivo.setMaximumSize(new java.awt.Dimension(130, 40));
+        botonesArchivo.setPreferredSize(new java.awt.Dimension(110, 40));
+
+        iconNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/NuevoBoceto.GIF"))); // NOI18N
+        iconNew.setToolTipText("Archivo nuevo");
+        iconNew.setFocusable(false);
+        iconNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        iconNew.setPreferredSize(new java.awt.Dimension(36, 36));
+        iconNew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        iconNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iconNewActionPerformed(evt);
+            }
+        });
+        botonesArchivo.add(iconNew);
+
+        iconOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/AbrirMedio.png"))); // NOI18N
+        iconOpen.setToolTipText("Abrir archivo multimedia");
+        iconOpen.setFocusable(false);
+        iconOpen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        iconOpen.setMinimumSize(new java.awt.Dimension(24, 24));
+        iconOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        iconOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iconOpenActionPerformed(evt);
+            }
+        });
+        botonesArchivo.add(iconOpen);
+
+        iconSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Guardar.gif"))); // NOI18N
+        iconSave.setToolTipText("Guardar");
+        iconSave.setFocusable(false);
+        iconSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        iconSave.setMinimumSize(new java.awt.Dimension(24, 24));
+        iconSave.setOpaque(false);
+        iconSave.setPreferredSize(new java.awt.Dimension(36, 36));
+        iconSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        iconSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iconSaveActionPerformed(evt);
+            }
+        });
+        botonesArchivo.add(iconSave);
+
+        paletaOpciones.add(botonesArchivo);
+
+        botonesFiguras.setMaximumSize(new java.awt.Dimension(265, 40));
+        botonesFiguras.setMinimumSize(new java.awt.Dimension(220, 40));
 
         BotonesMenu.add(botonLapiz);
         botonLapiz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Lapiz.gif"))); // NOI18N
         botonLapiz.setFocusable(false);
         botonLapiz.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonLapiz.setMaximumSize(new java.awt.Dimension(36, 36));
+        botonLapiz.setPreferredSize(new java.awt.Dimension(36, 36));
         botonLapiz.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         botonLapiz.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -236,6 +290,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonLinea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Linea.gif"))); // NOI18N
         botonLinea.setFocusable(false);
         botonLinea.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonLinea.setMaximumSize(new java.awt.Dimension(36, 36));
+        botonLinea.setPreferredSize(new java.awt.Dimension(36, 36));
         botonLinea.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         botonLinea.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -248,6 +304,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Rectangulo.gif"))); // NOI18N
         botonRectangulo.setFocusable(false);
         botonRectangulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonRectangulo.setMaximumSize(new java.awt.Dimension(36, 36));
+        botonRectangulo.setPreferredSize(new java.awt.Dimension(36, 36));
         botonRectangulo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         botonRectangulo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -260,6 +318,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonRectanguloRedondeado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/RectanguloRedondeado.gif"))); // NOI18N
         botonRectanguloRedondeado.setFocusable(false);
         botonRectanguloRedondeado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonRectanguloRedondeado.setMaximumSize(new java.awt.Dimension(36, 36));
+        botonRectanguloRedondeado.setPreferredSize(new java.awt.Dimension(36, 36));
         botonRectanguloRedondeado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         botonRectanguloRedondeado.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -272,6 +332,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonOvalo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Ovalo.gif"))); // NOI18N
         botonOvalo.setFocusable(false);
         botonOvalo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonOvalo.setMaximumSize(new java.awt.Dimension(36, 36));
+        botonOvalo.setPreferredSize(new java.awt.Dimension(36, 36));
         botonOvalo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         botonOvalo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -284,6 +346,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonCurvaControl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Curva1control.gif"))); // NOI18N
         botonCurvaControl.setFocusable(false);
         botonCurvaControl.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonCurvaControl.setMaximumSize(new java.awt.Dimension(36, 36));
+        botonCurvaControl.setPreferredSize(new java.awt.Dimension(36, 36));
         botonCurvaControl.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         botonCurvaControl.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -296,6 +360,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonCurvaCubicaSegmentada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Curva2control.gif"))); // NOI18N
         botonCurvaCubicaSegmentada.setFocusable(false);
         botonCurvaCubicaSegmentada.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        botonCurvaCubicaSegmentada.setMaximumSize(new java.awt.Dimension(36, 36));
+        botonCurvaCubicaSegmentada.setPreferredSize(new java.awt.Dimension(36, 36));
         botonCurvaCubicaSegmentada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         botonCurvaCubicaSegmentada.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -307,9 +373,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         paletaOpciones.add(botonesFiguras);
 
         botonesMultimedia.setRollover(true);
-        botonesMultimedia.setMaximumSize(new java.awt.Dimension(160, 38));
+        botonesMultimedia.setMaximumSize(new java.awt.Dimension(120, 40));
         botonesMultimedia.setMinimumSize(new java.awt.Dimension(100, 38));
-        botonesMultimedia.setPreferredSize(null);
 
         iconWebcam.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Camara.png"))); // NOI18N
         iconWebcam.setToolTipText("Captura");
@@ -339,6 +404,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         iconSoundRecorder.setToolTipText("Captura");
         iconSoundRecorder.setFocusable(false);
         iconSoundRecorder.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        iconSoundRecorder.setPreferredSize(new java.awt.Dimension(36, 36));
         iconSoundRecorder.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         iconSoundRecorder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2144,6 +2210,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_showToolBarMultimediaActionPerformed
 
+    private void iconNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconNewActionPerformed
+        nuevoActionPerformed(null);
+    }//GEN-LAST:event_iconNewActionPerformed
+
+    private void iconOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconOpenActionPerformed
+        abrirActionPerformed(null);
+    }//GEN-LAST:event_iconOpenActionPerformed
+
+    private void iconSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconSaveActionPerformed
+        guardarActionPerformed(null);
+    }//GEN-LAST:event_iconSaveActionPerformed
+
     public VentanaInterna getVentanaInterna() {
         return vi;
     }
@@ -2290,6 +2368,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton botonRotacion180;
     private javax.swing.JButton botonRotacion270;
     private javax.swing.JButton botonRotacion90;
+    private javax.swing.JToolBar botonesArchivo;
     private javax.swing.JToolBar botonesFiguras;
     private javax.swing.JToolBar botonesMultimedia;
     private javax.swing.JButton cloneShape;
@@ -2313,6 +2392,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JSpinner grosor;
     private javax.swing.ButtonGroup grupoPaletas;
     private javax.swing.JMenuItem guardar;
+    private javax.swing.JButton iconNew;
+    private javax.swing.JButton iconOpen;
+    private javax.swing.JButton iconSave;
     private javax.swing.JButton iconSoundRecorder;
     private javax.swing.JButton iconTakeScreenshot;
     private javax.swing.JButton iconWebcam;
