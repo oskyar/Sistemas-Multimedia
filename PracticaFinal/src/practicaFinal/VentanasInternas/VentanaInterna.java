@@ -4,16 +4,47 @@
  * and open the template in the editor.
  */
 
-package VentanasInternas;
+package practicaFinal.VentanasInternas;
 
+import java.awt.image.BufferedImage;
 import practicaFinal.Lienzo;
-import practicaFinal.Lienzo;
+import practicaFinal.VentanaPrincipal;
 
 /**
  *
  * @author oskyar
  */
 public class VentanaInterna extends javax.swing.JInternalFrame {
+
+    public static void showImage(BufferedImage img) {
+        VentanaInterna vi = new VentanaInterna();
+        vi.getLienzo().setImageOriginal(img);
+        VentanaPrincipal.getEscritorio().add(vi);
+        vi.setVisible(true);
+        vi.setSize(img.getWidth(), img.getHeight());
+    }
+
+    public static void showImage(BufferedImage img, String title) {
+        VentanaInterna vi = new VentanaInterna();
+        vi.getLienzo().setImageOriginal(img);
+        VentanaPrincipal.getEscritorio().add(vi);
+        vi.setVisible(true);
+        
+        double width, height;
+        if(VentanaPrincipal.getEscritorio().getWidth() < img.getWidth()){
+            width = VentanaPrincipal.getEscritorio().getWidth();
+        }else{
+            width = img.getWidth();
+        }
+        if(VentanaPrincipal.getEscritorio().getHeight() < img.getHeight()){
+            height = VentanaPrincipal.getEscritorio().getHeight();
+        }else{
+            height = img.getHeight();
+        }
+        
+        vi.setSize((int)width,(int)height);
+        vi.setTitle(title);
+    }
 
     /**
      * Creates new form VentanaInterna

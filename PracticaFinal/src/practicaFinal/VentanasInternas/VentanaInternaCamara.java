@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package VentanasInternas;
+package practicaFinal.VentanasInternas;
 
 
-import com.sun.media.format.AviVideoFormat;
 import java.awt.Component;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -18,7 +17,6 @@ import javax.media.Buffer;
 import javax.media.CannotRealizeException;
 import javax.media.CaptureDeviceInfo;
 import javax.media.CaptureDeviceManager;
-import javax.media.Format;
 import javax.media.Manager;
 import javax.media.MediaLocator;
 import javax.media.NoPlayerException;

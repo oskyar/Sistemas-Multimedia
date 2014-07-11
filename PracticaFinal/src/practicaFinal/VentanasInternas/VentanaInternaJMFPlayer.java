@@ -3,20 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package VentanasInternas;
+package practicaFinal.VentanasInternas;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.media.Buffer;
 import javax.media.CannotRealizeException;
 import javax.media.Manager;
 import javax.media.MediaLocator;
 import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.Time;
+import javax.media.control.FrameGrabbingControl;
+import javax.media.format.VideoFormat;
+import javax.media.util.BufferToImage;
+import practicaFinal.VentanaPrincipal;
 
 /**
  *
@@ -59,6 +66,13 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
 
     }
 
+    public static void showJMFPlayer(File f, String name) {
+        VentanaInternaJMFPlayer vi = VentanaInternaJMFPlayer.getInstance(f);
+        VentanaPrincipal.getEscritorio().add(vi);
+        vi.setVisible(true);
+        vi.setTitle(f.getName());
+    }    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,7 +109,7 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
             }
         });
 
-        botonesReproductor.setLayout(new java.awt.GridLayout());
+        botonesReproductor.setLayout(new java.awt.GridLayout(1, 0));
 
         play.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/PlayPressed_48x48.png"))); // NOI18N
         play.setMaximumSize(new java.awt.Dimension(125, 100));
@@ -179,6 +193,17 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
         return this.player;
     }
 
+    public BufferedImage getFrame() {
+        FrameGrabbingControl fgc; 
+        String claseCtr = "javax.media.control.FrameGrabbingControl"; 
+        fgc = (FrameGrabbingControl)player.getControl(claseCtr ); 
+        Buffer bufferFrame = fgc.grabFrame(); 
+        BufferToImage bti; 
+        bti=new BufferToImage((VideoFormat)bufferFrame.getFormat()); 
+        Image img = bti.createImage(bufferFrame); 
+        return (BufferedImage)img; 
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel botonesReproductor;
