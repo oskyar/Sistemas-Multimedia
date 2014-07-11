@@ -165,4 +165,20 @@ public class SMSoundPlayerRecorder implements SMPlayer,SMRecorder {
         lineListener = l;
     }
     
+    /**
+     * Devolvemos el archivo de sonido
+     * @return Archivo de sonido
+     */
+    public File getSoundFile(){
+        return soundFile;
+    }
+    
+    /**
+     * Devolvemos el archivo de sonido
+     * @return Archivo de sonido
+     */
+    public void setSoundFile(File soundFile){
+        this.soundFile = soundFile;
+    }    
+    
 }
