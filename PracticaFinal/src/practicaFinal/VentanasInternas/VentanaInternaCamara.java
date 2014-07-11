@@ -24,6 +24,7 @@ import javax.media.control.FrameGrabbingControl;
 import javax.media.format.VideoFormat;
 import javax.media.format.YUVFormat;
 import javax.media.util.BufferToImage;
+import practicaFinal.VentanaPrincipal;
 
 /**
  *
@@ -69,6 +70,14 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
         }
     }
 
+    public static void showWebcam(){
+        VentanaInternaCamara vi = VentanaInternaCamara.getInstance();
+        if (vi != null) {
+            VentanaPrincipal.getEscritorio().add(vi);
+            vi.setVisible(true);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
