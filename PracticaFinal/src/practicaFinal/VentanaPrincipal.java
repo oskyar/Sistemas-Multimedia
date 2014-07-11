@@ -63,8 +63,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.setTitle("PAINT 2.0 Professional - Óscar Zafra");
         numVentanas = 0;
         botonLapiz.setSelected(true);
-        panelColor.setVisible(true);
-        panelImagen.setVisible(false);
+        barraColor.setVisible(true);
+        barraImagen.setVisible(true);
+//        panelColor.setVisible(true);
+//        panelImagen.setVisible(false);
         Lienzo.setStrokeColor(Color.BLACK);
         Lienzo.setStrokeType(Lienzo.STROKE_CONTINUOUS);
         Lienzo.setStrokeWidth(1.0f);
@@ -112,14 +114,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonOvalo = new javax.swing.JToggleButton();
         botonCurvaControl = new javax.swing.JToggleButton();
         botonCurvaCubicaSegmentada = new javax.swing.JToggleButton();
-        botonesPaletas = new javax.swing.JPanel();
-        botonPaletaColor = new javax.swing.JRadioButton();
-        botonPaletaImagen = new javax.swing.JRadioButton();
         botonesMultimedia = new javax.swing.JToolBar();
         iconWebcam = new javax.swing.JButton();
         iconTakeScreenshot = new javax.swing.JButton();
         iconSoundRecorder = new javax.swing.JButton();
-        panelIzquierdo = new javax.swing.JPanel();
         cuerpo = new javax.swing.JPanel();
         escritorio = new javax.swing.JDesktopPane();
         panelDerecho = new javax.swing.JPanel();
@@ -129,9 +127,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         cloneShape = new javax.swing.JButton();
         removeShape = new javax.swing.JButton();
         reloadShapes = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
         pie = new javax.swing.JPanel();
         paneles = new javax.swing.JPanel();
-        panelImagen = new javax.swing.JPanel();
+        barraImagen = new javax.swing.JToolBar();
         contenedorBrillo = new javax.swing.JPanel();
         sliderBrillo = new javax.swing.JSlider();
         contenedorEfecto = new javax.swing.JPanel();
@@ -148,7 +147,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorEscala = new javax.swing.JPanel();
         botonAumentar = new javax.swing.JButton();
         botonDisminuir = new javax.swing.JButton();
-        panelColor = new javax.swing.JPanel();
+        barraColor = new javax.swing.JToolBar();
         contenedorColores = new javax.swing.JPanel();
         panelColores = new javax.swing.JPanel();
         botonColorRojo = new javax.swing.JButton();
@@ -183,8 +182,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         guardar = new javax.swing.JMenuItem();
         edicion = new javax.swing.JMenu();
         verBarraEstado = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
+        showToolBarColor = new javax.swing.JCheckBoxMenuItem();
+        showToolBarImage = new javax.swing.JCheckBoxMenuItem();
+        showToolBarMultimedia = new javax.swing.JCheckBoxMenuItem();
         imagen = new javax.swing.JMenu();
         menuRescaleOp = new javax.swing.JMenuItem();
         menuConvolveOp = new javax.swing.JMenuItem();
@@ -217,7 +217,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         paletaOpciones.setLayout(new javax.swing.BoxLayout(paletaOpciones, javax.swing.BoxLayout.LINE_AXIS));
 
-        botonesFiguras.setMaximumSize(new java.awt.Dimension(500, 250));
+        botonesFiguras.setMaximumSize(new java.awt.Dimension(300, 40));
+        botonesFiguras.setMinimumSize(new java.awt.Dimension(250, 40));
 
         BotonesMenu.add(botonLapiz);
         botonLapiz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Lapiz.gif"))); // NOI18N
@@ -303,44 +304,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         botonesFiguras.add(botonCurvaCubicaSegmentada);
 
-        botonesPaletas.setAlignmentX(0.0F);
-        botonesPaletas.setAlignmentY(0.0F);
-        botonesPaletas.setMaximumSize(new java.awt.Dimension(150, 45));
-        botonesPaletas.setPreferredSize(new java.awt.Dimension(125, 45));
-        botonesPaletas.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 0));
-
-        grupoPaletas.add(botonPaletaColor);
-        botonPaletaColor.setSelected(true);
-        botonPaletaColor.setText("Color");
-        botonPaletaColor.setFocusable(false);
-        botonPaletaColor.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        botonPaletaColor.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        botonPaletaColor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        botonPaletaColor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonPaletaColorActionPerformed(evt);
-            }
-        });
-        botonesPaletas.add(botonPaletaColor);
-
-        grupoPaletas.add(botonPaletaImagen);
-        botonPaletaImagen.setText("Imagen");
-        botonPaletaImagen.setFocusable(false);
-        botonPaletaImagen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        botonPaletaImagen.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        botonPaletaImagen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        botonPaletaImagen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonPaletaImagenActionPerformed(evt);
-            }
-        });
-        botonesPaletas.add(botonPaletaImagen);
-
-        botonesFiguras.add(botonesPaletas);
-
         paletaOpciones.add(botonesFiguras);
 
         botonesMultimedia.setRollover(true);
+        botonesMultimedia.setMaximumSize(new java.awt.Dimension(160, 38));
+        botonesMultimedia.setMinimumSize(new java.awt.Dimension(100, 38));
+        botonesMultimedia.setPreferredSize(null);
 
         iconWebcam.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Camara.png"))); // NOI18N
         iconWebcam.setToolTipText("Captura");
@@ -381,11 +350,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         paletaOpciones.add(botonesMultimedia);
 
         getContentPane().add(paletaOpciones, java.awt.BorderLayout.PAGE_START);
-
-        panelIzquierdo.setMaximumSize(new java.awt.Dimension(12, 50));
-        panelIzquierdo.setMinimumSize(new java.awt.Dimension(12, 50));
-        panelIzquierdo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(panelIzquierdo, java.awt.BorderLayout.LINE_START);
 
         cuerpo.setPreferredSize(new java.awt.Dimension(772, 400));
         cuerpo.setLayout(new java.awt.BorderLayout());
@@ -479,20 +443,23 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         cuerpo.add(panelDerecho, java.awt.BorderLayout.LINE_END);
 
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        cuerpo.add(jToolBar1, java.awt.BorderLayout.LINE_START);
+
         getContentPane().add(cuerpo, java.awt.BorderLayout.CENTER);
 
         pie.setLayout(new java.awt.BorderLayout());
 
         paneles.setLayout(new javax.swing.BoxLayout(paneles, javax.swing.BoxLayout.Y_AXIS));
 
-        panelImagen.setNextFocusableComponent(botonPaletaImagen);
-        panelImagen.setPreferredSize(new java.awt.Dimension(831, 100));
-        panelImagen.setLayout(new javax.swing.BoxLayout(panelImagen, javax.swing.BoxLayout.LINE_AXIS));
+        barraImagen.setRollover(true);
 
         contenedorBrillo.setBorder(javax.swing.BorderFactory.createTitledBorder("Brillo"));
         contenedorBrillo.setToolTipText("Brillo de la imagen");
         contenedorBrillo.setMaximumSize(new java.awt.Dimension(200, 90));
         contenedorBrillo.setMinimumSize(new java.awt.Dimension(95, 90));
+        contenedorBrillo.setPreferredSize(new java.awt.Dimension(150, 90));
         contenedorBrillo.setLayout(new java.awt.GridBagLayout());
 
         sliderBrillo.setMaximum(200);
@@ -519,12 +486,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         contenedorBrillo.add(sliderBrillo, gridBagConstraints);
 
-        panelImagen.add(contenedorBrillo);
+        barraImagen.add(contenedorBrillo);
 
         contenedorEfecto.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro"));
         contenedorEfecto.setToolTipText("");
         contenedorEfecto.setMaximumSize(new java.awt.Dimension(400, 90));
         contenedorEfecto.setMinimumSize(new java.awt.Dimension(95, 90));
+        contenedorEfecto.setPreferredSize(new java.awt.Dimension(200, 90));
         contenedorEfecto.setLayout(new java.awt.GridBagLayout());
 
         listaEfectos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano" }));
@@ -542,11 +510,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         contenedorEfecto.add(listaEfectos, gridBagConstraints);
 
-        panelImagen.add(contenedorEfecto);
+        barraImagen.add(contenedorEfecto);
 
         contenedorContraste.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraste"));
         contenedorContraste.setToolTipText("");
         contenedorContraste.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorContraste.setPreferredSize(new java.awt.Dimension(150, 90));
         contenedorContraste.setLayout(new java.awt.GridBagLayout());
 
         botonContraste.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/contraste.png"))); // NOI18N
@@ -600,13 +569,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         contenedorContraste.add(botonOscurecer, gridBagConstraints);
 
-        panelImagen.add(contenedorContraste);
+        barraImagen.add(contenedorContraste);
 
         contenedorRotacion.setBorder(javax.swing.BorderFactory.createTitledBorder("Rotación"));
         contenedorRotacion.setToolTipText("");
         contenedorRotacion.setMaximumSize(new java.awt.Dimension(450, 90));
         contenedorRotacion.setMinimumSize(new java.awt.Dimension(175, 91));
-        contenedorRotacion.setPreferredSize(new java.awt.Dimension(450, 97));
+        contenedorRotacion.setPreferredSize(new java.awt.Dimension(300, 90));
         contenedorRotacion.setLayout(new java.awt.GridBagLayout());
 
         sliderRotacion.setMajorTickSpacing(180);
@@ -672,11 +641,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         contenedorRotacion.add(botonRotacion270, new java.awt.GridBagConstraints());
 
-        panelImagen.add(contenedorRotacion);
+        barraImagen.add(contenedorRotacion);
 
         contenedorEscala.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraste"));
         contenedorEscala.setToolTipText("");
         contenedorEscala.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorEscala.setPreferredSize(new java.awt.Dimension(112, 90));
         contenedorEscala.setLayout(new java.awt.GridBagLayout());
 
         botonAumentar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/aumentar.png"))); // NOI18N
@@ -711,14 +681,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         contenedorEscala.add(botonDisminuir, gridBagConstraints);
 
-        panelImagen.add(contenedorEscala);
+        barraImagen.add(contenedorEscala);
 
-        paneles.add(panelImagen);
+        paneles.add(barraImagen);
 
-        panelColor.setMaximumSize(new java.awt.Dimension(831, 100));
-        panelColor.setNextFocusableComponent(botonPaletaColor);
-        panelColor.setPreferredSize(new java.awt.Dimension(831, 100));
-        panelColor.setLayout(new javax.swing.BoxLayout(panelColor, javax.swing.BoxLayout.LINE_AXIS));
+        barraColor.setRollover(true);
 
         contenedorColores.setMaximumSize(new java.awt.Dimension(125, 90));
         contenedorColores.setMinimumSize(new java.awt.Dimension(125, 90));
@@ -864,13 +831,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         contenedorColores.add(panelColores);
 
-        panelColor.add(contenedorColores);
+        barraColor.add(contenedorColores);
 
         contenedorRelleno.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipo de Relleno y color"));
         contenedorRelleno.setToolTipText("Tipo de Relleno y Color");
         contenedorRelleno.setMaximumSize(new java.awt.Dimension(180, 90));
         contenedorRelleno.setMinimumSize(new java.awt.Dimension(180, 55));
-        contenedorRelleno.setPreferredSize(new java.awt.Dimension(180, 58));
+        contenedorRelleno.setPreferredSize(new java.awt.Dimension(175, 90));
         java.awt.GridBagLayout contenedorRellenoLayout = new java.awt.GridBagLayout();
         contenedorRellenoLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0};
         contenedorRellenoLayout.rowHeights = new int[] {0, 5, 0};
@@ -928,7 +895,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         fillColor.setToolTipText("Color del relleno");
         fillColor.setFocusable(false);
         fillColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        fillColor.setMaximumSize(new java.awt.Dimension(20, 20));
+        fillColor.setMaximumSize(new java.awt.Dimension(30, 20));
         fillColor.setMinimumSize(new java.awt.Dimension(30, 20));
         fillColor.setPreferredSize(new java.awt.Dimension(25, 25));
         fillColor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -957,11 +924,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         contenedorRelleno.add(labelTextGradientColor, gridBagConstraints);
 
-        panelColor.add(contenedorRelleno);
+        barraColor.add(contenedorRelleno);
 
         contenedorBorde.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipo de Borde y color"));
         contenedorBorde.setToolTipText("");
         contenedorBorde.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorBorde.setPreferredSize(new java.awt.Dimension(190, 90));
         java.awt.GridBagLayout contenedorRelleno1Layout = new java.awt.GridBagLayout();
         contenedorRelleno1Layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0};
         contenedorRelleno1Layout.rowHeights = new int[] {0, 5, 0};
@@ -1033,11 +1001,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         contenedorBorde.add(strokeColor, gridBagConstraints);
 
-        panelColor.add(contenedorBorde);
+        barraColor.add(contenedorBorde);
 
         contenedorEstiloBorde.setBorder(javax.swing.BorderFactory.createTitledBorder("Estilos Borde"));
         contenedorEstiloBorde.setToolTipText("Estilos para el borde");
         contenedorEstiloBorde.setMaximumSize(new java.awt.Dimension(200, 90));
+        contenedorEstiloBorde.setPreferredSize(new java.awt.Dimension(202, 90));
         java.awt.GridBagLayout contenedorEstiloBordeLayout = new java.awt.GridBagLayout();
         contenedorEstiloBordeLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
         contenedorEstiloBordeLayout.rowHeights = new int[] {0, 5, 0};
@@ -1087,9 +1056,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 11;
         contenedorEstiloBorde.add(styleStrokeCapList, gridBagConstraints);
 
-        panelColor.add(contenedorEstiloBorde);
+        barraColor.add(contenedorEstiloBorde);
 
-        paneles.add(panelColor);
+        paneles.add(barraColor);
 
         pie.add(paneles, java.awt.BorderLayout.LINE_START);
 
@@ -1150,15 +1119,35 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         edicion.add(verBarraEstado);
 
-        jCheckBoxMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        jCheckBoxMenuItem1.setSelected(true);
-        jCheckBoxMenuItem1.setText("Herramientas de colores");
-        edicion.add(jCheckBoxMenuItem1);
+        showToolBarColor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        showToolBarColor.setSelected(true);
+        showToolBarColor.setText("Herramientas de colores");
+        showToolBarColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showToolBarColorActionPerformed(evt);
+            }
+        });
+        edicion.add(showToolBarColor);
 
-        jCheckBoxMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        jCheckBoxMenuItem2.setSelected(true);
-        jCheckBoxMenuItem2.setText("Herramientas de imagen");
-        edicion.add(jCheckBoxMenuItem2);
+        showToolBarImage.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        showToolBarImage.setSelected(true);
+        showToolBarImage.setText("Herramientas de imagen");
+        showToolBarImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showToolBarImageActionPerformed(evt);
+            }
+        });
+        edicion.add(showToolBarImage);
+
+        showToolBarMultimedia.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        showToolBarMultimedia.setSelected(true);
+        showToolBarMultimedia.setText("Herramientas multimedia");
+        showToolBarMultimedia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showToolBarMultimediaActionPerformed(evt);
+            }
+        });
+        edicion.add(showToolBarMultimedia);
 
         menu.add(edicion);
 
@@ -1437,17 +1426,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_menuConvolveOpActionPerformed
-
-    private void botonPaletaColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPaletaColorActionPerformed
-        panelColor.setVisible(true);
-        panelImagen.setVisible(false);
-        this.repaint();
-    }//GEN-LAST:event_botonPaletaColorActionPerformed
-
-    private void botonPaletaImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPaletaImagenActionPerformed
-        panelColor.setVisible(false);
-        panelImagen.setVisible(true);
-        this.repaint();    }//GEN-LAST:event_botonPaletaImagenActionPerformed
 
     private void sliderBrilloStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderBrilloStateChanged
         VentanaInterna vi = selectInternalWindows();
@@ -2142,6 +2120,30 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         VentanaInternaGrabador.showSoundRecorder();
     }//GEN-LAST:event_iconSoundRecorderActionPerformed
 
+    private void showToolBarColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showToolBarColorActionPerformed
+        if (!showToolBarColor.isSelected()) {
+            barraColor.setVisible(false);
+        } else {
+            barraColor.setVisible(true);
+        }
+    }//GEN-LAST:event_showToolBarColorActionPerformed
+
+    private void showToolBarImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showToolBarImageActionPerformed
+        if (!showToolBarImage.isSelected()) {
+            barraImagen.setVisible(false);
+        } else {
+            barraImagen.setVisible(true);
+        }
+    }//GEN-LAST:event_showToolBarImageActionPerformed
+
+    private void showToolBarMultimediaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showToolBarMultimediaActionPerformed
+        if (!showToolBarMultimedia.isSelected()) {
+            botonesMultimedia.setVisible(false);
+        } else {
+            botonesMultimedia.setVisible(true);
+        }
+    }//GEN-LAST:event_showToolBarMultimediaActionPerformed
+
     public VentanaInterna getVentanaInterna() {
         return vi;
     }
@@ -2151,7 +2153,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
 
     public void eventoEscritorioShapes(VentanaInterna vi) {
-        //VentanaInterna vi = selectInternalWindows();
         if (vi != null) {
             Vector<String> listData = new Vector();
             int i = 0;
@@ -2266,6 +2267,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.ButtonGroup GrupoColores;
     private javax.swing.JMenuItem abrir;
     private javax.swing.JMenu archivo;
+    private javax.swing.JToolBar barraColor;
+    private javax.swing.JToolBar barraImagen;
     private javax.swing.JButton botonAumentar;
     private javax.swing.JButton botonColorAmarillo;
     private javax.swing.JButton botonColorAzul;
@@ -2282,8 +2285,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JToggleButton botonLinea;
     private javax.swing.JButton botonOscurecer;
     private javax.swing.JToggleButton botonOvalo;
-    private javax.swing.JRadioButton botonPaletaColor;
-    private javax.swing.JRadioButton botonPaletaImagen;
     private javax.swing.JToggleButton botonRectangulo;
     private javax.swing.JToggleButton botonRectanguloRedondeado;
     private javax.swing.JButton botonRotacion180;
@@ -2291,7 +2292,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton botonRotacion90;
     private javax.swing.JToolBar botonesFiguras;
     private javax.swing.JToolBar botonesMultimedia;
-    private javax.swing.JPanel botonesPaletas;
     private javax.swing.JButton cloneShape;
     private javax.swing.JPanel contenedorBorde;
     private javax.swing.JPanel contenedorBrillo;
@@ -2317,13 +2317,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton iconTakeScreenshot;
     private javax.swing.JButton iconWebcam;
     private javax.swing.JMenu imagen;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel labelFigura;
     private javax.swing.JLabel labelTextBorderColor;
     private javax.swing.JLabel labelTextFillColor;
@@ -2338,17 +2337,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem multiplicar;
     private javax.swing.JMenuItem nuevo;
     private javax.swing.JPanel paletaOpciones;
-    private javax.swing.JPanel panelColor;
     private javax.swing.JPanel panelColores;
     private javax.swing.JPanel panelDerecho;
-    private javax.swing.JPanel panelImagen;
-    private javax.swing.JPanel panelIzquierdo;
     private javax.swing.JPanel panelLabelFigura;
     private javax.swing.JPanel paneles;
     private javax.swing.JPanel pie;
     private javax.swing.JButton reloadShapes;
     private javax.swing.JButton removeShape;
     private javax.swing.JMenuItem restar;
+    private javax.swing.JCheckBoxMenuItem showToolBarColor;
+    private javax.swing.JCheckBoxMenuItem showToolBarImage;
+    private javax.swing.JCheckBoxMenuItem showToolBarMultimedia;
     private javax.swing.JSlider sliderBrillo;
     private javax.swing.JSlider sliderRotacion;
     private javax.swing.JMenuItem sobelMenu;
