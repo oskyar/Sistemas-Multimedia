@@ -77,6 +77,7 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
         setPreferredSize(new java.awt.Dimension(250, 120));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
             }
             public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -163,6 +164,10 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
         exist=false;
     }//GEN-LAST:event_formInternalFrameClosing
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        VentanaPrincipal.getInstance().showToolsBarsOrNot(VentanaPrincipal.SHOW_TOOLBAR_SOUND);
+    }//GEN-LAST:event_formInternalFrameActivated
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

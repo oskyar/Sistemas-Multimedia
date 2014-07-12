@@ -70,6 +70,23 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setPreferredSize(new java.awt.Dimension(250, 120));
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         reproductor.add(play);
@@ -111,6 +128,10 @@ public class VentanaInternaReproductor extends javax.swing.JInternalFrame {
             player.stop();
         }
     }//GEN-LAST:event_stopActionPerformed
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        VentanaPrincipal.getInstance().showToolsBarsOrNot(VentanaPrincipal.SHOW_TOOLBAR_SOUND);
+    }//GEN-LAST:event_formInternalFrameActivated
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

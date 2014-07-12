@@ -42,7 +42,7 @@ public class PracticaFinal {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaPrincipal().setVisible(true);
+                VentanaPrincipal.getInstance().setVisible(true);
             }
         });
     }

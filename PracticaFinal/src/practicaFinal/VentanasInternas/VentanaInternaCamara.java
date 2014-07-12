@@ -42,9 +42,11 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
 
         try {
             CaptureDeviceInfo deviceInfo;
-            List<CaptureDeviceInfo> deviceList = CaptureDeviceManager.getDeviceList(new YUVFormat());
-            if (deviceList.size() > 0) {
-                deviceInfo = deviceList.get(0);
+            String dName="vfw:Microsoft WDM Image Capture (Win32):0";
+            deviceInfo = CaptureDeviceManager.getDevice(dName);
+//            List<CaptureDeviceInfo> deviceList = CaptureDeviceManager.getDeviceList(new YUVFormat());
+//            if (deviceList.size() > 0) {
+//                deviceInfo = deviceList.get(0);
                 MediaLocator ml = deviceInfo.getLocator();
                 player = Manager.createRealizedPlayer(ml);
                 Component areaVisual = player.getVisualComponent();
@@ -56,9 +58,9 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
                     add(panelControl);
                 }
                 player.start();
-            } else {
-                System.err.println("No se ha encontrado ningún dispositivo de captura");
-            }
+//            } else {
+//                System.err.println("No se ha encontrado ningún dispositivo de captura");
+//            }
 
             this.pack();
         } catch (IOException ex) {
@@ -94,6 +96,7 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
         setPreferredSize(new java.awt.Dimension(640, 480));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
             }
             public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -128,6 +131,10 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
             player.close();
         }
     }//GEN-LAST:event_formInternalFrameClosing
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        VentanaPrincipal.getInstance().showToolsBarsOrNot(VentanaPrincipal.SHOW_TOOLBAR_CAMERA);
+    }//GEN-LAST:event_formInternalFrameActivated
 
     public void close() {
         try {

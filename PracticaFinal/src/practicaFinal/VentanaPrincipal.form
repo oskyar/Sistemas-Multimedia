@@ -10,7 +10,7 @@
     </Component>
     <Menu class="javax.swing.JMenuBar" name="menu">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="archivo">
+        <Menu class="javax.swing.JMenu" name="menuArchivo">
           <Properties>
             <Property name="text" type="java.lang.String" value="Archivo"/>
           </Properties>
@@ -59,7 +59,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="edicion">
+        <Menu class="javax.swing.JMenu" name="menuVer">
           <Properties>
             <Property name="text" type="java.lang.String" value="Ver"/>
           </Properties>
@@ -114,7 +114,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="imagen">
+        <Menu class="javax.swing.JMenu" name="menuImagen">
           <Properties>
             <Property name="text" type="java.lang.String" value="Imagen"/>
           </Properties>
@@ -169,7 +169,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="menuMultimedia">
           <Properties>
             <Property name="text" type="java.lang.String" value="Multimedia"/>
           </Properties>
@@ -579,10 +579,7 @@
       <SubComponents>
         <Component class="javax.swing.JDesktopPane" name="escritorio">
           <Events>
-            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="escritorioComponentAdded"/>
-            <EventHandler event="hierarchyChanged" listener="java.awt.event.HierarchyListener" parameters="java.awt.event.HierarchyEvent" handler="escritorioHierarchyChanged"/>
-            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="escritorioFocusGained"/>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="escritorioKeyPressed"/>
+            <EventHandler event="componentShown" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="escritorioComponentShown"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
@@ -593,7 +590,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Container class="javax.swing.JPanel" name="panelDerecho">
+        <Container class="javax.swing.JPanel" name="panelDerechoImagen">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
               <BorderConstraints direction="After"/>
@@ -815,12 +812,13 @@
                     <Component class="javax.swing.JComboBox" name="listaEfectos">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="5">
+                          <StringArray count="6">
                             <StringItem index="0" value="Emborronamiento media"/>
                             <StringItem index="1" value="Emborronamiento binomial"/>
                             <StringItem index="2" value="Enfoque"/>
                             <StringItem index="3" value="Relieve"/>
                             <StringItem index="4" value="Dectector de fronteras laplaciano"/>
+                            <StringItem index="5" value="umbralizaci&#xf3;n"/>
                           </StringArray>
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" value="Filtro de imagen"/>
@@ -1093,7 +1091,7 @@
                   <Properties>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                        <TitledBorder title="Contraste"/>
+                        <TitledBorder title="Zoom"/>
                       </Border>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value=""/>

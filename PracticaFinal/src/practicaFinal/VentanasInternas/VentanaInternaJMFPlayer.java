@@ -95,6 +95,7 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
         setPreferredSize(new java.awt.Dimension(250, 120));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
             }
             public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -165,6 +166,10 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
             player.close();
         }
     }//GEN-LAST:event_formInternalFrameClosing
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        VentanaPrincipal.getInstance().showToolsBarsOrNot(VentanaPrincipal.SHOW_TOOLBAR_JMF);
+    }//GEN-LAST:event_formInternalFrameActivated
 
     public static VentanaInternaJMFPlayer getInstance(File f) {
         VentanaInternaJMFPlayer vi = new VentanaInternaJMFPlayer(f);

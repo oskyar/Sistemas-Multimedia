@@ -7,7 +7,7 @@ package practicaFinal;
 
 import Utils.JOptionPaneMultiInput;
 import practicaFinal.VentanasInternas.VentanaInternaGrabador;
-import practicaFinal.VentanasInternas.VentanaInterna;
+import practicaFinal.VentanasInternas.VentanaInternaImagen;
 import practicaFinal.VentanasInternas.VentanaInternaCamara;
 import practicaFinal.VentanasInternas.VentanaInternaJMFPlayer;
 import java.awt.Color;
@@ -37,6 +37,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.ListSelectionModel;
+import practicaFinal.VentanasInternas.VentanaInternaReproductor;
 import practicaFinal.filefilter.AVIVideoFileFilter;
 import practicaFinal.filefilter.GIFImageFileFilter;
 import practicaFinal.filefilter.JPEGImageFileFilter;
@@ -63,10 +64,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      * Creates new form VentanaPrincipal
      */
     //Guardo la última ventana interna creada
-    private VentanaInterna vi;
+    private VentanaInternaImagen vi;
     private int numVentanas;
+    public final static int SHOW_TOOLBAR_IMAGE = 0;
+    public final static int SHOW_TOOLBAR_SOUND = 1;
+    public final static int SHOW_TOOLBAR_JMF = 2;
+    public final static int SHOW_TOOLBAR_CAMERA = 3;
 
-    public VentanaPrincipal() {
+    private static VentanaPrincipal instance = new VentanaPrincipal();
+    
+    private VentanaPrincipal() {
         initComponents();
         this.setTitle("PAINT 2.0 Professional - Óscar Zafra");
         numVentanas = 0;
@@ -94,7 +101,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 //Evento para tener en cuenta cuando se pusa la tecla CONTROL del teclado.
         //Usada para seleccionar o deseleccionar shapes del lienzo.
         keyboardEvent();
-
+    }
+    
+    public static VentanaPrincipal getInstance(){
+        return instance;
     }
 
     /**
@@ -129,7 +139,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         iconSoundRecorder = new javax.swing.JButton();
         cuerpo = new javax.swing.JPanel();
         escritorio = new javax.swing.JDesktopPane();
-        panelDerecho = new javax.swing.JPanel();
+        panelDerechoImagen = new javax.swing.JPanel();
         contenedorFiguras = new javax.swing.JPanel();
         figureList = new javax.swing.JList();
         jPanel2 = new javax.swing.JPanel();
@@ -185,23 +195,23 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelLabelFigura = new javax.swing.JPanel();
         labelFigura = new javax.swing.JLabel();
         menu = new javax.swing.JMenuBar();
-        archivo = new javax.swing.JMenu();
+        menuArchivo = new javax.swing.JMenu();
         nuevo = new javax.swing.JMenuItem();
         abrir = new javax.swing.JMenuItem();
         guardar = new javax.swing.JMenuItem();
-        edicion = new javax.swing.JMenu();
+        menuVer = new javax.swing.JMenu();
         verBarraEstado = new javax.swing.JCheckBoxMenuItem();
         showToolBarColor = new javax.swing.JCheckBoxMenuItem();
         showToolBarImage = new javax.swing.JCheckBoxMenuItem();
         showToolBarMultimedia = new javax.swing.JCheckBoxMenuItem();
-        imagen = new javax.swing.JMenu();
+        menuImagen = new javax.swing.JMenu();
         menuRescaleOp = new javax.swing.JMenuItem();
         menuConvolveOp = new javax.swing.JMenuItem();
         umbralizacion = new javax.swing.JMenuItem();
         restar = new javax.swing.JMenuItem();
         multiplicar = new javax.swing.JMenuItem();
         sobelMenu = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        menuMultimedia = new javax.swing.JMenu();
         menuSoundRecorder = new javax.swing.JMenuItem();
         menuTakeScreenshot = new javax.swing.JMenuItem();
         menuWebcam = new javax.swing.JMenuItem();
@@ -262,7 +272,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         iconSave.setFocusable(false);
         iconSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         iconSave.setMinimumSize(new java.awt.Dimension(24, 24));
-        iconSave.setOpaque(false);
         iconSave.setPreferredSize(new java.awt.Dimension(36, 36));
         iconSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         iconSave.addActionListener(new java.awt.event.ActionListener() {
@@ -425,29 +434,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         cuerpo.setPreferredSize(new java.awt.Dimension(772, 400));
         cuerpo.setLayout(new java.awt.BorderLayout());
 
-        escritorio.addContainerListener(new java.awt.event.ContainerAdapter() {
-            public void componentAdded(java.awt.event.ContainerEvent evt) {
-                escritorioComponentAdded(evt);
-            }
-        });
-        escritorio.addHierarchyListener(new java.awt.event.HierarchyListener() {
-            public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
-                escritorioHierarchyChanged(evt);
-            }
-        });
-        escritorio.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                escritorioFocusGained(evt);
-            }
-        });
-        escritorio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                escritorioKeyPressed(evt);
+        escritorio.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                escritorioComponentShown(evt);
             }
         });
         cuerpo.add(escritorio, java.awt.BorderLayout.CENTER);
 
-        panelDerecho.setLayout(new java.awt.GridBagLayout());
+        panelDerechoImagen.setLayout(new java.awt.GridBagLayout());
 
         contenedorFiguras.setBorder(javax.swing.BorderFactory.createTitledBorder("Figuras"));
         contenedorFiguras.setToolTipText("Figuras dibujadas");
@@ -498,7 +492,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 13;
-        panelDerecho.add(contenedorFiguras, gridBagConstraints);
+        panelDerechoImagen.add(contenedorFiguras, gridBagConstraints);
 
         reloadShapes.setText("Recargar");
         reloadShapes.addActionListener(new java.awt.event.ActionListener() {
@@ -510,9 +504,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 5;
-        panelDerecho.add(reloadShapes, gridBagConstraints);
+        panelDerechoImagen.add(reloadShapes, gridBagConstraints);
 
-        cuerpo.add(panelDerecho, java.awt.BorderLayout.LINE_END);
+        cuerpo.add(panelDerechoImagen, java.awt.BorderLayout.LINE_END);
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -566,7 +560,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorEfecto.setPreferredSize(new java.awt.Dimension(200, 90));
         contenedorEfecto.setLayout(new java.awt.GridBagLayout());
 
-        listaEfectos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano" }));
+        listaEfectos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano", "umbralización" }));
         listaEfectos.setToolTipText("Filtro de imagen");
         listaEfectos.setMaximumSize(new java.awt.Dimension(170, 50));
         listaEfectos.setMinimumSize(new java.awt.Dimension(170, 30));
@@ -714,7 +708,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         barraImagen.add(contenedorRotacion);
 
-        contenedorEscala.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraste"));
+        contenedorEscala.setBorder(javax.swing.BorderFactory.createTitledBorder("Zoom"));
         contenedorEscala.setToolTipText("");
         contenedorEscala.setMaximumSize(new java.awt.Dimension(200, 90));
         contenedorEscala.setPreferredSize(new java.awt.Dimension(112, 90));
@@ -1144,7 +1138,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         getContentPane().add(pie, java.awt.BorderLayout.PAGE_END);
 
-        archivo.setText("Archivo");
+        menuArchivo.setText("Archivo");
 
         nuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         nuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/NuevoBoceto.GIF"))); // NOI18N
@@ -1154,7 +1148,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 nuevoActionPerformed(evt);
             }
         });
-        archivo.add(nuevo);
+        menuArchivo.add(nuevo);
 
         abrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         abrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/AbrirMedio.png"))); // NOI18N
@@ -1164,7 +1158,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 abrirActionPerformed(evt);
             }
         });
-        archivo.add(abrir);
+        menuArchivo.add(abrir);
 
         guardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
         guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Guardar.gif"))); // NOI18N
@@ -1174,11 +1168,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 guardarActionPerformed(evt);
             }
         });
-        archivo.add(guardar);
+        menuArchivo.add(guardar);
 
-        menu.add(archivo);
+        menu.add(menuArchivo);
 
-        edicion.setText("Ver");
+        menuVer.setText("Ver");
 
         verBarraEstado.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         verBarraEstado.setSelected(true);
@@ -1188,7 +1182,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 verBarraEstadoActionPerformed(evt);
             }
         });
-        edicion.add(verBarraEstado);
+        menuVer.add(verBarraEstado);
 
         showToolBarColor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         showToolBarColor.setSelected(true);
@@ -1198,7 +1192,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 showToolBarColorActionPerformed(evt);
             }
         });
-        edicion.add(showToolBarColor);
+        menuVer.add(showToolBarColor);
 
         showToolBarImage.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         showToolBarImage.setSelected(true);
@@ -1208,7 +1202,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 showToolBarImageActionPerformed(evt);
             }
         });
-        edicion.add(showToolBarImage);
+        menuVer.add(showToolBarImage);
 
         showToolBarMultimedia.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         showToolBarMultimedia.setSelected(true);
@@ -1218,11 +1212,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 showToolBarMultimediaActionPerformed(evt);
             }
         });
-        edicion.add(showToolBarMultimedia);
+        menuVer.add(showToolBarMultimedia);
 
-        menu.add(edicion);
+        menu.add(menuVer);
 
-        imagen.setText("Imagen");
+        menuImagen.setText("Imagen");
 
         menuRescaleOp.setText("RescaleOp");
         menuRescaleOp.addActionListener(new java.awt.event.ActionListener() {
@@ -1230,7 +1224,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 menuRescaleOpActionPerformed(evt);
             }
         });
-        imagen.add(menuRescaleOp);
+        menuImagen.add(menuRescaleOp);
 
         menuConvolveOp.setText("ConvolveOp");
         menuConvolveOp.addActionListener(new java.awt.event.ActionListener() {
@@ -1238,7 +1232,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 menuConvolveOpActionPerformed(evt);
             }
         });
-        imagen.add(menuConvolveOp);
+        menuImagen.add(menuConvolveOp);
 
         umbralizacion.setText("Umbralización");
         umbralizacion.addActionListener(new java.awt.event.ActionListener() {
@@ -1246,7 +1240,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 umbralizacionActionPerformed(evt);
             }
         });
-        imagen.add(umbralizacion);
+        menuImagen.add(umbralizacion);
 
         restar.setText("Restar");
         restar.addActionListener(new java.awt.event.ActionListener() {
@@ -1254,7 +1248,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 restarActionPerformed(evt);
             }
         });
-        imagen.add(restar);
+        menuImagen.add(restar);
 
         multiplicar.setText("Multiplicación");
         multiplicar.addActionListener(new java.awt.event.ActionListener() {
@@ -1262,7 +1256,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 multiplicarActionPerformed(evt);
             }
         });
-        imagen.add(multiplicar);
+        menuImagen.add(multiplicar);
 
         sobelMenu.setText("Sobel");
         sobelMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -1270,11 +1264,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 sobelMenuActionPerformed(evt);
             }
         });
-        imagen.add(sobelMenu);
+        menuImagen.add(sobelMenu);
 
-        menu.add(imagen);
+        menu.add(menuImagen);
 
-        jMenu1.setText("Multimedia");
+        menuMultimedia.setText("Multimedia");
 
         menuSoundRecorder.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         menuSoundRecorder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/microfono2.gif"))); // NOI18N
@@ -1285,7 +1279,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 menuSoundRecorderActionPerformed(evt);
             }
         });
-        jMenu1.add(menuSoundRecorder);
+        menuMultimedia.add(menuSoundRecorder);
 
         menuTakeScreenshot.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         menuTakeScreenshot.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Capturar.png"))); // NOI18N
@@ -1296,7 +1290,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 menuTakeScreenshotActionPerformed(evt);
             }
         });
-        jMenu1.add(menuTakeScreenshot);
+        menuMultimedia.add(menuTakeScreenshot);
 
         menuWebcam.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
         menuWebcam.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Camara.png"))); // NOI18N
@@ -1306,9 +1300,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 menuWebcamActionPerformed(evt);
             }
         });
-        jMenu1.add(menuWebcam);
+        menuMultimedia.add(menuWebcam);
 
-        menu.add(jMenu1);
+        menu.add(menuMultimedia);
 
         setJMenuBar(menu);
 
@@ -1316,7 +1310,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public static JDesktopPane getEscritorio() {
-        return VentanaPrincipal.escritorio;
+        return escritorio;
     }
 
     private void botonLineaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonLineaMouseClicked
@@ -1343,27 +1337,35 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoActionPerformed
         //figureList.clearSelection();
         ArrayList<Integer> options = JOptionPaneMultiInput.showJOptionPaneMultiIpunt();
-        vi = newWindows(options.get(0), options.get(1));
+        if (options != null) {
+            vi = newWindows(options.get(0), options.get(1));
+        }
 
     }//GEN-LAST:event_nuevoActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
         JFileChooser dlg = new JFileChooser();
         int resp = dlg.showSaveDialog(this);
-        if (resp == JFileChooser.APPROVE_OPTION) {
-            try {
-                File f = dlg.getSelectedFile();
-                VentanaInterna vi = selectInternalWindows();
-                BufferedImage img = vi.getLienzo().getImageOriginal();
-                if (img == null) {
-                    img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
-                }
-                img = vi.getLienzo().volcado(img);
+        if (escritorio.getSelectedFrame() instanceof VentanaInternaImagen) {
+            dlg.addChoosableFileFilter(new GIFImageFileFilter());
+            dlg.addChoosableFileFilter(new JPEGImageFileFilter());
+            dlg.addChoosableFileFilter(new JPGImageFileFilter());
+            dlg.addChoosableFileFilter(new PNGImageFileFilter());
+            if (resp == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File f = dlg.getSelectedFile();
+                    VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
+                    BufferedImage img = vi.getLienzo().getImageOriginal();
+                    if (img == null) {
+                        img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+                    }
+                    img = vi.getLienzo().volcado(img);
 
-                ImageIO.write(img, "jpg", f);
-                //Código
-            } catch (IOException ex) {
-                Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                    ImageIO.write(img, "jpg", f);
+                    //Código
+                } catch (IOException ex) {
+                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }//GEN-LAST:event_guardarActionPerformed
@@ -1393,7 +1395,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonColorVerdeMouseClicked
 
     private void setColorButtons(Color color) {
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         Lienzo.setFillColor(color);
         Lienzo.setStrokeColor(color);
         fillColor.setBackground(color);
@@ -1428,10 +1430,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 f = dlg.getSelectedFile();
                 if (UtilFileFilter.isImage(f)) {
                     BufferedImage img = ImageIO.read(f);
-                    VentanaInterna.showImage(img, f.getName());
+                    VentanaInternaImagen.showImage(img, f.getName());
                 } else if (UtilFileFilter.isSound(f) || UtilFileFilter.isVideo(f)) {
                     VentanaInternaJMFPlayer.showJMFPlayer(f, f.getName());
-
                 }
             } catch (Exception ex) {
                 System.err.println("Error al leer el archivo " + f.getName());
@@ -1455,14 +1456,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void grosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosorStateChanged
         Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             vi.getLienzo().changeWidthStrokeProperty(Float.parseFloat(grosor.getValue().toString()));
         }
     }//GEN-LAST:event_grosorStateChanged
 
     private void menuRescaleOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRescaleOpActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgSource = vi.getLienzo().getImageOriginal();
             if (imgSource != null) {
@@ -1491,7 +1492,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
 
     private void menuConvolveOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConvolveOpActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgSource = vi.getLienzo().getImageOriginal();
             if (imgSource != null) {
@@ -1508,7 +1509,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuConvolveOpActionPerformed
 
     private void sliderBrilloStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderBrilloStateChanged
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             if (vi.getLienzo().getImageOriginal() != null) {
                 try {
@@ -1524,7 +1525,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_sliderBrilloStateChanged
 
     private void sliderBrilloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderBrilloFocusLost
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             vi.getLienzo().setImageOriginal(vi.getLienzo().getImageActual());
         }
@@ -1532,7 +1533,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_sliderBrilloFocusLost
 
     private void listaEfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaEfectosActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
 
         switch (listaEfectos.getSelectedIndex()) {
 
@@ -1623,7 +1624,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void botonContrasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonContrasteActionPerformed
 
         try {
-            VentanaInterna vi = selectInternalWindows();
+            VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
             if (vi != null) {
                 BufferedImage imgActual = convertImageType(vi.getLienzo().getImageActual(), BufferedImage.TYPE_INT_RGB);
                 LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_SFUNCION);
@@ -1642,7 +1643,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void botonIluminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIluminarActionPerformed
         try {
-            VentanaInterna vi = selectInternalWindows();
+            VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
             if (vi != null) {
                 BufferedImage imgActual = convertImageType(vi.getLienzo().getImageActual(), BufferedImage.TYPE_INT_RGB);
                 LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_LOGARITHM);
@@ -1661,7 +1662,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void botonOscurecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOscurecerActionPerformed
         try {
-            VentanaInterna vi = selectInternalWindows();
+            VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
             if (vi != null) {
                 BufferedImage imgActual = convertImageType(vi.getLienzo().getImageActual(), BufferedImage.TYPE_INT_RGB);
                 LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_POWER);
@@ -1678,7 +1679,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonOscurecerActionPerformed
 
     private void sliderRotacionStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderRotacionStateChanged
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgSource = vi.getLienzo().getImageOriginal();
             double r = Math.toRadians(sliderRotacion.getValue());
@@ -1695,7 +1696,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_sliderRotacionStateChanged
 
     private void botonRotacion90ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRotacion90ActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgSource = vi.getLienzo().getImageActual();
             double r = Math.toRadians(90);
@@ -1712,7 +1713,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRotacion90ActionPerformed
 
     private void botonRotacion180ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRotacion180ActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgSource = vi.getLienzo().getImageActual();
             double r = Math.toRadians(180);
@@ -1729,7 +1730,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRotacion180ActionPerformed
 
     private void botonRotacion270ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRotacion270ActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgSource = vi.getLienzo().getImageActual();
             double r = Math.toRadians(270);
@@ -1746,7 +1747,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRotacion270ActionPerformed
 
     private void botonAumentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAumentarActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgSource = vi.getLienzo().getImageActual();
             AffineTransform at = AffineTransform.getScaleInstance(1.25, 1.25);
@@ -1761,7 +1762,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonAumentarActionPerformed
 
     private void botonDisminuirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDisminuirActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgSource = vi.getLienzo().getImageActual();
             AffineTransform at = AffineTransform.getScaleInstance(0.75, 0.75);
@@ -1776,7 +1777,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonDisminuirActionPerformed
 
     private void sliderRotacionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderRotacionFocusLost
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             vi.getLienzo().setImageOriginal(vi.getLienzo().getImageActual());
         }
@@ -1784,7 +1785,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_sliderRotacionFocusLost
 
     private void umbralizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_umbralizacionActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgSource = vi.getLienzo().getImageActual();
             UmbralizacionOp umbralizacion = new UmbralizacionOp(120);
@@ -1798,10 +1799,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_umbralizacionActionPerformed
 
     private void restarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restarActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgRight = vi.getLienzo().getImageActual();
-            VentanaInterna viNext = (VentanaInterna) escritorio.selectFrame(true);
+            VentanaInternaImagen viNext = (VentanaInternaImagen) escritorio.selectFrame(true);
             if (viNext != null) {
                 BufferedImage imgLeft = viNext.getLienzo().getImageActual();
                 RestaOp op = new RestaOp(imgLeft);
@@ -1815,10 +1816,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_restarActionPerformed
 
     private void multiplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiplicarActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgRight = vi.getLienzo().getImageActual();
-            VentanaInterna viNext = (VentanaInterna) escritorio.selectFrame(true);
+            VentanaInternaImagen viNext = (VentanaInternaImagen) escritorio.selectFrame(true);
             if (viNext != null) {
                 BufferedImage imgLeft = viNext.getLienzo().getImageActual();
                 MultiplicacionOp op = new MultiplicacionOp(imgLeft);
@@ -1832,7 +1833,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_multiplicarActionPerformed
 
     private void sobelMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sobelMenuActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgSource = vi.getLienzo().getImageActual();
             SobelOp sobel = new SobelOp();
@@ -1870,7 +1871,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRectanguloRedondeadoMouseClicked
 
     private void gradientColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gradientColorMouseClicked
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (evt.getClickCount() % 2 == 0 || gradientColor.getBackground() == null) {
             Color newColor = JColorChooser.showDialog(
                     VentanaPrincipal.this,
@@ -1889,7 +1890,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_gradientColorMouseClicked
 
     private void fillListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillListActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         switch (fillList.getSelectedIndex()) {
             case Lienzo.TYPE_FILL_NONE:
                 Lienzo.setFillType(Lienzo.TYPE_FILL_NONE);
@@ -1930,7 +1931,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_fillListActionPerformed
 
     private void strokeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strokeListActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         switch (strokeList.getSelectedIndex()) {
             case Lienzo.STROKE_CONTINUOUS: //Línea continua
                 Lienzo.setStrokeType(Lienzo.STROKE_CONTINUOUS);
@@ -1952,7 +1953,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_strokeListActionPerformed
 
     private void strokeColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strokeColorMouseClicked
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (evt.getClickCount() % 2 == 0 || strokeColor.getBackground() == null) {
             Color newColor = JColorChooser.showDialog(
                     VentanaPrincipal.this,
@@ -1975,7 +1976,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_strokeColorActionPerformed
 
     private void fillColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fillColorMouseClicked
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (evt.getClickCount() % 2 == 0 || fillColor.getBackground() == null) {
             Color newColor = JColorChooser.showDialog(
                     VentanaPrincipal.this,
@@ -1998,7 +1999,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_fillColorActionPerformed
 
     private void styleStrokeJoinListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleStrokeJoinListActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         switch (styleStrokeJoinList.getSelectedIndex()) {
             case Lienzo.STYLE_STROKE_JOIN_BEVEL:
                 Lienzo.setStrokeStyleJoinType(Lienzo.STYLE_STROKE_JOIN_BEVEL);
@@ -2022,20 +2023,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_styleStrokeJoinListActionPerformed
 
-    private void escritorioComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_escritorioComponentAdded
-
-    }//GEN-LAST:event_escritorioComponentAdded
-
-    private void escritorioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_escritorioFocusGained
-        // TODO add your handling code here:
-    }//GEN-LAST:event_escritorioFocusGained
-
-    private void escritorioHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_escritorioHierarchyChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_escritorioHierarchyChanged
-
     private void reloadShapesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadShapesActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             Vector<String> listData = new Vector();
             int i = 0;
@@ -2056,7 +2045,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void figureListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_figureListMouseClicked
 
-        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
+        VentanaInternaImagen vi = (VentanaInternaImagen) escritorio.getSelectedFrame();
         if (vi != null) {
             int selectedShapes[] = figureList.getSelectedIndices();
             vi.getLienzo().getvShapeSelected().clear();
@@ -2074,7 +2063,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_figureListMouseClicked
 
     private void removeShapeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeShapeMouseClicked
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             int selectedIndices[] = figureList.getSelectedIndices();
             if (selectedIndices.length > 0) {
@@ -2100,7 +2089,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void cloneShapeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cloneShapeMouseClicked
         int index = figureList.getSelectedIndex();
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             if (figureList.getSelectedIndex() >= 0) {
                 IOShape s = vi.getLienzo().getvShape().get(index);
@@ -2128,10 +2117,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_formKeyTyped
 
-    private void escritorioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_escritorioKeyPressed
-
-    }//GEN-LAST:event_escritorioKeyPressed
-
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
 
     }//GEN-LAST:event_formKeyReleased
@@ -2141,7 +2126,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_formMouseClicked
 
     private void styleStrokeCapListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleStrokeCapListActionPerformed
-        VentanaInterna vi = selectInternalWindows();
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         switch (styleStrokeCapList.getSelectedIndex()) {
             case Lienzo.STYLE_STROKE_CAP_BUTT:
                 Lienzo.setStrokeStyleCapType(Lienzo.STYLE_STROKE_CAP_BUTT);
@@ -2191,8 +2176,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             VentanaInternaJMFPlayer viJmf = (VentanaInternaJMFPlayer) escritorio.getSelectedFrame();
             img = viJmf.getFrame();
         }
-
-        VentanaInterna.showImage(img, "Nueva captura*");
+        if (img != null) {
+            JFileChooser dlg = new JFileChooser();
+            dlg.addChoosableFileFilter(new GIFImageFileFilter());
+            dlg.addChoosableFileFilter(new JPEGImageFileFilter());
+            dlg.addChoosableFileFilter(new JPGImageFileFilter());
+            dlg.addChoosableFileFilter(new PNGImageFileFilter());
+            int resp = dlg.showSaveDialog(this);
+            if (resp == JFileChooser.APPROVE_OPTION) {
+                File f = dlg.getSelectedFile();
+                VentanaInternaImagen.showImage(img, f.getName());
+            }
+        }
 
     }//GEN-LAST:event_menuTakeScreenshotActionPerformed
 
@@ -2236,15 +2231,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         guardarActionPerformed(null);
     }//GEN-LAST:event_iconSaveActionPerformed
 
-    public VentanaInterna getVentanaInterna() {
+    private void escritorioComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_escritorioComponentShown
+        System.err.println("HOLAAA");
+    }//GEN-LAST:event_escritorioComponentShown
+
+    public VentanaInternaImagen getVentanaInterna() {
         return vi;
     }
 
-    public void setVentanaInterna(VentanaInterna vi) {
+    public void setVentanaInterna(VentanaInternaImagen vi) {
         this.vi = vi;
     }
 
-    public void eventoEscritorioShapes(VentanaInterna vi) {
+    public void eventoEscritorioShapes(VentanaInternaImagen vi) {
         if (vi != null) {
             Vector<String> listData = new Vector();
             int i = 0;
@@ -2282,9 +2281,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
     }
 
-    public final VentanaInterna newWindows() {
+    public final VentanaInternaImagen newWindows() {
 
-        final VentanaInterna vi = new VentanaInterna();
+        final VentanaInternaImagen vi = new VentanaInternaImagen();
         escritorio.add(vi);
         vi.setTitle("Lienzo " + ++numVentanas);
         vi.setVisible(true);
@@ -2312,8 +2311,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         return vi;
     }
 
-    public final VentanaInterna newWindows(int width, int height) {
-        final VentanaInterna vi = new VentanaInterna();
+    public final VentanaInternaImagen newWindows(int width, int height) {
+        final VentanaInternaImagen vi = new VentanaInternaImagen();
         escritorio.add(vi);
         vi.setSize(width, height);
         //vi.getLienzo().setSize(width, height);
@@ -2343,11 +2342,76 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         return vi;
     }
 
-    public VentanaInterna selectInternalWindows() {
-        VentanaInterna vi = (VentanaInterna) escritorio.getSelectedFrame();
-        eventoEscritorioShapes(vi);
-        repaint();
-        return vi;
+    public javax.swing.JInternalFrame selectInternalWindows() {
+        if (escritorio.getSelectedFrame() instanceof VentanaInternaImagen) {
+            VentanaInternaImagen vi = (VentanaInternaImagen) escritorio.getSelectedFrame();
+            eventoEscritorioShapes(vi);
+            showToolsBarsOrNot(SHOW_TOOLBAR_IMAGE);
+            repaint();
+            return vi;
+        } else if (escritorio.getSelectedFrame() instanceof VentanaInternaReproductor) {
+            showToolsBarsOrNot(SHOW_TOOLBAR_SOUND);
+            repaint();
+            return (VentanaInternaReproductor) escritorio.getSelectedFrame();
+        } else if (escritorio.getSelectedFrame() instanceof VentanaInternaGrabador) {
+            showToolsBarsOrNot(SHOW_TOOLBAR_SOUND);
+            repaint();
+            return (VentanaInternaGrabador) escritorio.getSelectedFrame();
+        } else if (escritorio.getSelectedFrame() instanceof VentanaInternaJMFPlayer) {
+            showToolsBarsOrNot(SHOW_TOOLBAR_JMF);
+            repaint();
+            return (VentanaInternaJMFPlayer) escritorio.getSelectedFrame();
+        } else if (escritorio.getSelectedFrame() instanceof VentanaInternaCamara) {
+            showToolsBarsOrNot(SHOW_TOOLBAR_CAMERA);
+            repaint();
+            return (VentanaInternaCamara) escritorio.getSelectedFrame();
+        } else {
+            return null;
+        }
+    }
+
+    public void showToolsBarsOrNot(int media) {
+        boolean image = false;
+        boolean buttonSave = false;
+        boolean buttonTakeScreenshot = false;
+
+        switch (media) {
+            case SHOW_TOOLBAR_IMAGE:
+                image = true;
+                buttonSave = true;
+                buttonTakeScreenshot = false;
+                break;
+            case SHOW_TOOLBAR_CAMERA:
+                image = false;
+                buttonSave = false;
+                buttonTakeScreenshot = true;
+                break;
+            case SHOW_TOOLBAR_JMF:
+                image = false;
+                buttonSave = false;
+                buttonTakeScreenshot = true;
+                break;
+            case SHOW_TOOLBAR_SOUND:
+                image = false;
+                buttonSave = false;
+                buttonTakeScreenshot = false;
+                break;
+        }
+        //Image
+        menuImagen.setEnabled(image);
+        botonesFiguras.setVisible(image);
+        barraColor.setVisible(image);
+        barraImagen.setVisible(image);
+        panelDerechoImagen.setVisible(image);
+        showToolBarColor.setEnabled(image);
+        showToolBarImage.setEnabled(image);
+        //buttonSave
+        iconSave.setEnabled(buttonSave);
+        guardar.setEnabled(buttonSave);
+        //Button screenshot
+        iconTakeScreenshot.setEnabled(buttonTakeScreenshot);
+        menuTakeScreenshot.setEnabled(buttonTakeScreenshot);
+
     }
 
     /**
@@ -2358,7 +2422,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.ButtonGroup BotonesMenu;
     private javax.swing.ButtonGroup GrupoColores;
     private javax.swing.JMenuItem abrir;
-    private javax.swing.JMenu archivo;
     private javax.swing.JToolBar barraColor;
     private javax.swing.JToolBar barraImagen;
     private javax.swing.JButton botonAumentar;
@@ -2397,7 +2460,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel contenedorRelleno;
     private javax.swing.JPanel contenedorRotacion;
     private javax.swing.JPanel cuerpo;
-    private javax.swing.JMenu edicion;
     private static javax.swing.JDesktopPane escritorio;
     private javax.swing.JList figureList;
     private javax.swing.JButton fillColor;
@@ -2412,11 +2474,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton iconSoundRecorder;
     private javax.swing.JButton iconTakeScreenshot;
     private javax.swing.JButton iconWebcam;
-    private javax.swing.JMenu imagen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel labelFigura;
@@ -2425,16 +2485,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel labelTextGradientColor;
     private javax.swing.JComboBox listaEfectos;
     private javax.swing.JMenuBar menu;
+    private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenuItem menuConvolveOp;
+    private javax.swing.JMenu menuImagen;
+    private javax.swing.JMenu menuMultimedia;
     private javax.swing.JMenuItem menuRescaleOp;
     private javax.swing.JMenuItem menuSoundRecorder;
     private javax.swing.JMenuItem menuTakeScreenshot;
+    private javax.swing.JMenu menuVer;
     private javax.swing.JMenuItem menuWebcam;
     private javax.swing.JMenuItem multiplicar;
     private javax.swing.JMenuItem nuevo;
     private javax.swing.JPanel paletaOpciones;
     private javax.swing.JPanel panelColores;
-    private javax.swing.JPanel panelDerecho;
+    private javax.swing.JPanel panelDerechoImagen;
     private javax.swing.JPanel panelLabelFigura;
     private javax.swing.JPanel paneles;
     private javax.swing.JPanel pie;
