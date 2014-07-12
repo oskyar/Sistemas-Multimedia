@@ -131,7 +131,7 @@ public class VentanaInternaGrabador extends javax.swing.JInternalFrame {
             recorder.stop();
             JFileChooser dlg = new JFileChooser();
             dlg.addChoosableFileFilter(new WAVSoundFileFilter());
-            int resp = dlg.showOpenDialog(this);
+            int resp = dlg.showSaveDialog(this);
             File f = recorder.getSoundFile();
             File newF = null;
             if (resp == JFileChooser.APPROVE_OPTION) {
