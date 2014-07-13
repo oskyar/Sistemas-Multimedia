@@ -118,10 +118,13 @@ public class VentanaInternaImagen extends javax.swing.JInternalFrame {
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
         VentanaPrincipal.getInstance().showToolsBarsOrNot(VentanaPrincipal.SHOW_TOOLBAR_IMAGE);
-        if(lienzo2.getImageOriginal().getType()==BufferedImage.TYPE_BYTE_GRAY ){
-            VentanaPrincipal.getInstance().getSobelMenu().setEnabled(false);
+        BufferedImage imgDest = lienzo2.getImageOriginal();
+        if (imgDest != null) {
+            if (imgDest.getType() == BufferedImage.TYPE_BYTE_GRAY) {
+                VentanaPrincipal.getSobelMenu().setEnabled(false);
+            }
         }
-        
+
     }//GEN-LAST:event_formInternalFrameActivated
 
 
