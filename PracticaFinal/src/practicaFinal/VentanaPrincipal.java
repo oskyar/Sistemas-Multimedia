@@ -6,10 +6,7 @@
 package practicaFinal;
 
 import Utils.JOptionPaneMultiInput;
-import practicaFinal.VentanasInternas.VentanaInternaGrabador;
-import practicaFinal.VentanasInternas.VentanaInternaImagen;
-import practicaFinal.VentanasInternas.VentanaInternaCamara;
-import practicaFinal.VentanasInternas.VentanaInternaJMFPlayer;
+import com.sun.javafx.scene.control.behavior.SliderBehavior;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
@@ -33,10 +30,16 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.ListSelectionModel;
+import javax.swing.plaf.IconUIResource;
+import practicaFinal.VentanasInternas.VentanaInternaCamara;
+import practicaFinal.VentanasInternas.VentanaInternaGrabador;
+import practicaFinal.VentanasInternas.VentanaInternaImagen;
+import practicaFinal.VentanasInternas.VentanaInternaJMFPlayer;
 import practicaFinal.VentanasInternas.VentanaInternaReproductor;
 import practicaFinal.filefilter.AVIVideoFileFilter;
 import practicaFinal.filefilter.GIFImageFileFilter;
@@ -53,6 +56,7 @@ import practicaFinal.filtros.SobelOp;
 import practicaFinal.filtros.UmbralizacionOp;
 import practicaFinal.shapes.IOShape;
 import sm.image.KernelProducer;
+import sm.image.ThresholdOp;
 
 /**
  *
@@ -66,13 +70,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     //Guardo la última ventana interna creada
     private VentanaInternaImagen vi;
     private int numVentanas;
+    private int thresholdingType;
+    private Color thresholdingColor;
     public final static int SHOW_TOOLBAR_IMAGE = 0;
     public final static int SHOW_TOOLBAR_SOUND = 1;
     public final static int SHOW_TOOLBAR_JMF = 2;
     public final static int SHOW_TOOLBAR_CAMERA = 3;
 
     private static VentanaPrincipal instance = new VentanaPrincipal();
-    
+
     private VentanaPrincipal() {
         initComponents();
         this.setTitle("PAINT 2.0 Professional - Óscar Zafra");
@@ -95,6 +101,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         fillColor.setVisible(false);
         Lienzo.setFillColor(fillColor.getBackground());
         Lienzo.setGradientColor(gradientColor.getBackground());
+        comboBoxUmbralizacionActionPerformed(null);
         //Un evento creado por mi para saber si se está presionando la tecla Control
         figureList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         //escritorio.dispatchEvent(new MouseEvent(escritorio,MouseEvent.MOUSE_RELEASED, 0, MouseEvent.NOBUTTON, 0, 0, 0, false));
@@ -102,8 +109,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         //Usada para seleccionar o deseleccionar shapes del lienzo.
         keyboardEvent();
     }
-    
-    public static VentanaPrincipal getInstance(){
+
+    public static VentanaPrincipal getInstance() {
         return instance;
     }
 
@@ -120,6 +127,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonesMenu = new javax.swing.ButtonGroup();
         GrupoColores = new javax.swing.ButtonGroup();
         grupoPaletas = new javax.swing.ButtonGroup();
+        coloresUmbralizacion = new javax.swing.ButtonGroup();
         paletaOpciones = new javax.swing.JPanel();
         botonesArchivo = new javax.swing.JToolBar();
         iconNew = new javax.swing.JButton();
@@ -153,7 +161,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorBrillo = new javax.swing.JPanel();
         sliderBrillo = new javax.swing.JSlider();
         contenedorEfecto = new javax.swing.JPanel();
-        listaEfectos = new javax.swing.JComboBox();
+        comboBoxEffectsList = new javax.swing.JComboBox();
         contenedorContraste = new javax.swing.JPanel();
         botonContraste = new javax.swing.JButton();
         botonIluminar = new javax.swing.JButton();
@@ -166,6 +174,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorEscala = new javax.swing.JPanel();
         botonAumentar = new javax.swing.JButton();
         botonDisminuir = new javax.swing.JButton();
+        contenedorUmbralizacion = new javax.swing.JPanel();
+        sliderUmbralizacion = new javax.swing.JSlider();
+        comboBoxUmbralizacion = new javax.swing.JComboBox();
+        buttonThresholdingRed = new javax.swing.JButton();
+        buttonThresholdingBlue = new javax.swing.JButton();
+        buttonThresholdingGreen = new javax.swing.JButton();
+        buttonThresholdingColorPalette = new javax.swing.JButton();
         barraColor = new javax.swing.JToolBar();
         contenedorColores = new javax.swing.JPanel();
         panelColores = new javax.swing.JPanel();
@@ -176,22 +191,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonColorVerde = new javax.swing.JButton();
         botonColorAmarillo = new javax.swing.JButton();
         contenedorRelleno = new javax.swing.JPanel();
-        fillList = new javax.swing.JComboBox();
+        comboBoxFillList = new javax.swing.JComboBox();
         labelTextFillColor = new javax.swing.JLabel();
         gradientColor = new javax.swing.JButton();
         fillColor = new javax.swing.JButton();
         labelTextGradientColor = new javax.swing.JLabel();
         contenedorBorde = new javax.swing.JPanel();
-        strokeList = new javax.swing.JComboBox();
+        comboBoxStrokeList = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         grosor = new javax.swing.JSpinner();
         labelTextBorderColor = new javax.swing.JLabel();
         strokeColor = new javax.swing.JButton();
         contenedorEstiloBorde = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        styleStrokeJoinList = new javax.swing.JComboBox();
+        comboBoxStyleStrokeJoinList = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
-        styleStrokeCapList = new javax.swing.JComboBox();
+        comboBoxStyleStrokeCapList = new javax.swing.JComboBox();
         panelLabelFigura = new javax.swing.JPanel();
         labelFigura = new javax.swing.JLabel();
         menu = new javax.swing.JMenuBar();
@@ -288,6 +303,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         BotonesMenu.add(botonLapiz);
         botonLapiz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Lapiz.gif"))); // NOI18N
+        botonLapiz.setToolTipText("Punto");
         botonLapiz.setFocusable(false);
         botonLapiz.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         botonLapiz.setMaximumSize(new java.awt.Dimension(36, 36));
@@ -302,6 +318,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         BotonesMenu.add(botonLinea);
         botonLinea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Linea.gif"))); // NOI18N
+        botonLinea.setToolTipText("Línea");
         botonLinea.setFocusable(false);
         botonLinea.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         botonLinea.setMaximumSize(new java.awt.Dimension(36, 36));
@@ -316,6 +333,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         BotonesMenu.add(botonRectangulo);
         botonRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Rectangulo.gif"))); // NOI18N
+        botonRectangulo.setToolTipText("Rectángulo");
         botonRectangulo.setFocusable(false);
         botonRectangulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         botonRectangulo.setMaximumSize(new java.awt.Dimension(36, 36));
@@ -330,6 +348,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         BotonesMenu.add(botonRectanguloRedondeado);
         botonRectanguloRedondeado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/RectanguloRedondeado.gif"))); // NOI18N
+        botonRectanguloRedondeado.setToolTipText("Rectángulo con esquinas redondeadas");
         botonRectanguloRedondeado.setFocusable(false);
         botonRectanguloRedondeado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         botonRectanguloRedondeado.setMaximumSize(new java.awt.Dimension(36, 36));
@@ -358,6 +377,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         BotonesMenu.add(botonCurvaControl);
         botonCurvaControl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Curva1control.gif"))); // NOI18N
+        botonCurvaControl.setToolTipText("Curva con un punto de control");
         botonCurvaControl.setFocusable(false);
         botonCurvaControl.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         botonCurvaControl.setMaximumSize(new java.awt.Dimension(36, 36));
@@ -372,6 +392,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         BotonesMenu.add(botonCurvaCubicaSegmentada);
         botonCurvaCubicaSegmentada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Curva2control.gif"))); // NOI18N
+        botonCurvaCubicaSegmentada.setToolTipText("Curva con dos puntos de control");
         botonCurvaCubicaSegmentada.setFocusable(false);
         botonCurvaCubicaSegmentada.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         botonCurvaCubicaSegmentada.setMaximumSize(new java.awt.Dimension(36, 36));
@@ -391,7 +412,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonesMultimedia.setMinimumSize(new java.awt.Dimension(100, 38));
 
         iconWebcam.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Camara.png"))); // NOI18N
-        iconWebcam.setToolTipText("Captura");
+        iconWebcam.setToolTipText("Webcam");
         iconWebcam.setFocusable(false);
         iconWebcam.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         iconWebcam.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -415,7 +436,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonesMultimedia.add(iconTakeScreenshot);
 
         iconSoundRecorder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/microfono2.gif"))); // NOI18N
-        iconSoundRecorder.setToolTipText("Captura");
+        iconSoundRecorder.setToolTipText("Grabar Sonido");
         iconSoundRecorder.setFocusable(false);
         iconSoundRecorder.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         iconSoundRecorder.setPreferredSize(new java.awt.Dimension(36, 36));
@@ -530,6 +551,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         sliderBrillo.setMaximum(200);
         sliderBrillo.setMinimum(-200);
         sliderBrillo.setPaintLabels(true);
+        sliderBrillo.setToolTipText("Desplazador para el brillo");
         sliderBrillo.setValue(0);
         sliderBrillo.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -554,37 +576,39 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         barraImagen.add(contenedorBrillo);
 
         contenedorEfecto.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro"));
-        contenedorEfecto.setToolTipText("");
+        contenedorEfecto.setToolTipText("Filtros de imagen");
         contenedorEfecto.setMaximumSize(new java.awt.Dimension(400, 90));
         contenedorEfecto.setMinimumSize(new java.awt.Dimension(95, 90));
         contenedorEfecto.setPreferredSize(new java.awt.Dimension(200, 90));
         contenedorEfecto.setLayout(new java.awt.GridBagLayout());
 
-        listaEfectos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano", "umbralización" }));
-        listaEfectos.setToolTipText("Filtro de imagen");
-        listaEfectos.setMaximumSize(new java.awt.Dimension(170, 50));
-        listaEfectos.setMinimumSize(new java.awt.Dimension(170, 30));
-        listaEfectos.setPreferredSize(null);
-        listaEfectos.addActionListener(new java.awt.event.ActionListener() {
+        comboBoxEffectsList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano", "umbralización" }));
+        comboBoxEffectsList.setToolTipText("Lista de filtros de imagen");
+        comboBoxEffectsList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        comboBoxEffectsList.setMaximumSize(new java.awt.Dimension(170, 50));
+        comboBoxEffectsList.setMinimumSize(new java.awt.Dimension(170, 30));
+        comboBoxEffectsList.setPreferredSize(null);
+        comboBoxEffectsList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                listaEfectosActionPerformed(evt);
+                comboBoxEffectsListActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        contenedorEfecto.add(listaEfectos, gridBagConstraints);
+        contenedorEfecto.add(comboBoxEffectsList, gridBagConstraints);
 
         barraImagen.add(contenedorEfecto);
 
         contenedorContraste.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraste"));
-        contenedorContraste.setToolTipText("");
+        contenedorContraste.setToolTipText("Contrastes");
         contenedorContraste.setMaximumSize(new java.awt.Dimension(200, 90));
         contenedorContraste.setPreferredSize(new java.awt.Dimension(150, 90));
         contenedorContraste.setLayout(new java.awt.GridBagLayout());
 
         botonContraste.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/contraste.png"))); // NOI18N
-        botonContraste.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonContraste.setToolTipText("Contraste");
+        botonContraste.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonContraste.setDisabledIcon(null);
         botonContraste.setMaximumSize(new java.awt.Dimension(50, 35));
         botonContraste.setMinimumSize(new java.awt.Dimension(50, 35));
@@ -601,7 +625,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorContraste.add(botonContraste, gridBagConstraints);
 
         botonIluminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iluminar.png"))); // NOI18N
-        botonIluminar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonIluminar.setToolTipText("Iluminar imagen");
+        botonIluminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonIluminar.setDisabledIcon(null);
         botonIluminar.setMaximumSize(new java.awt.Dimension(50, 35));
         botonIluminar.setMinimumSize(new java.awt.Dimension(50, 35));
@@ -618,7 +643,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorContraste.add(botonIluminar, gridBagConstraints);
 
         botonOscurecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/oscurecer.png"))); // NOI18N
-        botonOscurecer.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonOscurecer.setToolTipText("Oscurecer imagen");
+        botonOscurecer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonOscurecer.setDisabledIcon(null);
         botonOscurecer.setMaximumSize(new java.awt.Dimension(50, 35));
         botonOscurecer.setMinimumSize(new java.awt.Dimension(50, 35));
@@ -637,7 +663,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         barraImagen.add(contenedorContraste);
 
         contenedorRotacion.setBorder(javax.swing.BorderFactory.createTitledBorder("Rotación"));
-        contenedorRotacion.setToolTipText("");
+        contenedorRotacion.setToolTipText("Rotación de la imagen");
         contenedorRotacion.setMaximumSize(new java.awt.Dimension(450, 90));
         contenedorRotacion.setMinimumSize(new java.awt.Dimension(175, 91));
         contenedorRotacion.setPreferredSize(new java.awt.Dimension(300, 90));
@@ -648,7 +674,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         sliderRotacion.setMinorTickSpacing(90);
         sliderRotacion.setPaintLabels(true);
         sliderRotacion.setPaintTicks(true);
-        sliderRotacion.setToolTipText("");
+        sliderRotacion.setToolTipText("Desplazador para la rotación");
         sliderRotacion.setValue(0);
         sliderRotacion.setMaximumSize(new java.awt.Dimension(250, 65));
         sliderRotacion.setMinimumSize(new java.awt.Dimension(250, 65));
@@ -671,7 +697,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorRotacion.add(sliderRotacion, gridBagConstraints);
 
         botonRotacion90.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/rotacion90.png"))); // NOI18N
-        botonRotacion90.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonRotacion90.setToolTipText("Rotar 90º a la derecha");
+        botonRotacion90.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonRotacion90.setMaximumSize(new java.awt.Dimension(50, 35));
         botonRotacion90.setMinimumSize(new java.awt.Dimension(50, 35));
         botonRotacion90.setPreferredSize(new java.awt.Dimension(50, 35));
@@ -683,7 +710,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorRotacion.add(botonRotacion90, new java.awt.GridBagConstraints());
 
         botonRotacion180.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/rotacion180.png"))); // NOI18N
-        botonRotacion180.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonRotacion180.setToolTipText("Rotar 180º");
+        botonRotacion180.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonRotacion180.setMaximumSize(new java.awt.Dimension(50, 35));
         botonRotacion180.setMinimumSize(new java.awt.Dimension(50, 35));
         botonRotacion180.setPreferredSize(new java.awt.Dimension(50, 35));
@@ -695,7 +723,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorRotacion.add(botonRotacion180, new java.awt.GridBagConstraints());
 
         botonRotacion270.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/rotacion270.png"))); // NOI18N
-        botonRotacion270.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonRotacion270.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonRotacion270.setMaximumSize(new java.awt.Dimension(50, 35));
         botonRotacion270.setMinimumSize(new java.awt.Dimension(50, 35));
         botonRotacion270.setPreferredSize(new java.awt.Dimension(50, 35));
@@ -709,13 +737,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         barraImagen.add(contenedorRotacion);
 
         contenedorEscala.setBorder(javax.swing.BorderFactory.createTitledBorder("Zoom"));
-        contenedorEscala.setToolTipText("");
+        contenedorEscala.setToolTipText("Zoom imagen");
         contenedorEscala.setMaximumSize(new java.awt.Dimension(200, 90));
         contenedorEscala.setPreferredSize(new java.awt.Dimension(112, 90));
         contenedorEscala.setLayout(new java.awt.GridBagLayout());
 
         botonAumentar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/aumentar.png"))); // NOI18N
-        botonAumentar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonAumentar.setToolTipText("Aumentar Zoom");
+        botonAumentar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonAumentar.setMaximumSize(new java.awt.Dimension(50, 35));
         botonAumentar.setMinimumSize(new java.awt.Dimension(50, 35));
         botonAumentar.setPreferredSize(new java.awt.Dimension(50, 35));
@@ -731,7 +760,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorEscala.add(botonAumentar, gridBagConstraints);
 
         botonDisminuir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/disminuir.png"))); // NOI18N
-        botonDisminuir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonDisminuir.setToolTipText("Disminuir Zoom");
+        botonDisminuir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonDisminuir.setMaximumSize(new java.awt.Dimension(50, 35));
         botonDisminuir.setMinimumSize(new java.awt.Dimension(50, 35));
         botonDisminuir.setPreferredSize(new java.awt.Dimension(50, 35));
@@ -747,6 +777,133 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorEscala.add(botonDisminuir, gridBagConstraints);
 
         barraImagen.add(contenedorEscala);
+
+        contenedorUmbralizacion.setBorder(javax.swing.BorderFactory.createTitledBorder("Umbralización"));
+        contenedorUmbralizacion.setToolTipText("Umbralización");
+        contenedorUmbralizacion.setMaximumSize(new java.awt.Dimension(450, 90));
+        contenedorUmbralizacion.setMinimumSize(new java.awt.Dimension(175, 91));
+        contenedorUmbralizacion.setPreferredSize(new java.awt.Dimension(300, 90));
+        java.awt.GridBagLayout contenedorUmbralizacionLayout = new java.awt.GridBagLayout();
+        contenedorUmbralizacionLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
+        contenedorUmbralizacionLayout.rowHeights = new int[] {0, 5, 0, 5, 0, 5, 0};
+        contenedorUmbralizacion.setLayout(contenedorUmbralizacionLayout);
+
+        sliderUmbralizacion.setMajorTickSpacing(128);
+        sliderUmbralizacion.setMaximum(256);
+        sliderUmbralizacion.setMinorTickSpacing(64);
+        sliderUmbralizacion.setPaintLabels(true);
+        sliderUmbralizacion.setPaintTicks(true);
+        sliderUmbralizacion.setToolTipText("Slider umbralización");
+        sliderUmbralizacion.setValue(128);
+        sliderUmbralizacion.setMaximumSize(new java.awt.Dimension(250, 65));
+        sliderUmbralizacion.setMinimumSize(new java.awt.Dimension(250, 65));
+        sliderUmbralizacion.setPreferredSize(new java.awt.Dimension(250, 65));
+        sliderUmbralizacion.setValueIsAdjusting(true);
+        sliderUmbralizacion.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderUmbralizacionStateChanged(evt);
+            }
+        });
+        sliderUmbralizacion.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                sliderUmbralizacionFocusLost(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        contenedorUmbralizacion.add(sliderUmbralizacion, gridBagConstraints);
+
+        comboBoxUmbralizacion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Gris", "Color" }));
+        comboBoxUmbralizacion.setToolTipText("Tipo de umbralización");
+        comboBoxUmbralizacion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        comboBoxUmbralizacion.setMinimumSize(new java.awt.Dimension(100, 27));
+        comboBoxUmbralizacion.setPreferredSize(new java.awt.Dimension(100, 27));
+        comboBoxUmbralizacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxUmbralizacionActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 9;
+        contenedorUmbralizacion.add(comboBoxUmbralizacion, gridBagConstraints);
+
+        buttonThresholdingRed.setBackground(java.awt.Color.red);
+        coloresUmbralizacion.add(buttonThresholdingRed);
+        buttonThresholdingRed.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonThresholdingRed.setMaximumSize(new java.awt.Dimension(50, 35));
+        buttonThresholdingRed.setMinimumSize(new java.awt.Dimension(20, 20));
+        buttonThresholdingRed.setPreferredSize(new java.awt.Dimension(20, 20));
+        buttonThresholdingRed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonThresholdingRedActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        contenedorUmbralizacion.add(buttonThresholdingRed, gridBagConstraints);
+
+        buttonThresholdingBlue.setBackground(java.awt.Color.blue);
+        coloresUmbralizacion.add(buttonThresholdingBlue);
+        buttonThresholdingBlue.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonThresholdingBlue.setMaximumSize(new java.awt.Dimension(50, 35));
+        buttonThresholdingBlue.setMinimumSize(new java.awt.Dimension(20, 20));
+        buttonThresholdingBlue.setPreferredSize(new java.awt.Dimension(20, 20));
+        buttonThresholdingBlue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonThresholdingBlueActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        contenedorUmbralizacion.add(buttonThresholdingBlue, gridBagConstraints);
+
+        buttonThresholdingGreen.setBackground(java.awt.Color.green);
+        coloresUmbralizacion.add(buttonThresholdingGreen);
+        buttonThresholdingGreen.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonThresholdingGreen.setMaximumSize(new java.awt.Dimension(50, 35));
+        buttonThresholdingGreen.setMinimumSize(new java.awt.Dimension(20, 20));
+        buttonThresholdingGreen.setPreferredSize(new java.awt.Dimension(20, 20));
+        buttonThresholdingGreen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonThresholdingGreenActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        contenedorUmbralizacion.add(buttonThresholdingGreen, gridBagConstraints);
+
+        buttonThresholdingColorPalette.setBackground(new java.awt.Color(254, 254, 254));
+        buttonThresholdingColorPalette.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/gradiente.png"))); // NOI18N
+        buttonThresholdingColorPalette.setToolTipText("Paleta de colores");
+        buttonThresholdingColorPalette.setBorder(null);
+        coloresUmbralizacion.add(buttonThresholdingColorPalette);
+        buttonThresholdingColorPalette.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonThresholdingColorPalette.setMaximumSize(new java.awt.Dimension(50, 35));
+        buttonThresholdingColorPalette.setMinimumSize(new java.awt.Dimension(30, 30));
+        buttonThresholdingColorPalette.setPreferredSize(new java.awt.Dimension(35, 35));
+        buttonThresholdingColorPalette.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buttonThresholdingColorPaletteMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 3;
+        contenedorUmbralizacion.add(buttonThresholdingColorPalette, gridBagConstraints);
+
+        barraImagen.add(contenedorUmbralizacion);
 
         paneles.add(barraImagen);
 
@@ -767,9 +924,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelColores.setLayout(new java.awt.GridBagLayout());
 
         botonColorRojo.setBackground(new java.awt.Color(255, 0, 0));
+        botonColorRojo.setToolTipText("Color rojo");
         botonColorRojo.setBorder(null);
         GrupoColores.add(botonColorRojo);
-        botonColorRojo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonColorRojo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonColorRojo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         botonColorRojo.setMaximumSize(new java.awt.Dimension(15, 15));
         botonColorRojo.setMinimumSize(new java.awt.Dimension(15, 15));
@@ -791,7 +949,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonColorNegro.setBackground(new java.awt.Color(0, 0, 0));
         botonColorNegro.setBorder(null);
         GrupoColores.add(botonColorNegro);
-        botonColorNegro.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonColorNegro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonColorNegro.setMaximumSize(new java.awt.Dimension(15, 15));
         botonColorNegro.setMinimumSize(new java.awt.Dimension(15, 15));
         botonColorNegro.setPreferredSize(new java.awt.Dimension(15, 15));
@@ -811,9 +969,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelColores.add(botonColorNegro, gridBagConstraints);
 
         botonColorAzul.setBackground(new java.awt.Color(0, 0, 255));
+        botonColorAzul.setToolTipText("Color azul");
         botonColorAzul.setBorder(null);
         GrupoColores.add(botonColorAzul);
-        botonColorAzul.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonColorAzul.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonColorAzul.setMaximumSize(new java.awt.Dimension(15, 15));
         botonColorAzul.setMinimumSize(new java.awt.Dimension(15, 15));
         botonColorAzul.setPreferredSize(new java.awt.Dimension(15, 15));
@@ -834,7 +993,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonColorBlanco.setBackground(new java.awt.Color(255, 255, 255));
         botonColorBlanco.setBorder(null);
         GrupoColores.add(botonColorBlanco);
-        botonColorBlanco.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonColorBlanco.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonColorBlanco.setMaximumSize(new java.awt.Dimension(15, 15));
         botonColorBlanco.setMinimumSize(new java.awt.Dimension(15, 15));
         botonColorBlanco.setPreferredSize(new java.awt.Dimension(15, 15));
@@ -855,7 +1014,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonColorVerde.setBackground(new java.awt.Color(0, 255, 0));
         botonColorVerde.setBorder(null);
         GrupoColores.add(botonColorVerde);
-        botonColorVerde.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonColorVerde.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonColorVerde.setMaximumSize(new java.awt.Dimension(15, 15));
         botonColorVerde.setMinimumSize(new java.awt.Dimension(15, 15));
         botonColorVerde.setPreferredSize(new java.awt.Dimension(15, 15));
@@ -876,7 +1035,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         botonColorAmarillo.setBackground(new java.awt.Color(255, 255, 0));
         botonColorAmarillo.setBorder(null);
         GrupoColores.add(botonColorAmarillo);
-        botonColorAmarillo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        botonColorAmarillo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         botonColorAmarillo.setMaximumSize(new java.awt.Dimension(15, 15));
         botonColorAmarillo.setMinimumSize(new java.awt.Dimension(15, 15));
         botonColorAmarillo.setPreferredSize(new java.awt.Dimension(15, 15));
@@ -908,21 +1067,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorRellenoLayout.rowHeights = new int[] {0, 5, 0};
         contenedorRelleno.setLayout(contenedorRellenoLayout);
 
-        fillList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sin relleno", "Liso", "Degradado" }));
-        fillList.setToolTipText("Tipo de Relleno");
-        fillList.setMaximumSize(new java.awt.Dimension(200, 30));
-        fillList.setMinimumSize(new java.awt.Dimension(115, 22));
-        fillList.setPreferredSize(new java.awt.Dimension(155, 22));
-        fillList.addActionListener(new java.awt.event.ActionListener() {
+        comboBoxFillList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sin relleno", "Liso", "Degradado" }));
+        comboBoxFillList.setToolTipText("Tipo de Relleno");
+        comboBoxFillList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        comboBoxFillList.setMaximumSize(new java.awt.Dimension(200, 30));
+        comboBoxFillList.setMinimumSize(new java.awt.Dimension(115, 22));
+        comboBoxFillList.setPreferredSize(new java.awt.Dimension(155, 22));
+        comboBoxFillList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fillListActionPerformed(evt);
+                comboBoxFillListActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 7;
-        contenedorRelleno.add(fillList, gridBagConstraints);
+        contenedorRelleno.add(comboBoxFillList, gridBagConstraints);
 
         labelTextFillColor.setText("Color");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -932,6 +1092,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         gradientColor.setBackground(java.awt.Color.white);
         gradientColor.setToolTipText("Color del relleno");
+        gradientColor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         gradientColor.setFocusable(false);
         gradientColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gradientColor.setMaximumSize(new java.awt.Dimension(20, 20));
@@ -941,11 +1102,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gradientColor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 gradientColorMouseClicked(evt);
-            }
-        });
-        gradientColor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gradientColorActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -958,6 +1114,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         fillColor.setBackground(java.awt.Color.black);
         fillColor.setToolTipText("Color del relleno");
+        fillColor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         fillColor.setFocusable(false);
         fillColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         fillColor.setMaximumSize(new java.awt.Dimension(30, 20));
@@ -1000,21 +1157,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorRelleno1Layout.rowHeights = new int[] {0, 5, 0};
         contenedorBorde.setLayout(contenedorRelleno1Layout);
 
-        strokeList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Línea continua", "Línea discontinua" }));
-        strokeList.setToolTipText("Tipo de Relleno");
-        strokeList.setMaximumSize(new java.awt.Dimension(200, 30));
-        strokeList.setMinimumSize(new java.awt.Dimension(115, 22));
-        strokeList.setPreferredSize(new java.awt.Dimension(155, 22));
-        strokeList.addActionListener(new java.awt.event.ActionListener() {
+        comboBoxStrokeList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Línea continua", "Línea discontinua" }));
+        comboBoxStrokeList.setToolTipText("Tipo de Relleno");
+        comboBoxStrokeList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        comboBoxStrokeList.setMaximumSize(new java.awt.Dimension(200, 30));
+        comboBoxStrokeList.setMinimumSize(new java.awt.Dimension(115, 22));
+        comboBoxStrokeList.setPreferredSize(new java.awt.Dimension(155, 22));
+        comboBoxStrokeList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                strokeListActionPerformed(evt);
+                comboBoxStrokeListActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 7;
-        contenedorBorde.add(strokeList, gridBagConstraints);
+        contenedorBorde.add(comboBoxStrokeList, gridBagConstraints);
 
         jLabel1.setText("Grosor");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1044,7 +1202,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorBorde.add(labelTextBorderColor, gridBagConstraints);
 
         strokeColor.setToolTipText("Color del borde");
-        strokeColor.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        strokeColor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         strokeColor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         strokeColor.setMaximumSize(new java.awt.Dimension(60, 20));
         strokeColor.setMinimumSize(new java.awt.Dimension(60, 20));
@@ -1083,21 +1241,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         contenedorEstiloBorde.add(jLabel3, gridBagConstraints);
 
-        styleStrokeJoinList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Bevel", "Miter", "Round" }));
-        styleStrokeJoinList.setToolTipText("Tipo de Línea");
-        styleStrokeJoinList.setMaximumSize(new java.awt.Dimension(200, 30));
-        styleStrokeJoinList.setMinimumSize(new java.awt.Dimension(115, 22));
-        styleStrokeJoinList.setPreferredSize(new java.awt.Dimension(155, 22));
-        styleStrokeJoinList.addActionListener(new java.awt.event.ActionListener() {
+        comboBoxStyleStrokeJoinList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Bevel", "Miter", "Round" }));
+        comboBoxStyleStrokeJoinList.setToolTipText("Tipo de Línea");
+        comboBoxStyleStrokeJoinList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        comboBoxStyleStrokeJoinList.setMaximumSize(new java.awt.Dimension(200, 30));
+        comboBoxStyleStrokeJoinList.setMinimumSize(new java.awt.Dimension(115, 22));
+        comboBoxStyleStrokeJoinList.setPreferredSize(new java.awt.Dimension(155, 22));
+        comboBoxStyleStrokeJoinList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                styleStrokeJoinListActionPerformed(evt);
+                comboBoxStyleStrokeJoinListActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 11;
-        contenedorEstiloBorde.add(styleStrokeJoinList, gridBagConstraints);
+        contenedorEstiloBorde.add(comboBoxStyleStrokeJoinList, gridBagConstraints);
 
         jLabel4.setText("Final");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1105,21 +1264,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         contenedorEstiloBorde.add(jLabel4, gridBagConstraints);
 
-        styleStrokeCapList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Button", "Round", "Square" }));
-        styleStrokeCapList.setToolTipText("Tipo de Final de línea");
-        styleStrokeCapList.setMaximumSize(new java.awt.Dimension(200, 30));
-        styleStrokeCapList.setMinimumSize(new java.awt.Dimension(115, 22));
-        styleStrokeCapList.setPreferredSize(new java.awt.Dimension(155, 22));
-        styleStrokeCapList.addActionListener(new java.awt.event.ActionListener() {
+        comboBoxStyleStrokeCapList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Button", "Round", "Square" }));
+        comboBoxStyleStrokeCapList.setToolTipText("Tipo de Final de línea");
+        comboBoxStyleStrokeCapList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        comboBoxStyleStrokeCapList.setMaximumSize(new java.awt.Dimension(200, 30));
+        comboBoxStyleStrokeCapList.setMinimumSize(new java.awt.Dimension(115, 22));
+        comboBoxStyleStrokeCapList.setPreferredSize(new java.awt.Dimension(155, 22));
+        comboBoxStyleStrokeCapList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                styleStrokeCapListActionPerformed(evt);
+                comboBoxStyleStrokeCapListActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 11;
-        contenedorEstiloBorde.add(styleStrokeCapList, gridBagConstraints);
+        contenedorEstiloBorde.add(comboBoxStyleStrokeCapList, gridBagConstraints);
 
         barraColor.add(contenedorEstiloBorde);
 
@@ -1532,10 +1692,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         sliderBrillo.setValue(0);
     }//GEN-LAST:event_sliderBrilloFocusLost
 
-    private void listaEfectosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listaEfectosActionPerformed
+    private void comboBoxEffectsListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxEffectsListActionPerformed
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
 
-        switch (listaEfectos.getSelectedIndex()) {
+        switch (comboBoxEffectsList.getSelectedIndex()) {
 
             case KernelProducer.TYPE_MEDIA_3x3:
                 if (vi != null) {
@@ -1619,7 +1779,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 break;
 
         }
-    }//GEN-LAST:event_listaEfectosActionPerformed
+    }//GEN-LAST:event_comboBoxEffectsListActionPerformed
 
     private void botonContrasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonContrasteActionPerformed
 
@@ -1859,10 +2019,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         Lienzo.setForma(Lienzo.CURVACUBICACONTROL);
     }//GEN-LAST:event_botonCurvaCubicaSegmentadaMouseClicked
 
-    private void gradientColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradientColorActionPerformed
-
-    }//GEN-LAST:event_gradientColorActionPerformed
-
     private void botonRectanguloRedondeadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonRectanguloRedondeadoMouseClicked
 
         labelFigura.setText("Rectángulo con esquinas redondeadas");
@@ -1889,9 +2045,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_gradientColorMouseClicked
 
-    private void fillListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillListActionPerformed
+    private void comboBoxFillListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxFillListActionPerformed
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
-        switch (fillList.getSelectedIndex()) {
+        switch (comboBoxFillList.getSelectedIndex()) {
             case Lienzo.TYPE_FILL_NONE:
                 Lienzo.setFillType(Lienzo.TYPE_FILL_NONE);
                 Lienzo.setFillColor(null);
@@ -1928,11 +2084,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 break;
         }
         this.repaint();
-    }//GEN-LAST:event_fillListActionPerformed
+    }//GEN-LAST:event_comboBoxFillListActionPerformed
 
-    private void strokeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strokeListActionPerformed
+    private void comboBoxStrokeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxStrokeListActionPerformed
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
-        switch (strokeList.getSelectedIndex()) {
+        switch (comboBoxStrokeList.getSelectedIndex()) {
             case Lienzo.STROKE_CONTINUOUS: //Línea continua
                 Lienzo.setStrokeType(Lienzo.STROKE_CONTINUOUS);
                 Lienzo.setStrokeColor(strokeColor.getBackground());
@@ -1950,7 +2106,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 }
                 break;
         }
-    }//GEN-LAST:event_strokeListActionPerformed
+    }//GEN-LAST:event_comboBoxStrokeListActionPerformed
 
     private void strokeColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strokeColorMouseClicked
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
@@ -1998,9 +2154,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_fillColorActionPerformed
 
-    private void styleStrokeJoinListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleStrokeJoinListActionPerformed
+    private void comboBoxStyleStrokeJoinListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxStyleStrokeJoinListActionPerformed
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
-        switch (styleStrokeJoinList.getSelectedIndex()) {
+        switch (comboBoxStyleStrokeJoinList.getSelectedIndex()) {
             case Lienzo.STYLE_STROKE_JOIN_BEVEL:
                 Lienzo.setStrokeStyleJoinType(Lienzo.STYLE_STROKE_JOIN_BEVEL);
 
@@ -2021,7 +2177,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 }
                 break;
         }
-    }//GEN-LAST:event_styleStrokeJoinListActionPerformed
+    }//GEN-LAST:event_comboBoxStyleStrokeJoinListActionPerformed
 
     private void reloadShapesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadShapesActionPerformed
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
@@ -2125,9 +2281,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_formMouseClicked
 
-    private void styleStrokeCapListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleStrokeCapListActionPerformed
+    private void comboBoxStyleStrokeCapListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxStyleStrokeCapListActionPerformed
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
-        switch (styleStrokeCapList.getSelectedIndex()) {
+        switch (comboBoxStyleStrokeCapList.getSelectedIndex()) {
             case Lienzo.STYLE_STROKE_CAP_BUTT:
                 Lienzo.setStrokeStyleCapType(Lienzo.STYLE_STROKE_CAP_BUTT);
 
@@ -2148,7 +2304,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 }
                 break;
         }
-    }//GEN-LAST:event_styleStrokeCapListActionPerformed
+    }//GEN-LAST:event_comboBoxStyleStrokeCapListActionPerformed
 
     private void iconTakeScreenshotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconTakeScreenshotActionPerformed
         menuTakeScreenshotActionPerformed(null);
@@ -2232,8 +2388,99 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_iconSaveActionPerformed
 
     private void escritorioComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_escritorioComponentShown
-        System.err.println("HOLAAA");
     }//GEN-LAST:event_escritorioComponentShown
+
+    private void sliderUmbralizacionStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderUmbralizacionStateChanged
+
+        VentanaInternaImagen vii = (VentanaInternaImagen) selectInternalWindows();
+        if (vii != null) {
+            BufferedImage imgSource = vii.getLienzo().getImageOriginal();
+            ThresholdOp umbralizacionBarra;
+            //System.err.println("valor: "+sliderUmbralizacion.getValue());
+            if (thresholdingType == ThresholdOp.TYPE_COLOR) {
+                umbralizacionBarra = new ThresholdOp(thresholdingColor, sliderUmbralizacion.getValue());
+            } else if (thresholdingType == ThresholdOp.TYPE_GREY_LEVEL) {
+                umbralizacionBarra = new ThresholdOp(sliderUmbralizacion.getValue());
+            } else {//No va a pasar nunca pero para quitar warnings.
+                umbralizacionBarra = null;
+            }
+            umbralizacionBarra.setType(thresholdingType);
+            //umbralizacionBarra.setThreshold(sliderUmbralizacion.getValue());
+            BufferedImage imgdest = umbralizacionBarra.filter(imgSource, null);
+
+            if (imgdest != null) {
+                vii.getLienzo().setImageActual(imgdest);
+                vii.getLienzo().repaint();
+            }
+        }
+
+    }//GEN-LAST:event_sliderUmbralizacionStateChanged
+
+    private void sliderUmbralizacionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderUmbralizacionFocusLost
+        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
+        if (vi != null) {
+            vi.getLienzo().setImageOriginal(vi.getLienzo().getImageActual());
+        }
+    }//GEN-LAST:event_sliderUmbralizacionFocusLost
+
+    private void buttonThresholdingRedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonThresholdingRedActionPerformed
+        ((JButton) evt.getSource()).setSelected(true);
+        thresholdingColor = buttonThresholdingRed.getBackground();
+    }//GEN-LAST:event_buttonThresholdingRedActionPerformed
+
+    private void buttonThresholdingBlueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonThresholdingBlueActionPerformed
+        ((JButton) evt.getSource()).setSelected(true);
+        thresholdingColor = buttonThresholdingBlue.getBackground();
+    }//GEN-LAST:event_buttonThresholdingBlueActionPerformed
+
+    private void buttonThresholdingGreenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonThresholdingGreenActionPerformed
+        ((JButton) evt.getSource()).setSelected(true);
+        thresholdingColor = buttonThresholdingGreen.getBackground();
+    }//GEN-LAST:event_buttonThresholdingGreenActionPerformed
+
+    private void comboBoxUmbralizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxUmbralizacionActionPerformed
+
+        switch (comboBoxUmbralizacion.getSelectedIndex()) {
+            case 0: //Gris
+                buttonThresholdingRed.setVisible(false);
+                buttonThresholdingGreen.setVisible(false);
+                buttonThresholdingBlue.setVisible(false);
+                buttonThresholdingColorPalette.setVisible(false);
+                thresholdingType = ThresholdOp.TYPE_GREY_LEVEL;
+                break;
+            case 1:  //Color
+                buttonThresholdingRed.setVisible(true);
+                buttonThresholdingGreen.setVisible(true);
+                buttonThresholdingBlue.setVisible(true);
+                buttonThresholdingColorPalette.setVisible(true);
+                thresholdingType = ThresholdOp.TYPE_COLOR;
+                if (thresholdingColor == null) {
+                    thresholdingColor = Color.RED;
+                    buttonThresholdingRed.setSelected(true);
+                }
+                break;
+        }
+
+
+    }//GEN-LAST:event_comboBoxUmbralizacionActionPerformed
+
+    private void buttonThresholdingColorPaletteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonThresholdingColorPaletteMouseClicked
+        if (evt.getClickCount() % 2 == 0 || buttonThresholdingColorPalette.getIcon() != null) {
+            Color newColor = JColorChooser.showDialog(
+                    VentanaPrincipal.this,
+                    "Escoge el color para la Umbralización",
+                    gradientColor.getBackground());
+            if (newColor != null) {
+                thresholdingColor = newColor;
+                buttonThresholdingColorPalette.setIcon(null);
+                buttonThresholdingColorPalette.setBackground(newColor);
+            }
+        } else if (evt.getClickCount() % 2 == 1) {
+            thresholdingColor = buttonThresholdingColorPalette.getBackground();
+        }
+        ((JButton)evt.getSource()).setSelected(true);
+
+    }//GEN-LAST:event_buttonThresholdingColorPaletteMouseClicked
 
     public VentanaInternaImagen getVentanaInterna() {
         return vi;
@@ -2448,7 +2695,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JToolBar botonesArchivo;
     private javax.swing.JToolBar botonesFiguras;
     private javax.swing.JToolBar botonesMultimedia;
+    private javax.swing.JButton buttonThresholdingBlue;
+    private javax.swing.JButton buttonThresholdingColorPalette;
+    private javax.swing.JButton buttonThresholdingGreen;
+    private javax.swing.JButton buttonThresholdingRed;
     private javax.swing.JButton cloneShape;
+    private javax.swing.ButtonGroup coloresUmbralizacion;
+    private javax.swing.JComboBox comboBoxEffectsList;
+    private javax.swing.JComboBox comboBoxFillList;
+    private javax.swing.JComboBox comboBoxStrokeList;
+    private javax.swing.JComboBox comboBoxStyleStrokeCapList;
+    private javax.swing.JComboBox comboBoxStyleStrokeJoinList;
+    private javax.swing.JComboBox comboBoxUmbralizacion;
     private javax.swing.JPanel contenedorBorde;
     private javax.swing.JPanel contenedorBrillo;
     private javax.swing.JPanel contenedorColores;
@@ -2459,11 +2717,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel contenedorFiguras;
     private javax.swing.JPanel contenedorRelleno;
     private javax.swing.JPanel contenedorRotacion;
+    private javax.swing.JPanel contenedorUmbralizacion;
     private javax.swing.JPanel cuerpo;
     private static javax.swing.JDesktopPane escritorio;
     private javax.swing.JList figureList;
     private javax.swing.JButton fillColor;
-    private javax.swing.JComboBox fillList;
     private javax.swing.JButton gradientColor;
     private javax.swing.JSpinner grosor;
     private javax.swing.ButtonGroup grupoPaletas;
@@ -2483,7 +2741,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel labelTextBorderColor;
     private javax.swing.JLabel labelTextFillColor;
     private javax.swing.JLabel labelTextGradientColor;
-    private javax.swing.JComboBox listaEfectos;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenuItem menuConvolveOp;
@@ -2510,11 +2767,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem showToolBarMultimedia;
     private javax.swing.JSlider sliderBrillo;
     private javax.swing.JSlider sliderRotacion;
+    private javax.swing.JSlider sliderUmbralizacion;
     private javax.swing.JMenuItem sobelMenu;
     private javax.swing.JButton strokeColor;
-    private javax.swing.JComboBox strokeList;
-    private javax.swing.JComboBox styleStrokeCapList;
-    private javax.swing.JComboBox styleStrokeJoinList;
     private javax.swing.JMenuItem umbralizacion;
     private javax.swing.JCheckBoxMenuItem verBarraEstado;
     // End of variables declaration//GEN-END:variables
