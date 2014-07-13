@@ -31,10 +31,10 @@ public class UmbralizacionOp extends BufferedImageOpAdapter {
 
         for (BufferedImageSampleIterator it = new BufferedImageSampleIterator(src); it.hasNext();) {
             BufferedImageSampleIterator.SampleData sample = it.next();
-            if(sample.value > this.umbral){
-                sample.value=255;
-            }else{
-                sample.value=0;
+            if (sample.value > this.umbral) {
+                sample.value = 255;
+            } else {
+                sample.value = 0;
             }
             destRaster.setSample(sample.col, sample.row, sample.band, sample.value);
         }

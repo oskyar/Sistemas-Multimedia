@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package practicaFinal.filtros;
 
 import java.awt.image.BufferedImage;
@@ -13,7 +12,7 @@ import sm.image.BinaryOp;
  *
  * @author oskyar
  */
-public class RestaOp extends BinaryOp{
+public class RestaOp extends BinaryOp {
 
     public RestaOp(BufferedImage img) {
         super(img);
@@ -21,7 +20,7 @@ public class RestaOp extends BinaryOp{
 
     @Override
     public int binaryOp(int s1, int s2) {
-        return Math.abs(s1-s2);
+        return Math.abs(s1 - s2);
     }
-    
+
 }

@@ -20,7 +20,7 @@ public class MultiplicacionOp extends BinaryOp {
 
     @Override
     public int binaryOp(int s1, int s2) {
-        return s1*s2;
+        return s1 * s2;
     }
 
 }

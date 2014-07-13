@@ -16,13 +16,7 @@ import practicaFinal.VentanaPrincipal;
 public class VentanaInternaImagen extends javax.swing.JInternalFrame {
 
     public static void showImage(BufferedImage img) {
-        VentanaInternaImagen vi = new VentanaInternaImagen();
-        if (img != null) {
-            vi.getLienzo().setImageOriginal(img);
-            VentanaPrincipal.getEscritorio().add(vi);
-            vi.setVisible(true);
-            vi.setSize(img.getWidth(), img.getHeight());
-        }
+        showImage(img, "Imagen");
     }
 
     public static void showImage(BufferedImage img, String title) {
@@ -124,6 +118,10 @@ public class VentanaInternaImagen extends javax.swing.JInternalFrame {
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
         VentanaPrincipal.getInstance().showToolsBarsOrNot(VentanaPrincipal.SHOW_TOOLBAR_IMAGE);
+        if(lienzo2.getImageOriginal().getType()==BufferedImage.TYPE_BYTE_GRAY ){
+            VentanaPrincipal.getInstance().getSobelMenu().setEnabled(false);
+        }
+        
     }//GEN-LAST:event_formInternalFrameActivated
 
 

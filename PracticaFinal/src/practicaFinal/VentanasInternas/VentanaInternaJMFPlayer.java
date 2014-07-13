@@ -24,6 +24,7 @@ import javax.media.control.FrameGrabbingControl;
 import javax.media.format.VideoFormat;
 import javax.media.util.BufferToImage;
 import practicaFinal.VentanaPrincipal;
+import practicaFinal.filefilter.UtilFileFilter;
 
 /**
  *
@@ -41,7 +42,7 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
         this.setTitle(f.getName());
 
         try {
-            MediaLocator ml = new MediaLocator( "file:"+f.getAbsolutePath());
+            MediaLocator ml = new MediaLocator("file:" + f.getAbsolutePath());
             player = Manager.createRealizedPlayer(ml);
             Component areaVisual = player.getVisualComponent();
             if (areaVisual != null) {
@@ -50,10 +51,10 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
                 add(areaVisual, BorderLayout.CENTER);
                 //Meto aqui el panel de control para que de esta forma solo 
                 //se muestre con videos y para sonidos mi panel personalizado.
-                Component panelControl = player.getControlPanelComponent();
-                if (panelControl != null) {
-                    add(panelControl, BorderLayout.SOUTH);
-                }
+            }
+            Component panelControl = player.getControlPanelComponent();
+            if (panelControl != null) {
+                add(panelControl, BorderLayout.SOUTH);
             }
             pack();
 
@@ -73,8 +74,8 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
         VentanaPrincipal.getEscritorio().add(vi);
         vi.setVisible(true);
         vi.setTitle(f.getName());
-    }    
-    
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -201,14 +202,14 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
     }
 
     public BufferedImage getFrame() {
-        FrameGrabbingControl fgc; 
-        String claseCtr = "javax.media.control.FrameGrabbingControl"; 
-        fgc = (FrameGrabbingControl)player.getControl(claseCtr ); 
-        Buffer bufferFrame = fgc.grabFrame(); 
-        BufferToImage bti; 
-        bti=new BufferToImage((VideoFormat)bufferFrame.getFormat()); 
-        Image img = bti.createImage(bufferFrame); 
-        return (BufferedImage)img; 
+        FrameGrabbingControl fgc;
+        String claseCtr = "javax.media.control.FrameGrabbingControl";
+        fgc = (FrameGrabbingControl) player.getControl(claseCtr);
+        Buffer bufferFrame = fgc.grabFrame();
+        BufferToImage bti;
+        bti = new BufferToImage((VideoFormat) bufferFrame.getFormat());
+        Image img = bti.createImage(bufferFrame);
+        return (BufferedImage) img;
 
     }
 

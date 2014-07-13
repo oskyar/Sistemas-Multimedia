@@ -6,12 +6,14 @@
 package practicaFinal;
 
 import Utils.JOptionPaneMultiInput;
-import com.sun.javafx.scene.control.behavior.SliderBehavior;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
+import java.awt.color.ColorSpace;
+import java.awt.color.ICC_ColorSpace;
+import java.awt.color.ICC_Profile;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,6 +21,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.awt.image.ConvolveOp;
 import java.awt.image.LookupOp;
 import java.awt.image.LookupTable;
@@ -34,8 +37,8 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
 import javax.swing.ListSelectionModel;
-import javax.swing.plaf.IconUIResource;
 import practicaFinal.VentanasInternas.VentanaInternaCamara;
 import practicaFinal.VentanasInternas.VentanaInternaGrabador;
 import practicaFinal.VentanasInternas.VentanaInternaImagen;
@@ -105,7 +108,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         //Un evento creado por mi para saber si se está presionando la tecla Control
         figureList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         //escritorio.dispatchEvent(new MouseEvent(escritorio,MouseEvent.MOUSE_RELEASED, 0, MouseEvent.NOBUTTON, 0, 0, 0, false));
-//Evento para tener en cuenta cuando se pusa la tecla CONTROL del teclado.
+        //Evento para tener en cuenta cuando se pusa la tecla CONTROL del teclado.
         //Usada para seleccionar o deseleccionar shapes del lienzo.
         keyboardEvent();
     }
@@ -226,6 +229,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         restar = new javax.swing.JMenuItem();
         multiplicar = new javax.swing.JMenuItem();
         sobelMenu = new javax.swing.JMenuItem();
+        negative = new javax.swing.JMenuItem();
+        menuChangeGrey = new javax.swing.JMenuItem();
+        menuCloneImage = new javax.swing.JMenuItem();
         menuMultimedia = new javax.swing.JMenu();
         menuSoundRecorder = new javax.swing.JMenuItem();
         menuTakeScreenshot = new javax.swing.JMenuItem();
@@ -582,7 +588,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorEfecto.setPreferredSize(new java.awt.Dimension(200, 90));
         contenedorEfecto.setLayout(new java.awt.GridBagLayout());
 
-        comboBoxEffectsList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano", "umbralización" }));
+        comboBoxEffectsList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Emborronamiento media", "Emborronamiento binomial", "Enfoque", "Relieve", "Dectector de fronteras laplaciano", "Negativo" }));
         comboBoxEffectsList.setToolTipText("Lista de filtros de imagen");
         comboBoxEffectsList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         comboBoxEffectsList.setMaximumSize(new java.awt.Dimension(170, 50));
@@ -1425,6 +1431,30 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         menuImagen.add(sobelMenu);
+
+        negative.setText("Negativo");
+        negative.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                negativeActionPerformed(evt);
+            }
+        });
+        menuImagen.add(negative);
+
+        menuChangeGrey.setText("Pasar a GRIS");
+        menuChangeGrey.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuChangeGreyActionPerformed(evt);
+            }
+        });
+        menuImagen.add(menuChangeGrey);
+
+        menuCloneImage.setText("Duplicar Imagen");
+        menuCloneImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCloneImageActionPerformed(evt);
+            }
+        });
+        menuImagen.add(menuCloneImage);
 
         menu.add(menuImagen);
 
@@ -2478,9 +2508,63 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         } else if (evt.getClickCount() % 2 == 1) {
             thresholdingColor = buttonThresholdingColorPalette.getBackground();
         }
-        ((JButton)evt.getSource()).setSelected(true);
+        ((JButton) evt.getSource()).setSelected(true);
 
     }//GEN-LAST:event_buttonThresholdingColorPaletteMouseClicked
+
+    private void negativeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_negativeActionPerformed
+        try {
+            VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
+            if (vi != null) {
+                BufferedImage imgActual = convertImageType(vi.getLienzo().getImageActual(), BufferedImage.TYPE_INT_RGB);
+                LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_NEGATIVE);
+                LookupOp lop = new LookupOp(ltp, null);
+                BufferedImage imgdest = lop.filter(imgActual, null);
+
+                if (imgdest != null) {
+                    vi.getLienzo().setImageOriginal(imgdest);
+                    vi.getLienzo().repaint();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el contraste");
+        }
+    }//GEN-LAST:event_negativeActionPerformed
+
+    private void menuChangeGreyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuChangeGreyActionPerformed
+        try {
+            VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
+            if (vi != null) {
+                ICC_Profile ip;
+                ip = ICC_Profile.getInstance(ColorSpace.CS_GRAY);
+                ColorSpace cs = new ICC_ColorSpace(ip);
+                ColorConvertOp ccop = new ColorConvertOp(cs, null);
+                BufferedImage imgdest = ccop.filter(vi.getLienzo().getImageOriginal(), null);
+
+                if (imgdest != null) {
+                    vi.getLienzo().setImageOriginal(imgdest);
+                    vi.getLienzo().repaint();
+                    System.err.println(imgdest.getType());
+                    System.err.println(imgdest.getColorModel().toString());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el contraste");
+        }
+
+
+    }//GEN-LAST:event_menuChangeGreyActionPerformed
+
+    private void menuCloneImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCloneImageActionPerformed
+        try {
+            VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
+            if (vi != null) {
+                VentanaInternaImagen.showImage(vi.getLienzo().getImageOriginal(), vi.getTitle()+" Duplicada");
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el contraste");
+        }
+    }//GEN-LAST:event_menuCloneImageActionPerformed
 
     public VentanaInternaImagen getVentanaInterna() {
         return vi;
@@ -2661,6 +2745,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     }
 
+    public static JMenuItem getSobelMenu() {
+        return sobelMenu;
+    }
+
+    public static void setSobelMenu(JMenuItem sobelMenu) {
+        VentanaPrincipal.sobelMenu = sobelMenu;
+    }
+
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -2743,6 +2837,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel labelTextGradientColor;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenu menuArchivo;
+    private javax.swing.JMenuItem menuChangeGrey;
+    private javax.swing.JMenuItem menuCloneImage;
     private javax.swing.JMenuItem menuConvolveOp;
     private javax.swing.JMenu menuImagen;
     private javax.swing.JMenu menuMultimedia;
@@ -2752,6 +2848,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuVer;
     private javax.swing.JMenuItem menuWebcam;
     private javax.swing.JMenuItem multiplicar;
+    private javax.swing.JMenuItem negative;
     private javax.swing.JMenuItem nuevo;
     private javax.swing.JPanel paletaOpciones;
     private javax.swing.JPanel panelColores;
@@ -2768,7 +2865,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JSlider sliderBrillo;
     private javax.swing.JSlider sliderRotacion;
     private javax.swing.JSlider sliderUmbralizacion;
-    private javax.swing.JMenuItem sobelMenu;
+    private static javax.swing.JMenuItem sobelMenu;
     private javax.swing.JButton strokeColor;
     private javax.swing.JMenuItem umbralizacion;
     private javax.swing.JCheckBoxMenuItem verBarraEstado;
