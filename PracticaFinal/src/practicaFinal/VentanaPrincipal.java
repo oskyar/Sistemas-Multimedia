@@ -495,9 +495,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorFiguras.add(figureList, java.awt.BorderLayout.CENTER);
         figureList.getAccessibleContext().setAccessibleName("");
 
-        cloneShape.setText("C");
+        cloneShape.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/copy.png"))); // NOI18N
+        cloneShape.setToolTipText("Clonar figuras");
         cloneShape.setContentAreaFilled(false);
         cloneShape.setEnabled(false);
+        cloneShape.setMaximumSize(new java.awt.Dimension(34, 34));
+        cloneShape.setMinimumSize(new java.awt.Dimension(34, 34));
+        cloneShape.setPreferredSize(new java.awt.Dimension(34, 34));
         cloneShape.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cloneShapeMouseClicked(evt);
@@ -2331,13 +2335,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_removeShapeMouseClicked
 
     private void cloneShapeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cloneShapeMouseClicked
-        int index = figureList.getSelectedIndex();
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
-            if (figureList.getSelectedIndex() >= 0) {
-                IOShape s = vi.getLienzo().getvShape().get(index);
-                IOShape sClone = s.clone();
-                vi.getLienzo().getvShape().add(sClone);
+         int selectedIndices[] = figureList.getSelectedIndices();
+            if (selectedIndices.length > 0) {
+                for (int i = selectedIndices.length - 1; i >= 0; i--) {
+                    vi.getLienzo().getvShape().add(vi.getLienzo().getvShape().get(selectedIndices[i]).clone());
+                }
+               // IOShape s = vi.getLienzo().getvShape().get(index);
+               // IOShape sClone = s.clone();
+                //vi.getLienzo().getvShape().add(sClone);
                 Vector<String> listData = new Vector();
                 int i = 0;
                 for (IOShape sh : vi.getLienzo().getvShape()) {
