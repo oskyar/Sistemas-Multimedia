@@ -231,7 +231,7 @@ public interface IOShape{
     
     /**
      * Dibuja el marco de la figura pasándole la instancia de gráficos. ver {@link Graphics2D}
-     * @param g2d <code>Graphics2D</code>, 
+     * @param g2d Componente <code>Graphics2D</code>  que pinta las figuras.
      */
     public void drawFrame(Graphics2D g2d);
 
