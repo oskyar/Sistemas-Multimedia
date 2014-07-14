@@ -15,11 +15,16 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
+ * Línea que implementa la interfaz IOShape para que todas las clases
+ * personalizadas tengan los mismos atributos/métodos.
  *
- * @author oskyar
+ * ver {@link IOShape}, ver {@link Line2D.Double}
+ * 
+ * @author oskyar (Óscar Zafra)
  */
 public class OLine2D extends Line2D.Double implements IOShape {
-    public static final String NAME="Línea";
+
+    public static final String NAME = "Línea";
     private int fillType;
     private int strokeType;
     private Color fillColor;
@@ -32,19 +37,17 @@ public class OLine2D extends Line2D.Double implements IOShape {
     private ORectangle2D frame;
     private int strokeJoin;
     private int strokeCap;
-    
-    private final int CTRLPOINTS=0;
 
-    public OLine2D(Point2D p1, double width, double height) {
-        super(p1.getX(), p1.getY(), width, height);
-    }
+    private final int CTRLPOINTS = 0;
 
+    /**
+     * Crea una línea con dos puntos.
+     *
+     * @param p1 Punto inicial.
+     * @param p2 Punto final.
+     */
     public OLine2D(Point2D p1, Point2D p2) {
         super(p1.getX(), p1.getY(), p2.getX(), p2.getY());
-    }
-
-    public OLine2D(Line2D line) {
-        super(line.getP1(), line.getP2());
     }
 
     @Override
@@ -61,20 +64,20 @@ public class OLine2D extends Line2D.Double implements IOShape {
 
     @Override
     public void draw(Graphics2D g2d) {
-        if(strokeType==0){
+        if (strokeType == 0) {
             stroke = new BasicStroke(strokeWidth);
-        }else if(strokeType == 1){
-            final float dash[] = {1.0f,0.0f,20.0f};
+        } else if (strokeType == 1) {
+            final float dash[] = {1.0f, 0.0f, 20.0f};
             stroke = new BasicStroke(strokeWidth, strokeCap, strokeJoin, 10.0f, dash, 0.0f);
         }
         g2d.setStroke(stroke);
         g2d.setColor(strokeColor);
         g2d.draw(this);
-        
+
         g2d.setColor(fillColor);
-        if(fillType==1){
+        if (fillType == 1) {
             g2d.fill(this);
-        }else if(fillType==2){
+        } else if (fillType == 2) {
             g2d.setPaint(gradient);
             g2d.fill(this);
         }
@@ -96,9 +99,9 @@ public class OLine2D extends Line2D.Double implements IOShape {
     @Override
     public void updateShape(Point2D p1, Point2D p2) {
         this.setLine(p1, p2);
-         if(fillType==2){
-             gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
-         }
+        if (fillType == 2) {
+            gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
+        }
     }
 
     @Override
@@ -155,31 +158,29 @@ public class OLine2D extends Line2D.Double implements IOShape {
     public void setGradient(GradientPaint gradient) {
         this.gradient = gradient;
     }
-    
 
     @Override
     public void drawFrame(Graphics2D g2d) {
-        double x1,x2,y1,y2;
+        double x1, x2, y1, y2;
         x1 = Math.min(this.getX1(), this.getX2());
         x2 = Math.max(this.getX1(), this.getX2());
         y1 = Math.min(this.getY1(), this.getY2());
         y2 = Math.max(this.getY1(), this.getY2());
-            
-        
-        frame = new ORectangle2D( x1-4, y1-4, Math.abs(x1-x2)+8, Math.abs(y1-y2)+8);
+
+        frame = new ORectangle2D(x1 - 4, y1 - 4, Math.abs(x1 - x2) + 8, Math.abs(y1 - y2) + 8);
         frame.setStrokeWidth(1);
         frame.setStrokeType(1);
         frame.setStrokeColor(Color.RED);
         frame.setFillType(0);
         frame.draw(g2d);
         //return frame;
-    }  
+    }
 
     @Override
     public void createGradient(Point2D p1, Point2D p2) {
         gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
     }
-    
+
     @Override
     public void updateGradient(Point2D p1, Point2D p2) {
         gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
@@ -223,12 +224,12 @@ public class OLine2D extends Line2D.Double implements IOShape {
     @Override
     public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
-                System.err.println("ETNRA " + fillType);
-        if(fillType==2){
-            if(gradient != null){
-                gradient = new GradientPaint((float)super.getX1(),(float)super.getY1(), fillColor, (float)super.getX2(),(float)super.getY2(), gradientColor);
-            }else{
-                gradient = new GradientPaint((float)super.getX1(),(float)super.getY1(), fillColor, (float)super.getX2(),(float)super.getY2(), fillColor);
+        System.err.println("ETNRA " + fillType);
+        if (fillType == 2) {
+            if (gradient != null) {
+                gradient = new GradientPaint((float) super.getX1(), (float) super.getY1(), fillColor, (float) super.getX2(), (float) super.getY2(), gradientColor);
+            } else {
+                gradient = new GradientPaint((float) super.getX1(), (float) super.getY1(), fillColor, (float) super.getX2(), (float) super.getY2(), fillColor);
             }
         }
     }
@@ -251,7 +252,7 @@ public class OLine2D extends Line2D.Double implements IOShape {
     @Override
     public void setGradientColor(Color gradientColor) {
         this.gradientColor = gradientColor;
-        gradient = new GradientPaint((float)super.getX1(),(float)super.getY1(), fillColor, (float)super.getX2(),(float)super.getY2(), gradientColor);
+        gradient = new GradientPaint((float) super.getX1(), (float) super.getY1(), fillColor, (float) super.getX2(), (float) super.getY2(), gradientColor);
     }
 
     @Override
@@ -262,7 +263,7 @@ public class OLine2D extends Line2D.Double implements IOShape {
     @Override
     public void setStrokeWidth(float strokeWidth) {
         this.strokeWidth = strokeWidth;
-    }   
+    }
 
     @Override
     public int getFillType() {

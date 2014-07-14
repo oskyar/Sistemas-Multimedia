@@ -17,8 +17,13 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 /**
+ * Clase que crea un Rectángulo con esquinas redondeadas que implementa la
+ * interfaz IOShape para que todas las clases personalizadas tengan los mismos
+ * atributos/métodos.
  *
- * @author oskyar
+ * ver {@link IOShape}, ver {@link Rectangle2D.Double}
+ *
+ * @author oskyar (Óscar Zafra)
  */
 public class ORoundRectangle2D extends RoundRectangle2D.Double implements IOShape {
 
@@ -38,14 +43,41 @@ public class ORoundRectangle2D extends RoundRectangle2D.Double implements IOShap
 
     private final int CTRLPOINTS = 0;
 
+    /**
+     * Crea un rectángulo con las esquinas redondeadas por defecto.
+     *
+     * @param p1 Punto 1 del rectángulo
+     * @param p2 Punto 2 del rectángulo
+     * @param arcWidth Ancho del radio de las esquinas
+     * @param arcHeight Alto del radio de las esquinas
+     */
     public ORoundRectangle2D(Point2D p1, Point2D p2, double arcWidth, double arcHeight) {
         super(p1.getX(), p1.getY(), Math.abs(p1.getX() - p2.getX()), Math.abs(p1.getY() - p2.getY()), arcWidth, arcHeight);
     }
 
+    /**
+     * Crea un rectángulo con las esquinas redondeadas por defecto.
+     *
+     * @param p1 Punto 1 del rectángulo
+     * @param width Ancho del rectángulo
+     * @param height Alto del rectángulo
+     * @param arcWidth Ancho del radio de las esquinas
+     * @param arcHeight Alto del radio de las esquinas
+     */
     public ORoundRectangle2D(Point2D p1, double width, double height, double arcWidth, double arcHeight) {
         super(p1.getX(), p1.getY(), width, height, arcWidth, arcHeight);
     }
 
+    /**
+     * Crea un rectángulo con las esquinas redondeadas por defecto.
+     *
+     * @param x Coordenada X del punto 1
+     * @param y Coordenada Y del punto 1
+     * @param width Ancho del rectángulo
+     * @param height Alto del rectángulo
+     * @param arcWidth Ancho del radio de las esquinas
+     * @param arcHeight Alto del radio de las esquinas
+     */
     public ORoundRectangle2D(double x, double y, double width, double height, double arcWidth, double arcHeight) {
         super(x, y, width, height, arcWidth, arcHeight);
     }

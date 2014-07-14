@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package practicaFinal.shapes;
 
 import java.awt.BasicStroke;
@@ -16,10 +15,14 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
+ * Curva con 2 puntos de control que implementa la interfaz IOShape para que
+ * todas las clases personalizadas tengan los mismos atributos/métodos.
  *
- * @author oskyar
+ * ver {@link IOShape}, ver {@link CubicCurve2D.Double}
+ * 
+ * @author oskyar (Óscar Zafra)
  */
-public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape{
+public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape {
 
     public static final String NAME = "Curva con 2 ptos control";
     private int fillType;
@@ -35,23 +38,36 @@ public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape{
     private int strokeJoin;
     private int strokeCap;
     private ArrayList<Point2D> vPoints;
-    
-    private final int CTRLPOINTS=2;    
 
-    public OCubicCurve2D(Point2D p1, Point2D ctrl1, Point2D ctrl2, Point2D p2){
-        super(p1.getX(),p1.getY(),ctrl1.getX(),ctrl1.getY(),ctrl2.getX(),ctrl2.getY(),p2.getX(),p2.getY());
+    private final int CTRLPOINTS = 2;
+
+    /**
+     * Contruye e inicializa una curva con 2 puntos de control.
+     *
+     * @param p1 Punto 1
+     * @param ctrl1 Punto de control 1
+     * @param ctrl2 Punto de control 2
+     * @param p2 Punto 2
+     */
+    public OCubicCurve2D(Point2D p1, Point2D ctrl1, Point2D ctrl2, Point2D p2) {
+        super(p1.getX(), p1.getY(), ctrl1.getX(), ctrl1.getY(), ctrl2.getX(), ctrl2.getY(), p2.getX(), p2.getY());
         vPoints = new ArrayList<>();
         vPoints.add(ctrl1);
         vPoints.add(ctrl2);
     }
-    
-    
-    public OCubicCurve2D(OCubicCurve2D qc){
-        super(qc.getX1(),qc.getY1(),qc.getCtrlX1(),qc.getCtrlY1(),qc.getCtrlX2(),qc.getCtrlY2(),qc.getX2(),qc.getY2());
+
+    /**
+     * Contruye e inicializa una curva con dos puntos de control pasándole una
+     * curva.
+     *
+     * @param qc Variable de la clase <code>OCubicCurve2D</code>
+     */
+    public OCubicCurve2D(OCubicCurve2D qc) {
+        super(qc.getX1(), qc.getY1(), qc.getCtrlX1(), qc.getCtrlY1(), qc.getCtrlX2(), qc.getCtrlY2(), qc.getX2(), qc.getY2());
         vPoints = new ArrayList<>();
-        vPoints.add(new Point2D.Double(qc.getCtrlX1(),qc.getCtrlY1()));
-        vPoints.add(new Point2D.Double(qc.getCtrlX2(),qc.getCtrlY2()));
-    }   
+        vPoints.add(new Point2D.Double(qc.getCtrlX1(), qc.getCtrlY1()));
+        vPoints.add(new Point2D.Double(qc.getCtrlX2(), qc.getCtrlY2()));
+    }
 
     @Override
     public Stroke getStroke() {
@@ -60,8 +76,9 @@ public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape{
 
     @Override
     public void setStroke(Stroke sk) {
-        if(sk != null)
+        if (sk != null) {
             this.stroke = sk;
+        }
     }
 
     @Override
@@ -89,21 +106,21 @@ public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape{
     public void setLocation(Point2D p) {
         double dx = p.getX() - this.getX1();
         double dy = p.getY() - this.getY1();
-        
+
         Point2D newP2 = new Point2D.Double(this.getX2() + dx, this.getY2() + dy);
-        Point2D newCtrl1 = new Point2D.Double(this.getCtrlX1()+ dx, this.getCtrlY1()+ dy);
-        Point2D newCtrl2 = new Point2D.Double(this.getCtrlX2()+ dx, this.getCtrlY2()+ dy);
-        vPoints.set(0,newCtrl1);
-        vPoints.set(1,newCtrl2);
-        this.setCurve(p,newCtrl1,newCtrl2,newP2);
+        Point2D newCtrl1 = new Point2D.Double(this.getCtrlX1() + dx, this.getCtrlY1() + dy);
+        Point2D newCtrl2 = new Point2D.Double(this.getCtrlX2() + dx, this.getCtrlY2() + dy);
+        vPoints.set(0, newCtrl1);
+        vPoints.set(1, newCtrl2);
+        this.setCurve(p, newCtrl1, newCtrl2, newP2);
     }
 
     @Override
     public void updateShape(Point2D p1, Point2D p2) {
-        this.setCurve(p1, vPoints.get(0),vPoints.get(1), p2);
+        this.setCurve(p1, vPoints.get(0), vPoints.get(1), p2);
         if (fillType == 2) {
             gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
-        }        
+        }
     }
 
     @Override
@@ -232,9 +249,9 @@ public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape{
 
     @Override
     public void drawFrame(Graphics2D g2d) {
-        
-        ArrayList<java.lang.Double> pointsX= new ArrayList<>();
-        ArrayList<java.lang.Double> pointsY= new ArrayList<>();
+
+        ArrayList<java.lang.Double> pointsX = new ArrayList<>();
+        ArrayList<java.lang.Double> pointsY = new ArrayList<>();
         pointsX.add(this.getX1());
         pointsX.add(this.getX2());
         pointsX.add(this.getCtrlX1());
@@ -246,22 +263,22 @@ public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape{
         double minX, maxX, minY, maxY;
         minX = maxX = pointsX.get(0);
         minY = maxY = pointsY.get(0);
-        for(java.lang.Double d: pointsX){
-            if(minX > d){
+        for (java.lang.Double d : pointsX) {
+            if (minX > d) {
                 minX = d;
-            }else if(maxX <= d){
+            } else if (maxX <= d) {
                 maxX = d;
             }
         }
-        for(java.lang.Double d: pointsY){
-            if(minY > d){
+        for (java.lang.Double d : pointsY) {
+            if (minY > d) {
                 minY = d;
-            }else if(maxY <= d){
+            } else if (maxY <= d) {
                 maxY = d;
             }
         }
-        
-        frame = new ORectangle2D( minX-4, minY-4, Math.abs(minX-maxX)+8, Math.abs(minY-maxY)+8);
+
+        frame = new ORectangle2D(minX - 4, minY - 4, Math.abs(minX - maxX) + 8, Math.abs(minY - maxY) + 8);
         frame.setStrokeWidth(1);
         frame.setStrokeType(1);
         frame.setStrokeColor(Color.RED);
@@ -297,6 +314,6 @@ public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape{
     @Override
     public void setStrokeCapStyle(int strokeCap) {
         this.strokeCap = strokeCap;
-    }    
-       
+    }
+
 }

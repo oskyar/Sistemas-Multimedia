@@ -13,15 +13,18 @@ import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import static practicaFinal.shapes.ORectangle2D.NAME;
 
 /**
+ * Punto que implementa la interfaz IOShape para que todas las clases
+ * personalizadas tengan los mismos atributos/métodos.
  *
- * @author oskyar
+ * ver {@link IOShape}, ver {@link Line2D.Double}
+ * 
+ * @author oskyar (Óscar Zafra)
  */
 public class OPoint2D extends Line2D.Double implements IOShape {
 
-    public static final String NAME="Punto";
+    public static final String NAME = "Punto";
     private int fillType;
     private int strokeType;
     private Color fillColor;
@@ -34,19 +37,16 @@ public class OPoint2D extends Line2D.Double implements IOShape {
     private ORectangle2D frame;
     private int strokeJoin;
     private int strokeCap;
-    
-    private final int CTRLPOINTS=0;
 
+    private final int CTRLPOINTS = 0;
+
+    /**
+     * Constructor que crea un punto pasándole un punto.
+     *
+     * @param p1 Punto.
+     */
     public OPoint2D(Point2D p1) {
-        super(p1.getX(), p1.getY(), p1.getX(), p1.getY());
-    }
-
-    public OPoint2D(double x, double y) {
-        super(x,y,x,y);
-    }
-
-    public OPoint2D(Point2D p1, Point2D p2) {
-        super(p1.getX(), p1.getY(), p1.getX(), p1.getY());
+        super(p1, p1);
     }
 
     @Override
@@ -63,20 +63,20 @@ public class OPoint2D extends Line2D.Double implements IOShape {
 
     @Override
     public void draw(Graphics2D g2d) {
-       if(strokeType==0){
+        if (strokeType == 0) {
             stroke = new BasicStroke(strokeWidth);
-        }else if(strokeType == 1){
+        } else if (strokeType == 1) {
             final float dash[] = {10.0f};
             stroke = new BasicStroke(strokeWidth, strokeCap, strokeJoin, 5.0f, dash, 0.0f);
         }
         g2d.setStroke(stroke);
         g2d.setColor(strokeColor);
         g2d.draw(this);
-        
+
         g2d.setColor(fillColor);
-        if(fillType==1){
+        if (fillType == 1) {
             g2d.fill(this);
-        }else if(fillType==2){
+        } else if (fillType == 2) {
             g2d.setPaint(gradient);
             g2d.fill(this);
         }
@@ -85,7 +85,7 @@ public class OPoint2D extends Line2D.Double implements IOShape {
     @Override
     public boolean contains(Point2D p) {
         Point2D aux = new Point2D.Double(getP1().getX(), getP1().getY());
-        return aux.distance(p) <= 9.0 +strokeWidth/2;
+        return aux.distance(p) <= 9.0 + strokeWidth / 2;
     }
 
     @Override
@@ -136,7 +136,7 @@ public class OPoint2D extends Line2D.Double implements IOShape {
         return super.getY1();
     }
 
-        @Override
+    @Override
     public int getFillType() {
         return fillType;
     }
@@ -165,12 +165,12 @@ public class OPoint2D extends Line2D.Double implements IOShape {
     public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
         /*if(fillType==2){
-            if(gradient != null){
-                //gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), gradientColor);
-            }else{
-                gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), fillColor);
-            }
-        }*/
+         if(gradient != null){
+         //gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), gradientColor);
+         }else{
+         gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), fillColor);
+         }
+         }*/
     }
 
     @Override
@@ -190,9 +190,9 @@ public class OPoint2D extends Line2D.Double implements IOShape {
 
     @Override
     public void setGradientColor(Color gradientColor) {
-       /* this.gradientColor = gradientColor;
-        gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), gradientColor);
-               */
+        /* this.gradientColor = gradientColor;
+         gradient = new GradientPaint((float)super.getX(),(float)super.getY(), fillColor, (float)super.getX()+(float)super.getWidth(),(float)super.getY()+(float)super.getHeight(), gradientColor);
+         */
     }
 
     @Override
@@ -203,7 +203,7 @@ public class OPoint2D extends Line2D.Double implements IOShape {
     @Override
     public void setStrokeWidth(float strokeWidth) {
         this.strokeWidth = strokeWidth;
-    }   
+    }
 
     @Override
     public String getName() {
@@ -224,26 +224,25 @@ public class OPoint2D extends Line2D.Double implements IOShape {
     public void setGradient(GradientPaint gradient) {
         this.gradient = gradient;
     }
-    
 
     @Override
     public void drawFrame(Graphics2D g2d) {
         //Para que no aparezca justo por el borde sino que se vea un poquito de margen (por eso el -2) y tengo en cuenta
         //El tamaño del trazo hay que tenerlo en cuenta también.
-        frame = new ORectangle2D( (this.getX()-2-strokeWidth/2), (this.getY()-2-strokeWidth/2),  strokeWidth+6,strokeWidth+6);
+        frame = new ORectangle2D((this.getX() - 2 - strokeWidth / 2), (this.getY() - 2 - strokeWidth / 2), strokeWidth + 6, strokeWidth + 6);
         frame.setStrokeWidth(2);
         frame.setStrokeType(1);
         frame.setStrokeColor(Color.RED);
         frame.setFillType(0);
         frame.draw(g2d);
         //return frame;
-    }  
+    }
 
     @Override
     public void createGradient(Point2D p1, Point2D p2) {
         gradient = new GradientPaint(p1, fillColor, p2, gradientColor);
     }
-    
+
     @Override
     public void updateGradient(Point2D p1, Point2D p2) {
         gradient = new GradientPaint(p1, fillColor, p2, gradientColor);

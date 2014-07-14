@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package practicaFinal.shapes;
 
 import java.awt.BasicStroke;
@@ -16,10 +15,14 @@ import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 
 /**
+ * Curva con un punto de control que implementa la interfaz IOShape para que
+ * todas las clases personalizadas tengan los mismos atributos/métodos.
  *
- * @author oskyar
+ * ver {@link IOShape}, ver {@link QuadCurve2D.Double}
+ *
+ * @author oskyar (Óscar Zafra)
  */
-public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape{
+public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape {
 
     public static final String NAME = "Curva con 1 pto control";
     private int fillType;
@@ -35,21 +38,21 @@ public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape{
     private int strokeJoin;
     private int strokeCap;
     private ArrayList<Point2D> vPoints;
-    
-    private final int CTRLPOINTS=1;
 
-    public OQuadCurve2D(Point2D p1, Point2D ctrl, Point2D p2){
-        super(p1.getX(),p1.getY(),ctrl.getX(),ctrl.getY(),p2.getX(),p2.getY());
+    private final int CTRLPOINTS = 1;
+
+    /**
+     * Constructor que crea una curva con 1 punto de control
+     *
+     * @param p1 Punto inicial
+     * @param ctrl Punto de control
+     * @param p2 Punto final
+     */
+    public OQuadCurve2D(Point2D p1, Point2D ctrl, Point2D p2) {
+        super(p1.getX(), p1.getY(), ctrl.getX(), ctrl.getY(), p2.getX(), p2.getY());
         vPoints = new ArrayList<>();
         vPoints.add(ctrl);
     }
-    
-    
-    public OQuadCurve2D(OQuadCurve2D qc){
-        super(qc.getX1(),qc.getY1(),qc.getCtrlX(),qc.getCtrlY(),qc.getX2(),qc.getY2());
-        vPoints = new ArrayList<>();
-        vPoints.add(new Point2D.Double(qc.getCtrlX(),qc.getCtrlY()));
-    }   
 
     @Override
     public Stroke getStroke() {
@@ -58,8 +61,9 @@ public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape{
 
     @Override
     public void setStroke(Stroke sk) {
-        if(sk != null)
+        if (sk != null) {
             this.stroke = sk;
+        }
     }
 
     @Override
@@ -87,11 +91,11 @@ public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape{
     public void setLocation(Point2D p) {
         double dx = p.getX() - this.getX1();
         double dy = p.getY() - this.getY1();
-        
+
         Point2D newP2 = new Point2D.Double(this.getX2() + dx, this.getY2() + dy);
-        Point2D newCtrl = new Point2D.Double(this.getCtrlX()+ dx, this.getCtrlY()+ dy);
-        vPoints.set(0,newCtrl);
-        this.setCurve(p,newCtrl,newP2);
+        Point2D newCtrl = new Point2D.Double(this.getCtrlX() + dx, this.getCtrlY() + dy);
+        vPoints.set(0, newCtrl);
+        this.setCurve(p, newCtrl, newP2);
     }
 
     @Override
@@ -228,8 +232,8 @@ public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape{
 
     @Override
     public void drawFrame(Graphics2D g2d) {
-    ArrayList<java.lang.Double> pointsX= new ArrayList<>();
-        ArrayList<java.lang.Double> pointsY= new ArrayList<>();
+        ArrayList<java.lang.Double> pointsX = new ArrayList<>();
+        ArrayList<java.lang.Double> pointsY = new ArrayList<>();
         pointsX.add(this.getX1());
         pointsX.add(this.getX2());
         pointsX.add(this.getCtrlX());
@@ -239,22 +243,22 @@ public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape{
         double minX, maxX, minY, maxY;
         minX = maxX = pointsX.get(0);
         minY = maxY = pointsY.get(0);
-        for(java.lang.Double d: pointsX){
-            if(minX > d){
+        for (java.lang.Double d : pointsX) {
+            if (minX > d) {
                 minX = d;
-            }else if(maxX <= d){
+            } else if (maxX <= d) {
                 maxX = d;
             }
         }
-        for(java.lang.Double d: pointsY){
-            if(minY > d){
+        for (java.lang.Double d : pointsY) {
+            if (minY > d) {
                 minY = d;
-            }else if(maxY <= d){
+            } else if (maxY <= d) {
                 maxY = d;
             }
         }
-        
-        frame = new ORectangle2D( minX-4, minY-4, Math.abs(minX-maxX)+8, Math.abs(minY-maxY)+8);
+
+        frame = new ORectangle2D(minX - 4, minY - 4, Math.abs(minX - maxX) + 8, Math.abs(minY - maxY) + 8);
         frame.setStrokeWidth(1);
         frame.setStrokeType(1);
         frame.setStrokeColor(Color.RED);
@@ -291,5 +295,5 @@ public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape{
     @Override
     public void setStrokeCapStyle(int strokeCap) {
         this.strokeCap = strokeCap;
-    }    
+    }
 }
