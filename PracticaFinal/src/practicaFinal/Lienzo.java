@@ -25,8 +25,11 @@ import practicaFinal.shapes.ORectangle2D;
 import practicaFinal.shapes.ORoundRectangle2D;
 
 /**
- *
+ * 
+ * 
  * @author Óscar
+ * 
+ * see {@link javax.swing.JPanel}
  */
 public class Lienzo extends javax.swing.JPanel {
 
@@ -178,6 +181,16 @@ public class Lienzo extends javax.swing.JPanel {
         return null;
     }
 
+    private IOShape getSelectedShapeSelected(Point2D p) {
+        //Recorro el vector al revés, porque la primera figura en dibujarse es la última en seleccionarse.
+        for (int i = vShapeSelected.size() - 1; i >= 0; i--) {
+            if (vShape.get(vShapeSelected.get(i)).contains(p)) {
+                return vShape.get(vShapeSelected.get(i));
+            }
+        }
+        return null;
+    }    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -227,7 +240,7 @@ public class Lienzo extends javax.swing.JPanel {
                     s.setOnePoint(ctrlCurva - 1, p);
                 }
             }
-        } else if (evt.isAltDown() && !vShapeSelected.isEmpty()) {
+        } else if (evt.isControlDown() && evt.isAltDown() && !vShapeSelected.isEmpty()) {
             for (Integer i : vShapeSelected) {
                 //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
                 if(vShape.get(i).getFillType()==Lienzo.COLOR_GRADIENT){
@@ -235,7 +248,7 @@ public class Lienzo extends javax.swing.JPanel {
                 }
             }
         } else {
-            s = getSelectedShape(evt.getPoint());
+            s = getSelectedShapeSelected(evt.getPoint());
             //Compruebo que se pincha con el botón izquierdo del ratón
             if (s != null) {
                 double x, y;
@@ -288,9 +301,8 @@ public class Lienzo extends javax.swing.JPanel {
             } else {
                 s.setOnePoint(ctrlCurva - 1, pEvt);
             }
-        } else if (evt.isAltDown() && !vShapeSelected.isEmpty()) {
+        } else if (evt.isControlDown() && evt.isAltDown() && !vShapeSelected.isEmpty()) {
             for (Integer i : vShapeSelected) {
-                //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
                 if(vShape.get(i).getFillType()==Lienzo.TYPE_FILL_GRADIENT){
                     vShape.get(i).updateGradient(p, pEvt);
                 }
