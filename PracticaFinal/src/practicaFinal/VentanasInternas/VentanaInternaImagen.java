@@ -80,6 +80,7 @@ public class VentanaInternaImagen extends javax.swing.JInternalFrame {
             public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
             }
             public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -148,6 +149,14 @@ public class VentanaInternaImagen extends javax.swing.JInternalFrame {
         }
 
     }//GEN-LAST:event_formInternalFrameActivated
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        VentanaInternaImagen vi = (VentanaInternaImagen) this;
+        if(vi!=null){
+            VentanaPrincipal.getInstance().getFigureList().setListData(new Vector());
+            VentanaPrincipal.getInstance().repaint();
+        }
+    }//GEN-LAST:event_formInternalFrameClosing
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

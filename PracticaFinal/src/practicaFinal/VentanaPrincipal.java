@@ -1632,6 +1632,29 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 if (UtilFileFilter.isImage(f)) {
                     BufferedImage img = ImageIO.read(f);
                     VentanaInternaImagen.showImage(img, f.getName());
+                    vi = (VentanaInternaImagen) escritorio.getSelectedFrame();
+                    if (vi != null) {
+                        vi.getLienzo().addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                eventoEscritorioShapes(vi);
+                                repaint();
+                            }
+
+                            @Override
+                            public void mousePressed(MouseEvent e) {
+                                eventoEscritorioShapes(vi);
+                                repaint();
+                            }
+
+                            @Override
+                            public void mouseReleased(MouseEvent e) {
+                                eventoEscritorioShapes(vi);
+                                repaint();
+                            }
+                        });
+                        eventoEscritorioShapes(vi);
+                    }
                 } else if (UtilFileFilter.isSound(f) || UtilFileFilter.isVideo(f)) {
                     VentanaInternaJMFPlayer.showJMFPlayer(f, f.getName());
                 }
@@ -2258,6 +2281,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 }
                 figureList.setSelectedIndices(selectedIndices);
             }
+        } else {
+            figureList.setListData(new Vector());
         }
     }//GEN-LAST:event_reloadShapesActionPerformed
 
@@ -2850,7 +2875,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.figureList = figureList;
     }
 
-    
     /**
      * @param args the command line arguments
      */
