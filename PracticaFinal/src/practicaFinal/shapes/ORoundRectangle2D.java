@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * interfaz IOShape para que todas las clases personalizadas tengan los mismos
  * atributos/métodos.
  *
- * ver {@link IOShape}, ver {@link Rectangle2D.Double}
+ * ver {@link IOShape}, ver {@link RoundRectangle2D.Double}
  *
  * @author oskyar (Óscar Zafra)
  */
