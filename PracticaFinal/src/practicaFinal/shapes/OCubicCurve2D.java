@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * todas las clases personalizadas tengan los mismos atributos/métodos.
  *
  * ver {@link IOShape}, ver {@link CubicCurve2D.Double}
- * 
+ *
  * @author oskyar (Óscar Zafra)
  */
 public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape {
