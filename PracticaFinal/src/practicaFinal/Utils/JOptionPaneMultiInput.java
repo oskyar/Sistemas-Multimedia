@@ -34,16 +34,27 @@ public class JOptionPaneMultiInput {
         myPanel.add(Box.createHorizontalStrut(15));
         myPanel.add(new JLabel("Alto:"));
         myPanel.add(height);
-
+        boolean ok = false;
         int result = JOptionPane.showConfirmDialog(null, myPanel,
                 "Introduzca el ancho y el alto del lienzo", JOptionPane.OK_CANCEL_OPTION);
-        while (width.getText().equals("") || height.getText().equals("") || Integer.parseInt(width.getText()) == 0 || Integer.parseInt(height.getText()) == 0) {
-            if (width.getText().equals("") || height.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Por favor introduzca algún número y que sea mayor que 0");
-            }
-            result = JOptionPane.showConfirmDialog(null, myPanel,
-                    "Introduzca el ancho y el alto del lienzo", JOptionPane.OK_CANCEL_OPTION);
+        while (result == JOptionPane.OK_OPTION && !ok) {
+            try {
+                //while (width.getText().equals("") || height.getText().equals("") || Integer.parseInt(width.getText()) == 0 || Integer.parseInt(height.getText()) == 0) {
+                double w = Double.parseDouble(width.getText());
+                double h = Double.parseDouble(height.getText());
+                if (width.getText().equals("") || height.getText().equals("") || Integer.parseInt(width.getText()) == 0 || Integer.parseInt(height.getText()) == 0) {
+                    JOptionPane.showMessageDialog(null, "Por favor introduzca algún número y que sea mayor que 0");
+                    result = JOptionPane.showConfirmDialog(null, myPanel,
+                            "Introduzca el ancho y el alto del lienzo", JOptionPane.OK_CANCEL_OPTION);
+                } else {
+                    ok = true;
 
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error: Introduzca un número");
+                result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Introduzca el ancho y el alto del lienzo", JOptionPane.OK_CANCEL_OPTION);
+            }
         }
         if (result == JOptionPane.OK_OPTION) {
             ArrayList<Integer> v = new ArrayList<>();
