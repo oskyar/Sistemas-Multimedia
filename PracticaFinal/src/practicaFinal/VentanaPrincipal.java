@@ -40,6 +40,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JSpinner;
 import javax.swing.ListSelectionModel;
 import practicaFinal.VentanasInternas.VentanaInternaCamara;
 import practicaFinal.VentanasInternas.VentanaInternaGrabador;
@@ -109,6 +110,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         comboBoxUmbralizacionActionPerformed(null);
         //Un evento creado por mi para saber si se está presionando la tecla Control
         figureList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        this.showToolsBarsOrNot(VentanaPrincipal.SHOW_TOOLBAR_SOUND);
         //escritorio.dispatchEvent(new MouseEvent(escritorio,MouseEvent.MOUSE_RELEASED, 0, MouseEvent.NOBUTTON, 0, 0, 0, false));
         //Evento para tener en cuenta cuando se pusa la tecla CONTROL del teclado.
         //Usada para seleccionar o deseleccionar shapes del lienzo.
@@ -1540,7 +1542,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonOvaloMouseClicked
 
     private void nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoActionPerformed
-        //figureList.clearSelection();
         ArrayList<Integer> options = JOptionPaneMultiInput.showJOptionPaneMultiIpunt();
         if (options != null) {
             vi = newWindows(options.get(0), options.get(1));
@@ -1562,11 +1563,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
                     BufferedImage img = vi.getLienzo().getImageOriginal();
                     if (img == null) {
-                        img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+                        img = new BufferedImage(vi.getLienzo().getWidth(), vi.getLienzo().getHeight(), BufferedImage.TYPE_INT_RGB);
+                        //Le añado filtro negativo para que slaga el fondo blanco en la imagen.
+                        LookupTable ltp = LookupTableProducer.createLookupTable(LookupTableProducer.TYPE_NEGATIVE);
+                        LookupOp lop = new LookupOp(ltp, null);
+                        img = lop.filter(img, null);
+
                     }
                     img = vi.getLienzo().volcado(img);
 
-                    ImageIO.write(img, "jpg", f);
+                    ImageIO.write(img, UtilFileFilter.getExtension(f), f);
                     //Código
                 } catch (IOException ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -1619,10 +1625,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirActionPerformed
         JFileChooser dlg = new JFileChooser();
-        dlg.addChoosableFileFilter(new AVIVideoFileFilter());
-        dlg.addChoosableFileFilter(new GIFImageFileFilter());
+        dlg.setAcceptAllFileFilterUsed(false);
         dlg.addChoosableFileFilter(new JPGImageFileFilter());
         dlg.addChoosableFileFilter(new JPEGImageFileFilter());
+        dlg.addChoosableFileFilter(new AVIVideoFileFilter());
+        dlg.addChoosableFileFilter(new GIFImageFileFilter());
         dlg.addChoosableFileFilter(new PNGImageFileFilter());
         dlg.addChoosableFileFilter(new WAVSoundFileFilter());
         dlg.addChoosableFileFilter(new MP3SoundFileFilter());
@@ -1683,11 +1690,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonLapizMouseClicked
 
     private void grosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosorStateChanged
-        Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
-        VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
-        if (vi != null) {
-            vi.getLienzo().changeWidthStrokeProperty(Float.parseFloat(grosor.getValue().toString()));
+        float value = Float.parseFloat(((JSpinner)evt.getSource()).getValue().toString());
+        if( value < 0 ){
+            Lienzo.setStrokeWidth(0);
+        }else{
+            Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
         }
+        VentanaInternaImagen vii = (VentanaInternaImagen) selectInternalWindows();
+        if (vii != null) {
+            vii.getLienzo().changeWidthStrokeProperty(Float.parseFloat(grosor.getValue().toString()));
+        }
+        
     }//GEN-LAST:event_grosorStateChanged
 
     private void menuRescaleOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRescaleOpActionPerformed
@@ -2302,6 +2315,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 vi.getLienzo().getVdXY().add(new Point2D.Double());
                 repaint();
             }
+            //System.err.println(vi.getLienzo().getvShape().get(vi.getLienzo().getvShapeSelected().get(0)).);
 
             removeShape.setEnabled(true);
             cloneShape.setEnabled(true);
@@ -2337,22 +2351,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void cloneShapeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cloneShapeMouseClicked
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
-         int selectedIndices[] = figureList.getSelectedIndices();
+            int selectedIndices[] = figureList.getSelectedIndices();
             if (selectedIndices.length > 0) {
                 for (int i = selectedIndices.length - 1; i >= 0; i--) {
                     vi.getLienzo().getvShape().add(vi.getLienzo().getvShape().get(selectedIndices[i]).clone());
                 }
-               // IOShape s = vi.getLienzo().getvShape().get(index);
-               // IOShape sClone = s.clone();
-                //vi.getLienzo().getvShape().add(sClone);
                 Vector<String> listData = new Vector();
                 int i = 0;
                 for (IOShape sh : vi.getLienzo().getvShape()) {
                     listData.add(sh.getName() + " " + ++i);
                 }
                 figureList.setListData(listData);
-                //removeShape.setEnabled(false);
-                //cloneShape.setEnabled(false);
                 repaint();
             }
         }
@@ -2742,7 +2751,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         final VentanaInternaImagen vi = new VentanaInternaImagen();
         escritorio.add(vi);
         vi.setSize(width, height);
-        //vi.getLienzo().setSize(width, height);
         vi.setTitle("Lienzo " + ++numVentanas);
         vi.setVisible(true);
         setVentanaInterna(vi);
