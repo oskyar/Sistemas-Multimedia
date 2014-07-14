@@ -35,8 +35,10 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JFileChooser;
+import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.ListSelectionModel;
 import practicaFinal.VentanasInternas.VentanaInternaCamara;
@@ -2015,14 +2017,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgRight = vi.getLienzo().getImageActual();
-            VentanaInternaImagen viNext = (VentanaInternaImagen) escritorio.selectFrame(true);
-            if (viNext != null) {
-                BufferedImage imgLeft = viNext.getLienzo().getImageActual();
-                RestaOp op = new RestaOp(imgLeft);
-                BufferedImage imgdest = op.filter(imgRight, null);
-                if (imgdest != null) {
-                    vi.getLienzo().setImageActual(imgdest);
-                    vi.getLienzo().repaint();
+            if (imgRight != null) {
+                VentanaInternaImagen viNext = (VentanaInternaImagen) escritorio.selectFrame(true);
+                if (viNext != null) {
+                    BufferedImage imgLeft = viNext.getLienzo().getImageActual();
+                    RestaOp op = new RestaOp(imgLeft);
+                    BufferedImage imgdest = op.filter(imgRight, null);
+                    if (imgdest != null) {
+                        vi.getLienzo().setImageActual(imgdest);
+                        vi.getLienzo().repaint();
+                    }
                 }
             }
         }
@@ -2032,14 +2036,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (vi != null) {
             BufferedImage imgRight = vi.getLienzo().getImageActual();
-            VentanaInternaImagen viNext = (VentanaInternaImagen) escritorio.selectFrame(true);
-            if (viNext != null) {
-                BufferedImage imgLeft = viNext.getLienzo().getImageActual();
-                MultiplicacionOp op = new MultiplicacionOp(imgLeft);
-                BufferedImage imgdest = op.filter(imgRight, null);
-                if (imgdest != null) {
-                    vi.getLienzo().setImageActual(imgdest);
-                    vi.getLienzo().repaint();
+            if (imgRight != null) {
+                VentanaInternaImagen viNext = (VentanaInternaImagen) escritorio.selectFrame(true);
+                if (viNext != null) {
+                    BufferedImage imgLeft = viNext.getLienzo().getImageActual();
+                    MultiplicacionOp op = new MultiplicacionOp(imgLeft);
+                    BufferedImage imgdest = op.filter(imgRight, null);
+                    if (imgdest != null) {
+                        vi.getLienzo().setImageActual(imgdest);
+                        vi.getLienzo().repaint();
+                    }
                 }
             }
         }
@@ -2055,6 +2061,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
                 if (imgdest != null) {
                     vi.getLienzo().setImageActual(imgdest);
+                    activateFilterColorImage(false);
                     vi.getLienzo().repaint();
                 }
             }
@@ -2455,10 +2462,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 //System.err.println("valor: "+sliderUmbralizacion.getValue());
                 if (thresholdingType == ThresholdOp.TYPE_COLOR) {
                     umbralizacionBarra = new ThresholdOp(thresholdingColor, sliderUmbralizacion.getValue());
-                } else if (thresholdingType == ThresholdOp.TYPE_GREY_LEVEL) {
+                } else { // thresholdingType == ThresholdOp.TYPE_GREY_LEVEL
+                    thresholdingType = ThresholdOp.TYPE_GREY_LEVEL;
                     umbralizacionBarra = new ThresholdOp(sliderUmbralizacion.getValue());
-                } else {//No va a pasar nunca pero para quitar warnings.
-                    umbralizacionBarra = null;
                 }
                 umbralizacionBarra.setType(thresholdingType);
                 //umbralizacionBarra.setThreshold(sliderUmbralizacion.getValue());
@@ -2571,8 +2577,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 if (imgdest != null) {
                     vi.getLienzo().setImageOriginal(imgdest);
                     vi.getLienzo().repaint();
-                    System.err.println(imgdest.getType());
-                    System.err.println(imgdest.getColorModel().toString());
+                    activateFilterColorImage(false);
                 }
             }
         } catch (Exception e) {
@@ -2618,6 +2623,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 //Guardo la imagen
                 if (imgdest != null) {
                     vi.getLienzo().setImageOriginal(imgdest);
+                    activateFilterColorImage(false);
                     vi.getLienzo().repaint();
                 }
             }
@@ -2803,14 +2809,48 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     }
 
-    public static JMenuItem getSobelMenu() {
+    public JMenuItem getSobelMenu() {
         return sobelMenu;
     }
 
-    public static void setSobelMenu(JMenuItem sobelMenu) {
-        VentanaPrincipal.sobelMenu = sobelMenu;
+    public void setSobelMenu(JMenuItem sobelMenu) {
+        this.sobelMenu = sobelMenu;
     }
 
+    public JComboBox getComboBoxUmbralizacion() {
+        return comboBoxUmbralizacion;
+    }
+
+    public void setComboBoxUmbralizacion(JComboBox comboBoxUmbralizacion) {
+        this.comboBoxUmbralizacion = comboBoxUmbralizacion;
+    }
+
+    public JMenuItem getMenuArtFilter() {
+        return menuArtFilter;
+    }
+
+    public void setMenuArtFilter(JMenuItem menuArtFilter) {
+        this.menuArtFilter = menuArtFilter;
+    }
+
+    public void activateFilterColorImage(boolean b) {
+        sobelMenu.setEnabled(b);
+        comboBoxUmbralizacion.setEnabled(b);
+        sliderUmbralizacion.setEnabled(b);
+        menuArtFilter.setEnabled(b);
+
+        repaint();
+    }
+
+    public JList getFigureList() {
+        return figureList;
+    }
+
+    public void setFigureList(JList figureList) {
+        this.figureList = figureList;
+    }
+
+    
     /**
      * @param args the command line arguments
      */
@@ -2922,7 +2962,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JSlider sliderBrillo;
     private javax.swing.JSlider sliderRotacion;
     private javax.swing.JSlider sliderUmbralizacion;
-    private static javax.swing.JMenuItem sobelMenu;
+    private javax.swing.JMenuItem sobelMenu;
     private javax.swing.JButton strokeColor;
     private javax.swing.JMenuItem umbralizacion;
     private javax.swing.JCheckBoxMenuItem verBarraEstado;

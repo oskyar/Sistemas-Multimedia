@@ -6,8 +6,10 @@
 package practicaFinal.VentanasInternas;
 
 import java.awt.image.BufferedImage;
+import java.util.Vector;
 import practicaFinal.Lienzo;
 import practicaFinal.VentanaPrincipal;
+import practicaFinal.shapes.IOShape;
 
 /**
  *
@@ -121,7 +123,27 @@ public class VentanaInternaImagen extends javax.swing.JInternalFrame {
         BufferedImage imgDest = lienzo2.getImageOriginal();
         if (imgDest != null) {
             if (imgDest.getType() == BufferedImage.TYPE_BYTE_GRAY) {
-                VentanaPrincipal.getSobelMenu().setEnabled(false);
+                VentanaPrincipal.getInstance().activateFilterColorImage(false);
+            } else {
+                VentanaPrincipal.getInstance().activateFilterColorImage(true);
+            }
+        }
+        
+        VentanaInternaImagen vi = (VentanaInternaImagen) this;
+        if (vi != null) {
+            Vector<String> listData = new Vector();
+            int i = 0;
+            for (IOShape s : vi.getLienzo().getvShape()) {
+                listData.add(s.getName() + " " + ++i);
+            }
+            VentanaPrincipal.getInstance().getFigureList().setListData(listData);
+            if (!vi.getLienzo().getvShapeSelected().isEmpty()) {
+                int selectedIndices[] = new int[vi.getLienzo().getvShapeSelected().size()];
+                i = 0;
+                for (Integer index : vi.getLienzo().getvShapeSelected()) {
+                    selectedIndices[i++] = index;
+                }
+                VentanaPrincipal.getInstance().getFigureList().setSelectedIndices(selectedIndices);
             }
         }
 
