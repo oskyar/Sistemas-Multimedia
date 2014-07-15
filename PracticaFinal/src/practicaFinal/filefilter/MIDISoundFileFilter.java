@@ -4,8 +4,11 @@ import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
 /**
+ * Filtro para tener en cuento el formato MIDI de sonido.
  *
- * @author oskyar
+ * Ver {@link FileFilter}
+ *
+ * @author oskyar (Óscar Zafra)
  */
 public class MIDISoundFileFilter extends FileFilter {
 

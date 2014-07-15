@@ -9,8 +9,11 @@ import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
 /**
+ * Filtro para tener en cuento el formato JPEG de imagen.
  *
- * @author oskyar
+ * Ver {@link FileFilter}
+ *
+ * @author oskyar (Óscar Zafra)
  */
 public class JPEGImageFileFilter extends FileFilter {
 
