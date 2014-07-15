@@ -14,6 +14,10 @@ import sm.image.BufferedImagePixelIterator;
 import sm.image.KernelProducer;
 
 /**
+ * Este filtro de imagen detecta las fronteras entre colores ó grises, siendo la
+ * detección entre colores mucho más precisa.
+ *
+ * Ver {@link BufferedImageOpAdapter}
  *
  * @author oskyar
  */

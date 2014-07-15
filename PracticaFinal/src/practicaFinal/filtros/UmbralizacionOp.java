@@ -11,6 +11,12 @@ import sm.image.BufferedImageOpAdapter;
 import sm.image.BufferedImageSampleIterator;
 
 /**
+ * Técnica de Segmentación basada en pixel.
+ *
+ * Usa las propiedades del pixel para agruparlos sin considerar una conectividad
+ * especial
+ *
+ * ver {@link BufferedImageOpAdapter}
  *
  * @author oskyar
  */
@@ -18,10 +24,17 @@ public class UmbralizacionOp extends BufferedImageOpAdapter {
 
     private int umbral;
 
+    /**
+     * Crea e inicializa el objeto con un umbral, que será el tenido en cuenta
+     * para la conectividad entre píxeles.
+     *
+     * @param umbral
+     */
     public UmbralizacionOp(int umbral) {
         this.umbral = umbral;
     }
 
+    @Override
     public BufferedImage filter(BufferedImage src, BufferedImage dest) {
         if (dest == null) {
             dest = createCompatibleDestImage(src, null);

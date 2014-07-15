@@ -9,11 +9,21 @@ import java.awt.image.BufferedImage;
 import sm.image.BinaryOp;
 
 /**
+ * Esta operación de procesamiento es útil para visualizar diferencias entre
+ * imágenes, es obligatorio que las dos imágenes tengan el mismo tamaño, tanto
+ * de ancho como de alto.
  *
- * @author oskyar
+ * Ver {@link BinaryOp}
+ *
+ * @author oskyar (Óscar Zafra)
  */
 public class RestaOp extends BinaryOp {
 
+    /**
+     * Constructor al que se le pasa una imagen para comparar.
+     *
+     * @param img
+     */
     public RestaOp(BufferedImage img) {
         super(img);
     }
