@@ -28,7 +28,7 @@ public class UmbralizacionOp extends BufferedImageOpAdapter {
      * Crea e inicializa el objeto con un umbral, que será el tenido en cuenta
      * para la conectividad entre píxeles.
      *
-     * @param umbral
+     * @param umbral Umbral de tipo entero 
      */
     public UmbralizacionOp(int umbral) {
         this.umbral = umbral;

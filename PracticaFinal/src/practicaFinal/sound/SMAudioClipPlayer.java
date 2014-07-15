@@ -15,9 +15,10 @@ public class SMAudioClipPlayer implements SMPlayer{
     private AudioClip audio;
     private URL url;
     
-    /**
-     *  Constructor 
-     */
+/**
+ * 
+ * @param f File
+ */
     public SMAudioClipPlayer(File f){
         try {
             url = new URL("file:"+f.getAbsolutePath());

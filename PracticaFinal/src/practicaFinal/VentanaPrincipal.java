@@ -2937,10 +2937,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         return figureList;
     }
 
-    /**
-     * @param args the command line arguments
-     */
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup BotonesMenu;
     private javax.swing.ButtonGroup GrupoColores;

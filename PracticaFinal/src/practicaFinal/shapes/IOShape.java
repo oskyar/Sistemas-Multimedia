@@ -41,7 +41,6 @@ import practicaFinal.PracticaFinal;
  * <li>Método para clonar la figura </li>
  * </ul>
  *
- * @see Shape
  * @see Color
  * @see Stroke
  * @see GradientPaint
@@ -83,7 +82,7 @@ public interface IOShape {
      * En este método se modifica el Array de <code>Point2D.Double</code> pasado
      * por parámetro.
      *
-     * @param vPoints
+     * @param vPoints Modifica el vector de Puntos auxiliares
      */
     public void setPoint(ArrayList<Point2D> vPoints);
 
@@ -236,7 +235,7 @@ public interface IOShape {
      * Devuelve el Color del gradiente, (el segundo color), el primero viene a
      * ser el color de relleno.
      *
-     * @return
+     * @return Devuelve un Color, el color del gradiente.
      */
     public Color getGradientColor();
 

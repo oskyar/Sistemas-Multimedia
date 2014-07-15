@@ -22,7 +22,7 @@ public class RestaOp extends BinaryOp {
     /**
      * Constructor al que se le pasa una imagen para comparar.
      *
-     * @param img
+     * @param img Imagen con la que comparar
      */
     public RestaOp(BufferedImage img) {
         super(img);

@@ -107,6 +107,12 @@ public class Lienzo extends javax.swing.JPanel {
         vdXY = new ArrayList();
     }
 
+    /**
+     * Método principal sobrecargado para poder pintar las figuras con una
+     * instancia de Graphics2D
+     *
+     * @param g Instancia de Graphics.
+     */
     @Override
     public void paint(Graphics g) {
         super.paint(g);
