@@ -369,7 +369,7 @@ public class Lienzo extends javax.swing.JPanel {
 
     /**
      * Modifica la imagen actual del lienzo, la que se está usando.
-     * 
+     *
      * @param imgDest Imagen que se va a modificar.
      */
     void setImageActual(BufferedImage imgDest) {
@@ -378,8 +378,9 @@ public class Lienzo extends javax.swing.JPanel {
     }
 
     /**
-     * Devuelve la Imagen actual del Lienzo, que no tiene porqué ser la misma que la original.
-     * 
+     * Devuelve la Imagen actual del Lienzo, que no tiene porqué ser la misma
+     * que la original.
+     *
      * @return devuelve una imagen de tipo BufferedImage.
      */
     public BufferedImage getImageActual() {
@@ -388,111 +389,146 @@ public class Lienzo extends javax.swing.JPanel {
 
     /**
      * Modifica el color de relleno del lienzo.
-     * 
+     *
      * @param color Color con el que se va a modificar el color de relleno.
-     */    
+     */
     public static void setFillColor(Color color) {
         Lienzo.fillColor = color;
     }
 
+    /**
+     * Devuelve el colro del relleno del Lienzo.
+     *
+     * @return devuelve el color de relleno del lienzo.
+     */
     public static Color getFillColor() {
         return Lienzo.fillColor;
     }
 
+    /**
+     * Devuelve la forma actual para pintar.
+     *
+     * @return devuelve un entero que hace referencia a la forma para pintar.
+     */
     public static int getForma() {
         return Lienzo.forma;
     }
 
+    /**
+     * Modifica la forma para dibujar
+     *
+     * @param forma valor de la forma para dibujar.
+     */
     public static void setForma(int forma) {
         Lienzo.ctrlCurva = 0;
         Lienzo.forma = forma;
     }
 
-    public Point2D getP() {
-        return p;
-    }
-
-    public void setP(Point p) {
-        this.p = p;
-    }
-
-    public boolean isEditar() {
-        return editar;
-    }
-
-    public static void setEditar(boolean editar) {
-        Lienzo.ctrlCurva = 0;
-        Lienzo.editar = editar;
-    }
-
-    public Stroke getStroke() {
-        return Lienzo.stroke;
-    }
-
-    public static void setStroke(Stroke sk) {
-        stroke = sk;
-    }
-
-    public int getMaxPuntosControl() {
-        return this.maxPuntosControl;
-    }
-
-    public void setMaxPuntosControl(int num) {
-        this.maxPuntosControl = num;
-    }
-
-    public static int getCtrlCurva() {
-        return Lienzo.ctrlCurva;
-    }
-
-    public static void setCtrlCurva(int num) {
-        Lienzo.ctrlCurva = num;
-    }
-
+    /**
+     * Devuelve el tipo de Relleno que hay seleccionado en el lienzo
+     *
+     * @return Devuelve un entero con el tipo de relleno.
+     */
     public static int getFillType() {
         return fillType;
     }
 
+    /**
+     * Modifica el tipo de relleno
+     *
+     * @param fillType Tipo de relleno.
+     */
     public static void setFillType(int fillType) {
         Lienzo.fillType = fillType;
     }
 
+    /**
+     * Devuelve el color del gradiente (viene a ser el segundo color del
+     * gradiente).
+     *
+     * @return devuelve el color del gradiente.
+     */
     public static Color getGradientColor() {
         return gradientColor;
     }
 
+    /**
+     * Modifica el segundo color del gradiente
+     *
+     * @param gradientColor Color del gradiente
+     */
     public static void setGradientColor(Color gradientColor) {
         Lienzo.gradientColor = gradientColor;
     }
 
+    /**
+     * Devuelve el color del trazo de los marcos de las figuras
+     *
+     * @return Devuelve un color.
+     */
     public static Color getStrokeColor() {
         return strokeColor;
     }
 
+    /**
+     * Modifica el color de los trazos de las figuras
+     *
+     * @param strokeColor color del trazo seleccionado.
+     */
     public static void setStrokeColor(Color strokeColor) {
         Lienzo.strokeColor = strokeColor;
     }
 
+    /**
+     * Devuelve el tipo de trazo que hay seleccionado.
+     *
+     * @return devuelve un número entero con el tipo de trazo.
+     */
     public static int getStrokeType() {
         return strokeType;
     }
 
+    /**
+     * Modifica el tipo de trazo con el parámetro pasado.
+     *
+     * @param strokeType tipo de trazo.
+     */
     public static void setStrokeType(int strokeType) {
         Lienzo.strokeType = strokeType;
     }
 
+    /**
+     * Devuelve el grosor del trazo.
+     *
+     * @return Devuelve el grosor del trazo en tipo float.
+     */
     public static float getStrokeWidth() {
         return strokeWidth;
     }
 
+    /**
+     * Modifica el grosor del trazo
+     *
+     * @param strokeWidth Grosor del trazo.
+     */
     public static void setStrokeWidth(float strokeWidth) {
         Lienzo.strokeWidth = strokeWidth;
     }
 
+    /**
+     * Vector que contiene todos las formas dibujadas en ese lienzo.
+     *
+     * @return Devuelve el vector (ArrayList) de figuras pintadas.
+     */
     public ArrayList<IOShape> getvShape() {
         return vShape;
     }
 
+    /**
+     * Modifica el vector de figuras.
+     *
+     * @param vShape Vector de figuras.
+     */
     public void setvShape(ArrayList<IOShape> vShape) {
         this.vShape = vShape;
     }
@@ -500,19 +536,37 @@ public class Lienzo extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    /**
+     * Vector de enteros de figuras seleccionadas
+     *
+     * @return devuelve un ArrayList de enteros con los números de las figuras
+     * seleccionadas
+     */
     public ArrayList<Integer> getvShapeSelected() {
         return vShapeSelected;
     }
 
+    /**
+     * Modifica el vector de las figuras seleccionadas.
+     *
+     * @param vShapeSelected ArrayList de enteros de figuras seleccionadas
+     */
     public void setvShapeSelected(ArrayList<Integer> vShapeSelected) {
         this.vShapeSelected = vShapeSelected;
     }
 
+    /**
+     * Cambia la propiedad del relleno teniendo en cuenta el relleno y dos
+     * colores (Relleno y Gradiente).
+     *
+     * @param typeFill Tipo de relleno, véase constantes de la clase.
+     * @param color1 Color para el relleno.
+     * @param color2 Color para el gradiente.
+     */
     void changeFillProperty(int typeFill, Color color1, Color color2) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
                 vShape.get(index).setFillType(typeFill);
-                System.err.println("tipo fill " + typeFill);
                 vShape.get(index).setFillColor(color1);
                 if (typeFill == TYPE_FILL_GRADIENT) {
                     vShape.get(index).setGradientColor(color2);
@@ -522,14 +576,33 @@ public class Lienzo extends javax.swing.JPanel {
         repaint();
     }
 
+    /**
+     * Devuelve un ArrayList de Point2D que contiene la diferencia entre una
+     * forma y dónde pinchas a la hora de mover la figura para que no se mueva
+     * el ratón de forma extraña al seleccionar una figura.
+     *
+     * @return Devuelve un ArrayList de Point2D.
+     */
     public ArrayList<Point2D> getVdXY() {
         return vdXY;
     }
 
+    /**
+     * Modifica el ArrayList de Point2D.
+     *
+     * @param vdXY Nuevo ArrayList.
+     */
     public void setVdXY(ArrayList<Point2D> vdXY) {
         this.vdXY = vdXY;
     }
 
+    /**
+     * Cambia las propiedades del color dependiendo del tipo de Color
+     *
+     * @param TYPE_COLOR Entero que es el tipo de color.
+     * @param color1 Color del trazo/relleno.
+     * @param color2 Color del gradiente.
+     */
     void changeColorProperty(int TYPE_COLOR, Color color1, Color color2) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
@@ -550,6 +623,11 @@ public class Lienzo extends javax.swing.JPanel {
         repaint();
     }
 
+    /**
+     * Cambia la propiedad del ancho del trazo.
+     *
+     * @param width Tamaño del ancho del trazo
+     */
     void changeWidthStrokeProperty(float width) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
@@ -559,6 +637,11 @@ public class Lienzo extends javax.swing.JPanel {
         repaint();
     }
 
+    /**
+     * Cambia el tipo de trazo.
+     *
+     * @param strokeType Tipo de trazo.
+     */
     void changeStrokeTypeProperty(int strokeType) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
@@ -568,15 +651,25 @@ public class Lienzo extends javax.swing.JPanel {
         repaint();
     }
 
-    void changeStrokeStyleJoinProperty(int strokeType) {
+    /**
+     * Cambia el tipo de Unión de la línea de trazo.
+     *
+     * @param strokeTypeJoin Tipo de Unión en el trazo.
+     */
+    void changeStrokeStyleJoinProperty(int strokeTypeJoin) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
-                vShape.get(index).setStrokeJoinStyle(strokeType);
+                vShape.get(index).setStrokeJoinStyle(strokeTypeJoin);
             }
         }
         repaint();
     }
 
+    /**
+     * Cambia el tipo de final de la línea de trazo.
+     *
+     * @param strokeTypeJoin Tipo de finalización en el trazo.
+     */
     void changeStrokeStyleCapProperty(int strokeType) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
@@ -586,18 +679,38 @@ public class Lienzo extends javax.swing.JPanel {
         repaint();
     }
 
+    /**
+     * Devuelve el tipo de unión de la línea del trazo.
+     *
+     * @return Devuelve un entero con el tipo de unión.
+     */
     public static int getStrokeStyleJoinType() {
         return strokeStyleJoinType;
     }
 
+    /**
+     * Modifica el tipo de unión del trazo.
+     *
+     * @param strokeStyleJoinType Tipo de unión del trazo.
+     */
     public static void setStrokeStyleJoinType(int strokeStyleJoinType) {
         Lienzo.strokeStyleJoinType = strokeStyleJoinType;
     }
 
+    /**
+     * Devuelve el tipo de final de la línea del trazo.
+     *
+     * @return Devuelve un entero con el tipo de final.
+     */
     public static int getStrokeStyleCapType() {
         return strokeStyleCapType;
     }
 
+    /**
+     * Modifica el tipo de final del trazo.
+     *
+     * @param strokeStyleCapType Tipo de final del trazo.
+     */
     public static void setStrokeStyleCapType(int strokeStyleCapType) {
         Lienzo.strokeStyleCapType = strokeStyleCapType;
     }
