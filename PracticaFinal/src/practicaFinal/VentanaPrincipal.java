@@ -117,6 +117,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         keyboardEvent();
     }
 
+    /**
+     * Devuelve una instancia de Ventana Principal para poder tener acceso a sus
+     * componentes de la interfaz.
+     *
+     * Es lo denominado un Singleton.
+     *
+     * @return devuelve la única instancia de VentanaPrincipal.
+     */
     public static VentanaPrincipal getInstance() {
         return instance;
     }
@@ -243,22 +251,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         menuWebcam = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                formMouseClicked(evt);
-            }
-        });
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                formKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                formKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                formKeyTyped(evt);
-            }
-        });
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
         paletaOpciones.setLayout(new javax.swing.BoxLayout(paletaOpciones, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -927,7 +920,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         contenedorColores.setMaximumSize(new java.awt.Dimension(125, 90));
         contenedorColores.setMinimumSize(new java.awt.Dimension(125, 90));
         contenedorColores.setPreferredSize(new java.awt.Dimension(125, 90));
-        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0);
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(0, 0, 0);
         flowLayout1.setAlignOnBaseline(true);
         contenedorColores.setLayout(flowLayout1);
 
@@ -1141,11 +1134,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 fillColorMouseClicked(evt);
             }
         });
-        fillColor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fillColorActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -1227,11 +1215,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 strokeColorMouseClicked(evt);
             }
         });
-        strokeColor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                strokeColorActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
@@ -1302,7 +1285,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         pie.add(paneles, java.awt.BorderLayout.LINE_START);
 
-        panelLabelFigura.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        panelLabelFigura.setBorder(javax.swing.BorderFactory.createBevelBorder(1));
         panelLabelFigura.setLayout(new javax.swing.BoxLayout(panelLabelFigura, javax.swing.BoxLayout.LINE_AXIS));
 
         labelFigura.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1516,6 +1499,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Devuelve una instancia del escritorio, (se usaba antes de tener el método
+     * <code>getInstance()</code>.
+     *
+     * Es un método estático por lo que no era necesario crear objeto.
+     *
+     * @return devuelve un escritorio de tipo JDesktopPane.
+     */
     public static JDesktopPane getEscritorio() {
         return escritorio;
     }
@@ -1690,17 +1681,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonLapizMouseClicked
 
     private void grosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_grosorStateChanged
-        float value = Float.parseFloat(((JSpinner)evt.getSource()).getValue().toString());
-        if( value < 0 ){
+        float value = Float.parseFloat(((JSpinner) evt.getSource()).getValue().toString());
+        if (value < 0) {
             Lienzo.setStrokeWidth(0);
-        }else{
+        } else {
             Lienzo.setStrokeWidth(Float.parseFloat(grosor.getValue().toString()));
         }
         VentanaInternaImagen vii = (VentanaInternaImagen) selectInternalWindows();
         if (vii != null) {
             vii.getLienzo().changeWidthStrokeProperty(Float.parseFloat(grosor.getValue().toString()));
         }
-        
+
     }//GEN-LAST:event_grosorStateChanged
 
     private void menuRescaleOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRescaleOpActionPerformed
@@ -2229,10 +2220,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_strokeColorMouseClicked
 
-    private void strokeColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_strokeColorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_strokeColorActionPerformed
-
     private void fillColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fillColorMouseClicked
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
         if (evt.getClickCount() % 2 == 0 || fillColor.getBackground() == null) {
@@ -2251,10 +2238,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             vi.getLienzo().changeColorProperty(Lienzo.COLOR_FILL, fillColor.getBackground(), null);
         }
     }//GEN-LAST:event_fillColorMouseClicked
-
-    private void fillColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillColorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fillColorActionPerformed
 
     private void comboBoxStyleStrokeJoinListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxStyleStrokeJoinListActionPerformed
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
@@ -2366,23 +2349,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_cloneShapeMouseClicked
-
-    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-
-// TODO add your handling code here:
-    }//GEN-LAST:event_formKeyPressed
-
-    private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
-
-    }//GEN-LAST:event_formKeyTyped
-
-    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
-
-    }//GEN-LAST:event_formKeyReleased
-
-    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_formMouseClicked
 
     private void comboBoxStyleStrokeCapListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxStyleStrokeCapListActionPerformed
         VentanaInternaImagen vi = (VentanaInternaImagen) selectInternalWindows();
@@ -2671,14 +2637,33 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuArtFilterActionPerformed
 
+    /**
+     * Devuleve un objeto de VentanaInterna.
+     *
+     * ver {@link VentanaInternaImagen}
+     *
+     * @return Devuelve un atributo de la clase de tipo VentanaInternaImagen.
+     */
     public VentanaInternaImagen getVentanaInterna() {
         return vi;
     }
 
+    /**
+     * Modifica la ventana interna de actual.
+     *
+     * @param vi Ventana interna que pasará a ser la actual.
+     */
     public void setVentanaInterna(VentanaInternaImagen vi) {
         this.vi = vi;
     }
 
+    /**
+     * Genera una lista de figuras dibujadas y añade cada figura como items al
+     * panel derecho de la interfaz.
+     *
+     * @param vi Se usarán las figuras dibujadas en la VentanaInterna pasada por
+     * parámetro.
+     */
     public void eventoEscritorioShapes(VentanaInternaImagen vi) {
         if (vi != null) {
             Vector<String> listData = new Vector();
@@ -2698,6 +2683,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Evento que tiene en cuenta cuando presionas alguna tecla. Está desde que
+     * se crea la instancia de Ventana principal en funcionamiento.
+     *
+     * El único funcionamiento por ahora es que al pulsar la tecla ESC se
+     * deseleccionan las figuras seleccionadas en una VentanaInterna.
+     */
     public final void keyboardEvent() {
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(new KeyEventDispatcher() {
@@ -2747,6 +2739,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         return vi;
     }
 
+    /**
+     * Crea una nueva ventana que tiene en cuenta el ancho y el alto a la hora
+     * de mostrarla en el escritorio.
+     *
+     * No se tienen en cuenta las barras de desplazamiento en el ancho y alto.
+     *
+     * Este método crea un MouseListener al Lienzo para tener en cuenta cuando
+     * se dibuja una figura y pintarla en el panel derecho.
+     *
+     * @param width Ancho de la ventana.
+     * @param height Alto de la ventana.
+     * @return Devuelve una nueva VentanaInternaImagen.
+     */
     public final VentanaInternaImagen newWindows(int width, int height) {
         final VentanaInternaImagen vi = new VentanaInternaImagen();
         escritorio.add(vi);
@@ -2777,6 +2782,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         return vi;
     }
 
+    /**
+     * Método que devuelve la última ventana seleccionada.
+     *
+     * Devuelve <strong>null</strong> en caso de no seleccionar ninguna.
+     *
+     * @return Una ventana de tipo JInternalFrame ó null.
+     */
     public javax.swing.JInternalFrame selectInternalWindows() {
         if (escritorio.getSelectedFrame() instanceof VentanaInternaImagen) {
             VentanaInternaImagen vi = (VentanaInternaImagen) escritorio.getSelectedFrame();
@@ -2805,6 +2817,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Muestra ú oculta dependiendo del valor medido las barras de tareas que no
+     * corresponden con el entero <strong>media</strong>.
+     *
+     * Constantes:
+     * <ul>
+     * <li> SHOW_TOOLBAR_IMAGE = 0</li>
+     * <li> SHOW_TOOLBAR_SOUND = 1</li>
+     * <li> SHOW_TOOLBAR_JMF = 2</li>
+     * <li> SHOW_TOOLBAR_CAMERA = 3</li>
+     * </ul>
+     *
+     * @param media Constante que indica el tipo de medio actual seleccionado.
+     */
     public void showToolsBarsOrNot(int media) {
         boolean image = false;
         boolean buttonSave = false;
@@ -2849,30 +2875,47 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Devuelve una variable de tipo JMenuItem de la interfaz para poder
+     * modificar los valores del componente.
+     *
+     * Esta es una opción de: Imagen (Menú) / Sobel.
+     *
+     * @return Devuelve el componente sobelMenu.
+     */
     public JMenuItem getSobelMenu() {
         return sobelMenu;
     }
 
-    public void setSobelMenu(JMenuItem sobelMenu) {
-        this.sobelMenu = sobelMenu;
-    }
-
+    /**
+     * Devuelve una variable de tipo JComboBox de la interfaz para poder
+     * modificar los valores del componente.
+     *
+     * Esta es una opción del panel: Imagen (Barra herramientas) /
+     * comboBoxUmbralizacion
+     *
+     * @return Devuelve el componente comboBoxUmbralizacion.
+     */
     public JComboBox getComboBoxUmbralizacion() {
         return comboBoxUmbralizacion;
     }
 
-    public void setComboBoxUmbralizacion(JComboBox comboBoxUmbralizacion) {
-        this.comboBoxUmbralizacion = comboBoxUmbralizacion;
-    }
-
+    /**
+     * Devuelve el componente del menú de imagen, Filtro artístico.
+     *
+     * @return un componente de la interfaz del Menú de tipo JMenuItem.
+     */
     public JMenuItem getMenuArtFilter() {
         return menuArtFilter;
     }
 
-    public void setMenuArtFilter(JMenuItem menuArtFilter) {
-        this.menuArtFilter = menuArtFilter;
-    }
-
+    /**
+     * Activa/Desactiva los filtros de imagen de COLOR dependiendo del parámetro
+     * booleano pasado.
+     *
+     * @param b Habilitará si la booleana es true, y deshabilitará los filtros
+     * si es false.
+     */
     public void activateFilterColorImage(boolean b) {
         sobelMenu.setEnabled(b);
         comboBoxUmbralizacion.setEnabled(b);
@@ -2882,12 +2925,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         repaint();
     }
 
+    /**
+     * Devuelve un JList, que viene a ser los elementos que hay en el panel de
+     * las formas (en la derecha).
+     *
+     * Sirve sobretodo para saber qué elementos hay y des/seleccionarlos.
+     *
+     * @return Devuelve un componente de tipo JList
+     */
     public JList getFigureList() {
         return figureList;
-    }
-
-    public void setFigureList(JList figureList) {
-        this.figureList = figureList;
     }
 
     /**
