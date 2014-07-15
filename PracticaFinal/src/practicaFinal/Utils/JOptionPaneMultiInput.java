@@ -57,10 +57,10 @@ public class JOptionPaneMultiInput {
             }
         }
         if (result == JOptionPane.OK_OPTION) {
-            ArrayList<Integer> v = new ArrayList<>();
-            v.add(Integer.parseInt(width.getText()));
-            v.add(Integer.parseInt(height.getText()));
-            return v;
+            ArrayList<Integer> al = new ArrayList();
+            al.add(Integer.parseInt(width.getText()));
+            al.add(Integer.parseInt(height.getText()));
+            return al;
         }
         return null;
     }

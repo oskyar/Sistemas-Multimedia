@@ -9,7 +9,6 @@ import java.awt.Component;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.media.Buffer;
@@ -22,7 +21,6 @@ import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.control.FrameGrabbingControl;
 import javax.media.format.VideoFormat;
-import javax.media.format.YUVFormat;
 import javax.media.util.BufferToImage;
 import practicaFinal.VentanaPrincipal;
 

@@ -65,14 +65,14 @@ import sm.image.KernelProducer;
 import sm.image.ThresholdOp;
 
 /**
- *
- * @author Óscar
+ * Interfaz de la aplicación Paint 2.0 Professional - by Óscar Zafra.
+ * 
+ * También tiene la mayoría de la funcionalidad del programa.
+ * 
+ * @author oskyar (Óscar Zafra).
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form VentanaPrincipal
-     */
     //Guardo la última ventana interna creada
     private VentanaInternaImagen vi;
     private int numVentanas;

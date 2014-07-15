@@ -51,7 +51,7 @@ public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape {
      */
     public OCubicCurve2D(Point2D p1, Point2D ctrl1, Point2D ctrl2, Point2D p2) {
         super(p1.getX(), p1.getY(), ctrl1.getX(), ctrl1.getY(), ctrl2.getX(), ctrl2.getY(), p2.getX(), p2.getY());
-        vPoints = new ArrayList<>();
+        vPoints = new ArrayList();
         vPoints.add(ctrl1);
         vPoints.add(ctrl2);
     }
@@ -64,7 +64,7 @@ public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape {
      */
     public OCubicCurve2D(OCubicCurve2D qc) {
         super(qc.getX1(), qc.getY1(), qc.getCtrlX1(), qc.getCtrlY1(), qc.getCtrlX2(), qc.getCtrlY2(), qc.getX2(), qc.getY2());
-        vPoints = new ArrayList<>();
+        vPoints = new ArrayList();
         vPoints.add(new Point2D.Double(qc.getCtrlX1(), qc.getCtrlY1()));
         vPoints.add(new Point2D.Double(qc.getCtrlX2(), qc.getCtrlY2()));
     }
@@ -250,8 +250,8 @@ public class OCubicCurve2D extends CubicCurve2D.Double implements IOShape {
     @Override
     public void drawFrame(Graphics2D g2d) {
 
-        ArrayList<java.lang.Double> pointsX = new ArrayList<>();
-        ArrayList<java.lang.Double> pointsY = new ArrayList<>();
+        ArrayList<java.lang.Double> pointsX = new ArrayList();
+        ArrayList<java.lang.Double> pointsY = new ArrayList();
         pointsX.add(this.getX1());
         pointsX.add(this.getX2());
         pointsX.add(this.getCtrlX1());

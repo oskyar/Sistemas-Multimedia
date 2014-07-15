@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * personalizadas tengan los mismos atributos/métodos.
  *
  * ver {@link IOShape}, ver {@link Line2D.Double}
- * 
+ *
  * @author oskyar (Óscar Zafra)
  */
 public class OLine2D extends Line2D.Double implements IOShape {

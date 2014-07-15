@@ -25,10 +25,16 @@ import practicaFinal.shapes.ORectangle2D;
 import practicaFinal.shapes.ORoundRectangle2D;
 
 /**
- * 
- * 
- * @author Óscar
- * 
+ * Componente en el cual se van a mostrar las imágenes y se podrán dibujar
+ * formas como puntos, líneas, rectángulos...
+ *
+ * Éste va incrustado dentro de VentanaInternaImagen que es un componente de
+ * tipo JInternalFrame.
+ *
+ * La mayoría de las funcionalidades son para formas e imágenes.
+ *
+ * @author oskyar (Óscar Zafra).
+ *
  * see {@link javax.swing.JPanel}
  */
 public class Lienzo extends javax.swing.JPanel {
@@ -54,11 +60,11 @@ public class Lienzo extends javax.swing.JPanel {
     final static int TYPE_FILL_NONE = 0;
     final static int TYPE_FILL_SOLID = 1;
     final static int TYPE_FILL_GRADIENT = 2;
-    
+
     final static int STYLE_STROKE_JOIN_BEVEL = 0;
     final static int STYLE_STROKE_JOIN_MITER = 1;
     final static int STYLE_STROKE_JOIN_ROUND = 2;
-    
+
     final static int STYLE_STROKE_CAP_BUTT = 0;
     final static int STYLE_STROKE_CAP_ROUND = 1;
     final static int STYLE_STROKE_CAP_SQUARE = 2;
@@ -98,7 +104,7 @@ public class Lienzo extends javax.swing.JPanel {
         vShape = new ArrayList();
         vShapeSelected = new ArrayList();
         editar = false;
-        vdXY = new ArrayList<>();
+        vdXY = new ArrayList();
     }
 
     @Override
@@ -125,7 +131,7 @@ public class Lienzo extends javax.swing.JPanel {
 
         switch (forma) {
             case PUNTO:
-                s = new OPoint2D(p1, p1);
+                s = new OPoint2D(p1);
                 break;
             case LINEA:
                 s = new OLine2D(p1, p1);
@@ -189,8 +195,8 @@ public class Lienzo extends javax.swing.JPanel {
             }
         }
         return null;
-    }    
-    
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -207,9 +213,6 @@ public class Lienzo extends javax.swing.JPanel {
             }
         });
         addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                formMouseClicked(evt);
-            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);
             }
@@ -243,7 +246,7 @@ public class Lienzo extends javax.swing.JPanel {
         } else if (evt.isControlDown() && evt.isAltDown() && !vShapeSelected.isEmpty()) {
             for (Integer i : vShapeSelected) {
                 //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
-                if(vShape.get(i).getFillType()==Lienzo.COLOR_GRADIENT){
+                if (vShape.get(i).getFillType() == Lienzo.COLOR_GRADIENT) {
                     vShape.get(i).createGradient(p, p);
                 }
             }
@@ -270,7 +273,7 @@ public class Lienzo extends javax.swing.JPanel {
                         y = vShape.get(vShapeSelected.get(i)).getY();
                         //En este chorizo lo que hago es, coger todas las figuras seleccionadas y moverlas a la vez proporcionalmente.
                         vdXY.set(i, new Point2D.Double(x - p.getX(), y - p.getY()));
-                        if(vShape.get(vShapeSelected.get(i)).getFillType()==Lienzo.TYPE_FILL_GRADIENT){
+                        if (vShape.get(vShapeSelected.get(i)).getFillType() == Lienzo.TYPE_FILL_GRADIENT) {
                             dGradientXYp1 = new Point2D.Double(vShape.get(vShapeSelected.get(i)).getGradient().getPoint1().getX() - p.getX(), vShape.get(vShapeSelected.get(i)).getGradient().getPoint1().getY() - p.getY());
                             dGradientXYp2 = new Point2D.Double(vShape.get(vShapeSelected.get(i)).getGradient().getPoint2().getX() - p.getX(), vShape.get(vShapeSelected.get(i)).getGradient().getPoint2().getY() - p.getY());
                         }
@@ -303,7 +306,7 @@ public class Lienzo extends javax.swing.JPanel {
             }
         } else if (evt.isControlDown() && evt.isAltDown() && !vShapeSelected.isEmpty()) {
             for (Integer i : vShapeSelected) {
-                if(vShape.get(i).getFillType()==Lienzo.TYPE_FILL_GRADIENT){
+                if (vShape.get(i).getFillType() == Lienzo.TYPE_FILL_GRADIENT) {
                     vShape.get(i).updateGradient(p, pEvt);
                 }
             }
@@ -327,10 +330,11 @@ public class Lienzo extends javax.swing.JPanel {
         this.repaint();
     }//GEN-LAST:event_formMouseDragged
 
-    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-
-    }//GEN-LAST:event_formMouseClicked
-
+    /**
+     * Se modifica la imagen original del lienzo por la pasada por parámetro
+     *
+     * @param img Imagen que pasará a ser la original.
+     */
     public void setImageOriginal(BufferedImage img) {
         if (img != null) {
             setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
@@ -339,27 +343,54 @@ public class Lienzo extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Devuelve la imagen original del Lienzo.
+     *
+     * @return devuelve un BufferedImage del lienzo.
+     */
     public BufferedImage getImageOriginal() {
         return this.img;
     }
 
+    /**
+     * Guarda todas las figuras dibujadas en el lienzo en una imagen ó a la
+     * imagen que esté en el lienzo si existe.
+     *
+     * @param img Imagen para el volcado de formas.
+     * @return Devuelve una imagen con las formas ya dibujadas.
+     */
     public BufferedImage volcado(BufferedImage img) {
         Graphics2D g = img.createGraphics();
-        for (IOShape sh: vShape){
+        for (IOShape sh : vShape) {
             sh.draw(g);
         }
         return img;
     }
 
+    /**
+     * Modifica la imagen actual del lienzo, la que se está usando.
+     * 
+     * @param imgDest Imagen que se va a modificar.
+     */
     void setImageActual(BufferedImage imgDest) {
         setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
         this.imgDest = imgDest;
     }
 
+    /**
+     * Devuelve la Imagen actual del Lienzo, que no tiene porqué ser la misma que la original.
+     * 
+     * @return devuelve una imagen de tipo BufferedImage.
+     */
     public BufferedImage getImageActual() {
         return this.imgDest;
     }
 
+    /**
+     * Modifica el color de relleno del lienzo.
+     * 
+     * @param color Color con el que se va a modificar el color de relleno.
+     */    
     public static void setFillColor(Color color) {
         Lienzo.fillColor = color;
     }
@@ -536,7 +567,7 @@ public class Lienzo extends javax.swing.JPanel {
         }
         repaint();
     }
-    
+
     void changeStrokeStyleJoinProperty(int strokeType) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
@@ -544,8 +575,8 @@ public class Lienzo extends javax.swing.JPanel {
             }
         }
         repaint();
-    }    
-    
+    }
+
     void changeStrokeStyleCapProperty(int strokeType) {
         if (!vShapeSelected.isEmpty()) {
             for (int index : vShapeSelected) {
@@ -553,8 +584,7 @@ public class Lienzo extends javax.swing.JPanel {
             }
         }
         repaint();
-    }    
-    
+    }
 
     public static int getStrokeStyleJoinType() {
         return strokeStyleJoinType;
@@ -571,6 +601,5 @@ public class Lienzo extends javax.swing.JPanel {
     public static void setStrokeStyleCapType(int strokeStyleCapType) {
         Lienzo.strokeStyleCapType = strokeStyleCapType;
     }
-    
-    
+
 }

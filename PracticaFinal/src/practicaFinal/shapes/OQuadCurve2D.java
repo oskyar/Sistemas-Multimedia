@@ -50,7 +50,7 @@ public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape {
      */
     public OQuadCurve2D(Point2D p1, Point2D ctrl, Point2D p2) {
         super(p1.getX(), p1.getY(), ctrl.getX(), ctrl.getY(), p2.getX(), p2.getY());
-        vPoints = new ArrayList<>();
+        vPoints = new ArrayList();
         vPoints.add(ctrl);
     }
 
@@ -232,8 +232,8 @@ public class OQuadCurve2D extends QuadCurve2D.Double implements IOShape {
 
     @Override
     public void drawFrame(Graphics2D g2d) {
-        ArrayList<java.lang.Double> pointsX = new ArrayList<>();
-        ArrayList<java.lang.Double> pointsY = new ArrayList<>();
+        ArrayList<java.lang.Double> pointsX = new ArrayList();
+        ArrayList<java.lang.Double> pointsY = new ArrayList();
         pointsX.add(this.getX1());
         pointsX.add(this.getX2());
         pointsX.add(this.getCtrlX());
